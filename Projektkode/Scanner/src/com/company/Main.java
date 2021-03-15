@@ -4,30 +4,19 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) throws Exception
     {
-        lexer();
-	// write your code here
-    }
-
-    static String lexer() throws IOException
-    {
-        String s;
-
-        FileReader fr = new FileReader("C:\\Users\\Alexander Droob\\Desktop\\SW4\\Test.txt");
-        BufferedReader br = new BufferedReader(fr);
-        while ((s = br.readLine()) != null)
+        Scanner1 s = new Scanner1();
+        for (Token token : s.Lexer())
         {
-            scanLine(s);
-
+            System.out.println(token.getClass().getSimpleName());
         }
 
-        fr.close();
-        return "";
+
+	// write your code here
     }
 
 

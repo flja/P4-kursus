@@ -12,13 +12,10 @@ public class Scanner1
     int lineNum = 0;
     List<Token> tokens = new ArrayList<Token>();
 
-    public Scanner1()
-    {
-    }
+    public Scanner1() {}
 
     public List<Token> Lexer() throws Exception
     {
-
         int current;
         String line;
         Token temp;
@@ -195,7 +192,6 @@ public class Scanner1
         return token;
     }
 
-
     private Token HandleValue(String value)
     {
 
@@ -318,13 +314,26 @@ public class Scanner1
                 break;
             case "assign":
                 token = new assignSpecifierToken();
+                break;
+            case "neg":
+                token = new negToken();
+                break;
+            case "void":
+                token = new voidToken();
+                break;
+            case "switch":
+                token = new switchToken();
+                break;
+            case "endswitch":
+                token = new endSwitchToken();
+                break;
         }
         return token;
     }
 
     private Token HandleId(String word)
     {
-        return word.matches("[a-zA-Z_][\\w]*") ? new idToken(word) : null;
+        return word.matches("^[a-zA-Z_][\\w]*$") ? new idToken(word) : null;
     }
 
     private void AddToken(Token token)

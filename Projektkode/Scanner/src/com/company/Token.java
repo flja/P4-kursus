@@ -58,7 +58,11 @@ public abstract class Token {
         trueToken,
         turnToken,
         WhitespaceToken,
-        zeroToken}
+        zeroToken,
+        negToken,
+        voidToken,
+        switchToken,
+        endSwitchToken}
     tokenIdentifierEnum identifier;
 
     public tokenIdentifierEnum Identifier(){

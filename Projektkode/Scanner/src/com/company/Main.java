@@ -6,19 +6,15 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) throws Exception
     {
-        for (List<Integer> a: Data.generateTable())
-        {
-            for (Integer b : a)
-            {
-                System.out.print(b + " ");
-            }
-            System.out.println();
-        }
+        Scanner1 scanner = new Scanner1();
+        Parser parser = new Parser();
+        parser.LLparser(scanner.Lexer());
         //Scanner1 s = new Scanner1();
         //for (Token token : s.Lexer())
         //{

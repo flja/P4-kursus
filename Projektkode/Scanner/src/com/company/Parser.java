@@ -13,46 +13,75 @@ public class Parser
     {
 
         int tsIndex = 0;
-        //List<String> terminals = Arrays.asList(Data.terminals);
+        List<String> terminals = Arrays.asList(Data.terminals);
         List<String> nonTerminals = Arrays.asList(Data.nonterminals);
         boolean accepted;
-        Stack<Token> stack = new Stack<Token>();
-        stack.push(new NonTerminalToken("prog"));
+        Stack<String> stack = new Stack<String>();
+        stack.push("Never reach this");
+        stack.push("Prog");
         accepted = false;
         while (!accepted)
         {
+            System.out.println("stack: " + stack.peek() + " ts: " + GetName(ts.get(tsIndex)));
             if (isTerminal(stack.peek()))
             {
+                System.out.println("is terminal");
                 if(match(ts.get(tsIndex),stack.peek()))
                 {
+                    System.out.println("matches");
                     tsIndex++;
                 }
-                if (stack.peek().getClass().getSimpleName() == "endOfFileToken")
+                if (stack.peek() == "eof")
                 {
+                    System.out.println("eof");
                     accepted = true;
                 }
                 stack.pop();
             }
             else
             {
-                int p = Data.generateTable().get();
+                System.out.println("is nonterminal");
 
+                int p = Data.generateTable().get(nonTerminals.indexOf(stack.peek())).get(terminals.indexOf(GetName(ts.get(tsIndex))));
+                if (p == 0)
+                {
+                    throw new Exception("P = 0");
+                }
+                System.out.println("Production: " + p);
+                List<String> A = Data.getProduction(p);
+                stack.pop();
+                for (int i = A.size() - 1; i >= 0; i--)
+                {
+                    System.out.println(A.get(i) + " Pushed to stack");
+                    stack.push(A.get(i));
+                }
             }
+            System.out.println("\n\n");
         }
 
     }
 
-    boolean isTerminal(Token t)
+    boolean isTerminal(String a)
     {
-        return true;
+        return Character.isLowerCase(a.charAt(0));
     }
 
-    boolean match(Token a, Token b) throws Exception
+    boolean match(Token a, String b) throws Exception
     {
-        if (a == b)
+
+        if (a.getClass().getSimpleName().equals(b + "Token"))
         {
+            System.out.println("Hey");
             return true;
         }
-        throw new Exception("Unexpected Token");
+        else
+        {
+            throw new Exception("Unexpected Token");
+        }
+    }
+
+    String GetName(Token t)
+    {
+        return t.getClass().getSimpleName().replaceAll("Token","");
     }
 }

@@ -14,7 +14,7 @@ public class Scanner1
 
     public Scanner1() {}
 
-    public List<Token> Lexer() throws Exception
+    List<Token> Lexer() throws Exception
     {
         int current;
         String line;

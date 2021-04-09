@@ -17,12 +17,13 @@ public class Parser
         List<String> nonTerminals = Arrays.asList(Data.nonterminals);
         boolean accepted;
         Stack<String> stack = new Stack<String>();
-        stack.push("Never reach this");
+        stack.push("eof");
         stack.push("Prog");
         accepted = false;
         while (!accepted)
         {
             System.out.println("stack: " + stack.peek() + " ts: " + GetName(ts.get(tsIndex)));
+            System.out.println("Line: " + ts.get(tsIndex).line);
             if (isTerminal(stack.peek()))
             {
                 System.out.println("is terminal");
@@ -41,11 +42,11 @@ public class Parser
             else
             {
                 System.out.println("is nonterminal");
-
                 int p = Data.generateTable().get(nonTerminals.indexOf(stack.peek())).get(terminals.indexOf(GetName(ts.get(tsIndex))));
+                System.out.println(nonTerminals.indexOf(stack.peek()) + " " + terminals.indexOf(GetName(ts.get(tsIndex))));
                 if (p == 0)
                 {
-                    throw new Exception("P = 0");
+                    throw new Exception("P = 0 " + ts.get(tsIndex).line);
                 }
                 System.out.println("Production: " + p);
                 List<String> A = Data.getProduction(p);
@@ -68,20 +69,22 @@ public class Parser
 
     boolean match(Token a, String b) throws Exception
     {
-
-        if (a.getClass().getSimpleName().equals(b + "Token"))
+        if (GetName(a).equals(b.toLowerCase()))
         {
-            System.out.println("Hey");
             return true;
         }
         else
         {
-            throw new Exception("Unexpected Token");
+            String message = "Expected " + b + " Token at line " + a.line + " But found a " + GetName(a) + " token";
+            if (a instanceof idToken){
+                message += " " + ((idToken) a).spelling;
+            }
+            throw new Exception(message);
         }
     }
 
     String GetName(Token t)
     {
-        return t.getClass().getSimpleName().replaceAll("Token","");
+        return t.getClass().getSimpleName().replaceAll("Token","").toLowerCase();
     }
 }

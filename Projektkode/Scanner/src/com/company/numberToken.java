@@ -1,6 +1,7 @@
 package com.company;
 
 public class numberToken extends Token{
-    public numberToken() {
+    public numberToken(int line) {
+        super(line);
     }
 }

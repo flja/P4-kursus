@@ -113,58 +113,58 @@ public class Scanner1
         {
             //single char tokens:
             case '{':
-                token = new lBraceToken();
+                token = new lBraceToken(lineNum);
                 break;
             case '}':
-                token = new rBraceToken();
+                token = new rBraceToken(lineNum);
                 break;
             case '(':
-                token = new lParenToken();
+                token = new lParenToken(lineNum);
                 break;
             case ')':
-                token = new rParenToken();
+                token = new rParenToken(lineNum);
                 break;
             case '+':
-                token = new plusToken();
+                token = new plusToken(lineNum);
                 break;
             case '-':
-                token = new hyphenToken();
+                token = new hyphenToken(lineNum);
                 break;
             case ',':
-                token = new commaToken();
+                token = new commaToken(lineNum);
                 break;
             case '.':
-                token = new dotToken();
+                token = new dotToken(lineNum);
                 break;
             case ';':
-                token = new semicolonToken();
+                token = new semicolonToken(lineNum);
                 break;
             case '*':
-                token = new starToken();
+                token = new starToken(lineNum);
                 break;
             case '/':
-                token = new slashToken();
+                token = new slashToken(lineNum);
                 break;
             case '?':
-                token = new questionmarkToken();
+                token = new questionmarkToken(lineNum);
                 break;
             case ':':
-                token = new colonToken();
+                token = new colonToken(lineNum);
                 break;
             case ' ':
-                token = new WhitespaceToken();
+                token = new WhitespaceToken(lineNum);
                 break;
             case '<':
-                token = new lessThanToken();
+                token = new lessThanToken(lineNum);
                 break;
             case '>':
-                token = new greaterThanToken();
+                token = new greaterThanToken(lineNum);
                 break;
             case '=':
-                token = new assignToken();
+                token = new assignToken(lineNum);
                 break;
             case '!':
-                token = new notToken();
+                token = new notToken(lineNum);
                 break;
         }
         return token;
@@ -177,16 +177,16 @@ public class Scanner1
         switch (current)
         {
             case '<':
-                token = next == '=' ? new lessThanOrEqualToken() : defaultVal;
+                token = next == '=' ? new lessThanOrEqualToken(lineNum) : defaultVal;
                 break;
             case '>':
-                token = next == '=' ? new greaterThanOrEqualToken() : defaultVal;
+                token = next == '=' ? new greaterThanOrEqualToken(lineNum) : defaultVal;
                 break;
             case '=':
-                token = next == '=' ? new equalToken() : defaultVal;
+                token = next == '=' ? new equalToken(lineNum) : defaultVal;
                 break;
             case '!':
-                token = next == '=' ? new notEqualToken() : defaultVal;
+                token = next == '=' ? new notEqualToken(lineNum) : defaultVal;
                 break;
         }
         return token;
@@ -200,10 +200,10 @@ public class Scanner1
             int i = Integer.parseInt(value);
             if (i == 0)
             {
-                return new zeroToken();
+                return new zeroToken(lineNum);
             } else
             {
-                return new nonZeroNumToken(i);
+                return new nonZeroNumToken(lineNum,i);
             }
         } catch (Exception e)
         {
@@ -211,11 +211,11 @@ public class Scanner1
 
         if (value.matches("^([aAjJqQkK]|[2-9]|10)[hHcCsSdD]$"))
         {
-            return new cardValueToken(value.toLowerCase().charAt(0), value.toLowerCase().charAt(1));
+            return new cardValueToken(lineNum, value.toLowerCase().charAt(0), value.toLowerCase().charAt(1));
         }
         if (value.matches("^[\"][\\s\\S]*[\"]$"))
         {
-            return new stringValueToken(value);
+            return new stringValueToken(lineNum, value);
         }
         return null;
     }
@@ -226,106 +226,130 @@ public class Scanner1
         switch (word)
         {
             case "Cards":
-                token = new cardsToken();
+                token = new cardsToken(lineNum);
                 break;
             case "Player":
-                token = new playerToken();
+                token = new playerToken(lineNum);
                 break;
             case "Table":
-                token = new tableToken();
+                token = new tableToken(lineNum);
                 break;
             case "Define":
-                token = new defineToken();
+                token = new defineToken(lineNum);
                 break;
             case "Setup":
-                token = new setupToken();
+                token = new setupToken(lineNum);
                 break;
             case "Round":
-                token = new roundToken();
+                token = new roundToken(lineNum);
                 break;
             case "Turn":
-                token = new turnToken();
+                token = new turnToken(lineNum);
                 break;
             case "Endcondition":
-                token = new endconditionToken();
+                token = new endconditionToken(lineNum);
                 break;
             case "deck":
-                token = new deckToken();
+                token = new deckToken(lineNum);
                 break;
             case "number":
-                token = new numberToken();
+                token = new numberToken(lineNum);
                 break;
             case "card":
-                token = new cardToken();
+                token = new cardToken(lineNum);
                 break;
             case "hand":
-                token = new handToken();
+                token = new handToken(lineNum);
                 break;
             case "enum":
-                token = new enumToken();
+                token = new enumToken(lineNum);
                 break;
             case "string":
-                token = new stringToken();
+                token = new stringToken(lineNum);
                 break;
             case "flag":
-                token = new flagToken();
+                token = new flagToken(lineNum);
                 break;
             case "standard":
-                token = new standardToken();
+                token = new standardToken(lineNum);
                 break;
             case "hearts":
-                token = new heartsToken();
+                token = new heartsToken(lineNum);
                 break;
             case "spades":
-                token = new spadesToken();
+                token = new spadesToken(lineNum);
                 break;
             case "diamonds":
-                token = new diamondsToken();
+                token = new diamondsToken(lineNum);
                 break;
             case "clubs":
-                token = new clubsToken();
+                token = new clubsToken(lineNum);
                 break;
             case "joker":
-                token = new jokerToken();
+                token = new jokerToken(lineNum);
                 break;
             case "True":
-                token = new trueToken();
+                token = new trueToken(lineNum);
                 break;
             case "False":
-                token = new falseToken();
+                token = new falseToken(lineNum);
                 break;
             case "actions":
-                token = new actionsToken();
+                token = new actionsToken(lineNum);
                 break;
             case "if":
-                token = new ifToken();
+                token = new ifToken(lineNum);
                 break;
             case "else":
-                token = new elseToken();
+                token = new elseToken(lineNum);
                 break;
             case "endif":
-                token = new endifToken();
+                token = new endifToken(lineNum);
                 break;
             case "endelse":
-                token = new endelseToken();
+                token = new endelseToken(lineNum);
                 break;
             case "endactions":
-                token = new endactionsToken();
+                token = new endactionsToken(lineNum);
                 break;
             case "assign":
-                token = new assignSpecifierToken();
+                token = new assignSpecifierToken(lineNum);
                 break;
             case "neg":
-                token = new negToken();
+                token = new negToken(lineNum);
                 break;
             case "void":
-                token = new voidToken();
+                token = new voidToken(lineNum);
                 break;
             case "switch":
-                token = new switchToken();
+                token = new switchToken(lineNum);
                 break;
             case "endswitch":
-                token = new endSwitchToken();
+                token = new endSwitchToken(lineNum);
+                break;
+            case "func":
+                token = new funcToken(lineNum);
+                break;
+            case "while":
+                token = new whileToken(lineNum);
+                break;
+            case "endwhile":
+                token = new endWhileToken(lineNum);
+                break;
+            case "action":
+                token = new actionToken(lineNum);
+                break;
+            case "endaction":
+                token = new endActionToken(lineNum);
+                break;
+            case "and":
+                token = new andToken(lineNum);
+                break;
+            case "or":
+                token = new orToken(lineNum);
+                break;
+            case "xor":
+                token = new xorToken(lineNum);
                 break;
         }
         return token;
@@ -333,7 +357,7 @@ public class Scanner1
 
     private Token HandleId(String word)
     {
-        return word.matches("^[a-zA-Z_][\\w]*$") ? new idToken(word) : null;
+        return word.matches("^[a-zA-Z_][\\w]*$") ? new idToken(lineNum, word) : null;
     }
 
     private void AddToken(Token token)

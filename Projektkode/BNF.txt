@@ -2,13 +2,13 @@ Prog⟶DeckDcls CardsDef PlayerDef TableDef Setup Round Turn Endcondition Functi
 DeckDcls⟶DeckDcl assign Deck semicolon DeckDcls
 DeckDcls⟶
 CardsDef⟶define cards lBrace Assignments rBrace 
-PlayerDef⟶define player lparen nonzeroNum rparen CompoundStmt 
+PlayerDef⟶define player lParen nonZeroNum rParen CompoundStmt 
 TableDef⟶define table CompoundStmt 
 Setup⟶setup CompoundStmt 
 Round⟶round CompoundStmt 
 Turn⟶turn CompoundStmt 
-Endcondition⟶endcondition lparen LogicalExpr rparen CompoundStmt 
-Functions⟶functions lbrace FunctionsDefs rbrace 
+Endcondition⟶endcondition lParen LogicalExpr rParen CompoundStmt 
+Functions⟶functions lBrace FunctionsDefs rBrace 
 Dcls⟶Dcl semicolon Dcls
 Dcls⟶
 Dcl⟶DeckDcl
@@ -24,7 +24,7 @@ OptNumberAssign⟶assign Number
 OptNumberAssign⟶
 CardDcl⟶card id 
 HandDcl⟶hand id 
-EnumDcl⟶enum id lbrace Enum rbrace 
+EnumDcl⟶enum id lBrace Enum rBrace 
 StringDcl⟶string id 
 OptStringAssign⟶assign String
 OptStringAssign⟶
@@ -43,7 +43,7 @@ Cards⟶clubs Add
 Card⟶cardValue 
 Card⟶joker
 Number⟶zero
-Number⟶Sign nonzeronum
+Number⟶Sign nonZeroNum
 Sign⟶neg
 Sign⟶
 String⟶stringValue 
@@ -54,8 +54,11 @@ Enum3⟶comma Enum
 Enum3⟶
 Flag⟶true
 Flag⟶false
-Parameters⟶Val comma Parameters
+Parameters⟶Parameters1
 Parameters⟶
+Parameters1⟶Val Parameters2
+Parameters2⟶comma Parameters1
+Parameters2⟶
 Val⟶String 
 Val⟶Number 
 Val⟶Flag
@@ -72,21 +75,26 @@ Stmt⟶LabeledStmt
 Stmt⟶break semicolon 
 Assignments⟶Assignment Assignments
 Assignments⟶
-Assignment⟶assignspecifier ObjectSpecifier assign Expr semicolon 
+Assignment⟶assignSpecifier ObjectSpecifier assign Expr semicolon 
 ObjectSpecifier⟶id FollowObject 
-FollowObject⟶dot id FollowObject
+FollowObject⟶dot FollowObject1 FollowObject
 FollowObject⟶
-CompoundStmt⟶lbrace Dcls Stmts rbrace 
-SelectionStmt⟶if lparen LogicalExpr rparen Stmt OptElse
+FollowObject1⟶String 
+FollowObject1⟶Number
+FollowObject1⟶Flag
+FollowObject1⟶Card
+FollowObject1⟶id
+CompoundStmt⟶lBrace Dcls Stmts rBrace 
+SelectionStmt⟶if lParen LogicalExpr rParen Stmt OptElse
 SelectionStmt⟶actions CompoundStmt endactions semicolon
-SelectionStmt⟶switch lparen Expr rparen CompoundStmt endswitch semicolon 
+SelectionStmt⟶switch lParen Expr rParen CompoundStmt endswitch semicolon 
 LabeledStmt⟶case colon Expr colon Stmts endcase semicolon
 LabeledStmt⟶default colon Stmts enddefault semicolon
-LabeledStmt⟶action id if lparen LogicalExpr rparen CompoundStmt endaction semicolon 
+LabeledStmt⟶action id if lParen LogicalExpr rParen CompoundStmt endaction semicolon 
 OptElse⟶else Stmt endif semicolon
 OptElse⟶endif semicolon 
-LoopStmt⟶while lparen LogicalExpr rparen Stmt endwhile semicolon
-LoopStmt⟶for lparen Expr semicolon Expr semicolon Expr rparen Stmt 
+LoopStmt⟶while lParen LogicalExpr rParen Stmt endwhile semicolon
+LoopStmt⟶for lParen Expr semicolon Expr semicolon Expr rParen Stmt 
 Exprs⟶Expr Exprs
 Exprs⟶
 Expr⟶AddExpr
@@ -101,7 +109,7 @@ Term1⟶star Factor Term1
 Term1⟶slash Factor Term1
 Term1⟶mod Factor Term1
 Term1⟶
-Factor⟶lparen AddExpr rparen
+Factor⟶lParen AddExpr rParen
 Factor⟶Val 
 LogicalExpr⟶questionmark LogicalTerm LogicalExpr1 
 LogicalExpr1⟶or LogicalTerm LogicalExpr1
@@ -118,10 +126,10 @@ LogicalOperator⟶notequal
 LogicalOperator⟶lessthanorequal
 LogicalOperator⟶greaterthanorequal 
 FunctionCall⟶func FunctionCall1 
-FunctionCall1⟶ObjectSpecifier lparen Parameters rparen 
+FunctionCall1⟶ObjectSpecifier lParen Parameters rParen 
 FunctionsDefs⟶FunctionsDef FunctionsDefs
 FunctionsDefs⟶
-FunctionsDef⟶Type id lparen Dcls rparen CompoundStmt 
+FunctionsDef⟶Type id lParen Dcls rParen CompoundStmt 
 Type⟶deck
 Type⟶card
 Type⟶number

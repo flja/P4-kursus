@@ -3,8 +3,9 @@ package com.company;
 public class NonTerminalToken extends Token
 {
     public String nonTerminal;
-    public NonTerminalToken(String aNonTerminal)
+    public NonTerminalToken(int line, String aNonTerminal)
     {
+        super(line);
         nonTerminal = aNonTerminal;
     }
 }

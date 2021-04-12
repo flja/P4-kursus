@@ -1,24 +1,28 @@
 package com.company;
-import javax.swing.*;
-import java.nio.file.FileSystems;
+import com.company.AST.Node;
+import com.company.AST.NonTerminalNode;
+import com.company.AST.TerminalNode;
+import com.company.Tokens.Token;
+import com.company.Tokens.idToken;
+
 import java.util.*;
-import java.io.File;  // Import the File class
-import java.io.FileNotFoundException;  // Import this class to handle errors
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Parser
 {
-    public void LLparser(List<Token> ts) throws Exception
+    public Node LLparser(List<Token> ts) throws Exception
     {
 
         int tsIndex = 0;
+        Node rootNode;
+        Node currentNode;
         List<String> terminals = Arrays.asList(Data.terminals);
         List<String> nonTerminals = Arrays.asList(Data.nonterminals);
         boolean accepted;
         Stack<String> stack = new Stack<String>();
-        stack.push("eof");
+        stack.clear();
         stack.push("Prog");
+        rootNode = new NonTerminalNode(stack.peek());
+        currentNode = rootNode;
         accepted = false;
         while (!accepted)
         {
@@ -30,14 +34,21 @@ public class Parser
                 if(match(ts.get(tsIndex),stack.peek()))
                 {
                     System.out.println("matches");
+                    if (currentNode instanceof NonTerminalNode)
+                    {
+                        System.out.println(((NonTerminalNode) currentNode).nonterminal);
+                    }
+                    ((TerminalNode)currentNode).terminal = ts.get(tsIndex);
                     tsIndex++;
                 }
-                if (stack.peek() == "eof")
+                stack.pop();
+                currentNode.visited = true;
+                currentNode = setCurrentNode(currentNode);
+                if (stack.peek().equals("$"))
                 {
-                    System.out.println("eof");
                     accepted = true;
                 }
-                stack.pop();
+
             }
             else
             {
@@ -50,15 +61,48 @@ public class Parser
                 }
                 System.out.println("Production: " + p);
                 List<String> A = Data.getProduction(p);
+                Node child = null;
                 stack.pop();
                 for (int i = A.size() - 1; i >= 0; i--)
                 {
                     System.out.println(A.get(i) + " Pushed to stack");
                     stack.push(A.get(i));
                 }
+                for (int i = 0; i < A.size(); i++)
+                {
+                    if (child == null)
+                    {
+                        if (isTerminal(A.get(i)))
+                        {
+                            child = new TerminalNode(null);
+                        }
+                        else
+                        {
+                            child = new NonTerminalNode(A.get(i));
+                        }
+                    }
+                    else
+                    {
+                        if (isTerminal(A.get(i)))
+                        {
+                            child.MakeSiblings(new TerminalNode(null));
+                        }
+                        else
+                        {
+                            child.MakeSiblings(new NonTerminalNode(A.get(i)));
+                        }
+                    }
+                }
+                if (A.size() != 0)
+                {
+                    currentNode.AdoptChildren(child);
+                }
+                currentNode.visited = true;
+                currentNode = setCurrentNode(currentNode);
             }
             System.out.println("\n\n");
         }
+        return rootNode;
 
     }
 
@@ -86,5 +130,26 @@ public class Parser
     String GetName(Token t)
     {
         return t.getClass().getSimpleName().replaceAll("Token","").toLowerCase();
+    }
+
+    Node setCurrentNode(Node current)
+    {
+        while (current.visited)
+        {
+            if (current.leftMostChild != null && !current.leftMostChild.visited)
+            {
+                return current.leftMostChild;
+            }
+            else if (current.rightSib != null && !current.rightSib.visited)
+            {
+                return current.rightSib;
+            }
+            else if (current.parent != null)
+            {
+                current = current.parent;
+            }
+        }
+        System.out.println("No more");
+        return null;
     }
 }

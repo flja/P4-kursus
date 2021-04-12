@@ -1,4 +1,4 @@
-Prog⟶DeckDcls CardsDef PlayerDef TableDef Setup Round Turn Endcondition Functions eof 
+Prog⟶DeckDcls CardsDef PlayerDef TableDef Setup Round Turn Endcondition Functions $ 
 DeckDcls⟶DeckDcl assign Deck semicolon DeckDcls
 DeckDcls⟶
 CardsDef⟶define cards lBrace Assignments rBrace 

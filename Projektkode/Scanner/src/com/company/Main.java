@@ -1,4 +1,8 @@
 package com.company;
+import com.company.AST.Node;
+import com.company.AST.NonTerminalNode;
+import com.company.AST.TerminalNode;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,7 +18,9 @@ public class Main {
     {
         Scanner1 scanner = new Scanner1();
         Parser parser = new Parser();
-        parser.LLparser(scanner.Lexer());
+        Node node = parser.LLparser(scanner.Lexer());
+        System.out.println("\n\n");
+        
         //Scanner1 s = new Scanner1();
         //for (Token token : s.Lexer())
         //{

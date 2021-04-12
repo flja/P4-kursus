@@ -20,7 +20,32 @@ public class Main {
         Parser parser = new Parser();
         Node node = parser.LLparser(scanner.Lexer());
         System.out.println("\n\n");
-        
+        printNode(node);
+        while (node != null)
+        {
+            if (node.leftMostChild != null && node.leftMostChild.visited)
+            {
+                node = node.leftMostChild;
+                printNode(node);
+            }
+            else if (node.rightSib != null && node.rightSib.visited)
+            {
+                node = node.rightSib;
+                printNode(node);
+            }
+            else if (node.parent != null)
+            {
+                node = node.parent;
+            }
+            else
+            {
+                node = null;
+            }
+            if (node != null)
+            {
+                node.visited = false;
+            }
+        }
         //Scanner1 s = new Scanner1();
         //for (Token token : s.Lexer())
         //{
@@ -28,8 +53,17 @@ public class Main {
 
 	// write your code here
     }
-
-
+    public static void printNode(Node node)
+    {
+        if(node instanceof TerminalNode)
+        {
+            System.out.println(((TerminalNode) node).terminal.getClass().getSimpleName());
+        }
+        else
+        {
+            System.out.println(((NonTerminalNode) node).nonterminal);
+        }
+    }
 }
 
 

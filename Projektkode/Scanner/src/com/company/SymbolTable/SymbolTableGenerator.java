@@ -7,18 +7,24 @@ import com.company.Parser;
 import com.company.Tokens.idToken;
 
 import java.util.Stack;
-
 public class SymbolTableGenerator
 {
     Stack<ScopeTable> stack = new Stack<ScopeTable>();
     ScopeTable GlobalScope = new ScopeTable();
 
-    public SymbolTableGenerator()
+
+}
+public class SymbolTableGenerator1
+{
+    Stack<ScopeTable> stack = new Stack<ScopeTable>();
+    ScopeTable GlobalScope = new ScopeTable();
+
+    public SymbolTableGenerator1()
     {
         stack.push(GlobalScope);
     }
 
-    public void GenerateTable(Node node) throws Exception
+    public void Visitor1(Node node) throws Exception
     {
         if (node instanceof TerminalNode)
         {
@@ -61,22 +67,11 @@ public class SymbolTableGenerator
         }
         for (Node child : node.GetChildren())
         {
-            GenerateTable(child);
+            Visitor1(child);
         }
     }
 
-    private void OpenScope()
-    {
-        ScopeTable table = new ScopeTable();
-        table.previous = stack.peek();
-        stack.peek().subScopes.add(table);
-        stack.push(table);
-    }
 
-    private void CloseScope()
-    {
-        stack.pop();
-    }
 
     public Symbol RetrieveSymbol(String name)
     {

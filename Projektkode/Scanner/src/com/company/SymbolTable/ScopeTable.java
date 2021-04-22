@@ -1,13 +1,10 @@
 package com.company.SymbolTable;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class ScopeTable
 {
     ScopeTable previous = null;
-    Hashtable<String, Symbol> table = new Hashtable<String, Symbol>();
+    HashMap<String, Symbol> table = new HashMap<String,Symbol>();
     List<ScopeTable> subScopes = new ArrayList<ScopeTable>();
 }

@@ -49,7 +49,6 @@ public class Parser
                 {
                     accepted = true;
                 }
-
             }
             else
             {

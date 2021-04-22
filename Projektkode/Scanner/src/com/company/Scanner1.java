@@ -354,6 +354,27 @@ public class Scanner1
             case "Functions":
                 token = new functionsToken(lineNum);
                 break;
+            case "break" :
+                token = new breakToken(lineNum);
+                break;
+            case "case" :
+                token = new caseToken(lineNum);
+                break;
+            case "endcase" :
+                token = new endcaseToken(lineNum);
+                break;
+            case "default" :
+                token = new defaultToken(lineNum);
+                break;
+            case "enddefault" :
+                token = new enddefaultToken(lineNum);
+                break;
+            case "for" :
+                token = new forToken(lineNum);
+                break;
+            case "mod" :
+                token = new modToken(lineNum);
+                break;
         }
         return token;
     }

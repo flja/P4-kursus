@@ -2,6 +2,9 @@ package com.company.AST;
 
 import com.company.Tokens.Token;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Node
 {
     public Node parent = null;
@@ -47,4 +50,18 @@ public class Node
             }
         }
     }
+
+    public List<Node> GetChildren()
+    {
+        List<Node> children = new ArrayList<Node>();
+        Node child = this.leftMostChild;
+        children.add(child);
+        while(child.rightSib != null)
+        {
+            child = child.rightSib;
+            children.add(child);
+        }
+        return children;
+    }
+
 }

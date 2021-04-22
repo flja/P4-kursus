@@ -1,4 +1,5 @@
 package com.company;
+import com.company.AST.AST;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
@@ -9,7 +10,7 @@ import java.util.*;
 
 public class Parser
 {
-    public Node LLparser(List<Token> ts) throws Exception
+    public AST LLparser(List<Token> ts) throws Exception
     {
 
         int tsIndex = 0;
@@ -102,7 +103,7 @@ public class Parser
             }
             System.out.println("\n\n");
         }
-        return rootNode;
+        return new AST(rootNode);
 
     }
 
@@ -127,7 +128,7 @@ public class Parser
         }
     }
 
-    String GetName(Token t)
+    public static String GetName(Token t)
     {
         return t.getClass().getSimpleName().replaceAll("Token","").toLowerCase();
     }

@@ -29,10 +29,12 @@ public class Visitor1 extends Visitor
             {
                 String returnType = Parser.GetName(((TerminalNode) node.leftMostChild.leftMostChild).terminal);
                 String id = ((idToken) ((TerminalNode) node.leftMostChild.rightSib).terminal).spelling;
-                List<String> parameters = Collections.reverse(GetParameterTypes(node.leftMostChild.rightSib.rightSib.rightSib));
+                List<String> parameters = GetParameterTypes(node.leftMostChild.rightSib.rightSib.rightSib);
+                Collections.reverse(parameters);
 
-                Symbol symbol = new FunctionSymbol();
-                _stack.peek().table.put()
+                Symbol symbol = new FunctionSymbol(id, "func", returnType, parameters);
+                EnterSymbol(symbol);
+
             } catch (Exception e)
             {
                 throw new Exception(e.getMessage());

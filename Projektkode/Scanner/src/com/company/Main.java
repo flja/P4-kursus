@@ -3,6 +3,7 @@ import com.company.AST.AST;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
+import com.company.SymbolTable.SymbolTableGenerator;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -23,6 +24,29 @@ public class Main {
         Parser parser = new Parser();
         AST ast = parser.LLparser(scanner.Lexer());
         Node node = ast.Root;
+        prettyPrintTree(node);
+        SymbolTableGenerator symbolTableGenerator = new SymbolTableGenerator(ast);
+        
+    }
+    public static void printNode(Node node, int indents)
+    {
+        String indentation = "";
+        for (int i = 0; i < indents; i++)
+        {
+            indentation += "|   ";
+        }
+        if(node instanceof TerminalNode)
+        {
+            System.out.println(indentation  + ((TerminalNode) node).terminal.getClass().getSimpleName());
+        }
+        else
+        {
+            System.out.println(indentation + ((NonTerminalNode) node).nonterminal);
+        }
+    }
+
+    public static void prettyPrintTree(Node node)
+    {
         int indent = 0;
         System.out.println("\n\n");
         printNode(node, indent);
@@ -52,28 +76,6 @@ public class Main {
             {
                 node.visited = false;
             }
-        }
-        //Scanner1 s = new Scanner1();
-        //for (Token token : s.Lexer())
-        //{
-        //    System.out.println(token.getClass().getSimpleName());
-
-	// write your code here
-    }
-    public static void printNode(Node node, int indents)
-    {
-        String indentation = "";
-        for (int i = 0; i < indents; i++)
-        {
-            indentation += "|   ";
-        }
-        if(node instanceof TerminalNode)
-        {
-            System.out.println(indentation  + ((TerminalNode) node).terminal.getClass().getSimpleName());
-        }
-        else
-        {
-            System.out.println(indentation + ((NonTerminalNode) node).nonterminal);
         }
     }
 }

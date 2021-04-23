@@ -1,5 +1,6 @@
 package com.company.SymbolTable;
 
+import com.company.AST.AST;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
@@ -9,13 +10,23 @@ import com.company.Tokens.idToken;
 import java.util.Stack;
 public class SymbolTableGenerator
 {
-    Stack<ScopeTable> stack = new Stack<ScopeTable>();
-    ScopeTable GlobalScope = new ScopeTable();
+    AST _ast;
+    ScopeTable _globalScope = new ScopeTable();
 
 
+    public SymbolTableGenerator(AST aAST)
+    {
+        _ast = aAST;
+    }
+    public ScopeTable GenerateSymbolTable() throws Exception
+    {
+        _globalScope = new Visitor1(_globalScope, _ast.Root.GetChildren().get(8)).StartVisitor();
+        _globalScope = new Visitor2(_globalScope, _ast.Root).StartVisitor();
+        return _globalScope;
+    }
 }
-public class SymbolTableGenerator1
-{
+//public class SymbolTableGenerator1
+/*{
     Stack<ScopeTable> stack = new Stack<ScopeTable>();
     ScopeTable GlobalScope = new ScopeTable();
 
@@ -105,4 +116,4 @@ public class SymbolTableGenerator1
     {
         return stack.peek().table.get(name) != null;
     }
-}
+}*/

@@ -1,0 +1,98 @@
+deck gamedeck = standard;
+
+Define Cards
+{
+	assign king.value = 10;
+	assign queen.value = 10;
+	assign jack.value = 10;
+	assign ace.value = 11;	
+}
+
+Define Player(1)
+{
+	hand Hand;
+	assign Hand.visibility = visible;
+}
+
+Define Table
+{
+	deck pilehidden;
+	deck pilevisible;
+
+	assign pilehidden.visibility = hidden;
+	assign pilevisible.visibility = visible;		
+}
+
+Setup
+{
+	func gamedeck.shuffle();
+	func player.Hand.drawfrom(gamedeck, 2);
+	func pilehidden.drawfrom(gamedeck, 1);
+	func pilevisible.drawfrom(gamedeck, 1);
+}
+
+Round
+{
+	while(?pilehidden.cards.value + pilevisible.cards.value < 17)
+	{
+		func pilevisible.drawfrom(gamedeck, 1);
+	} endwhile;
+
+	if(?pilehidden.cards.value + pilevisible.cards.value < 21)
+	{
+		func player.taketurn();
+	} endif;
+	func endcondition.check();
+}
+
+Turn
+{
+	while(?turntaker.Hand.value < 21)
+	{
+		actions
+		{
+			action Hit if(?true)
+			{
+				func turntaker.Hand.drawfrom(gamedeck, 1);
+
+			} endaction;
+			action Stand if(?true)
+			{
+				func endturn();
+
+			} endaction;
+			action Split if(?turntaker.Hand.size == 2 and turntaker.Hand.1 == turntaker.Hand.2)
+			{
+
+			} endaction;
+		} endactions;
+	}endwhile;
+	func endcondition.check();
+}
+
+Endcondition(?pilehidden.cards.value + pilevisible.cards.value >= 21 or player.Hand.value >= 21)
+{
+	if(?pilehidden.cards.value + pilevisible.cards.value > 21)
+	{
+		assign winner = player;
+	}
+	else if(?pilehidden.cards.value + pilevisible.cards.value == 21)
+	{
+		assign winner = 0;
+	}
+	else if(?player.Hand.value == 21 )
+	{
+		assign winner = player;
+	}
+	else if(?player.Hand.value > pilehidden.cards.value + pilevisible.cards.value)
+	{
+		assign winner = player;
+	}
+	else
+	{
+		assign winner = 0;	
+	} endif; endif; endif; endif;
+}
+Functions
+{
+}

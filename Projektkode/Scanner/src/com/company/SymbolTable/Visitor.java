@@ -18,12 +18,13 @@ public abstract class Visitor
         _astTree = aAstTree;
     }
 
-    public void StartVisitor()
+    public ScopeTable StartVisitor() throws Exception
     {
         RecursiveVisitor(_astTree);
-
+        return _globalScope;
     }
-    private void RecursiveVisitor(Node node)
+
+    private void RecursiveVisitor(Node node) throws Exception
     {
         Visit(node);
         for (Node child : node.GetChildren())
@@ -31,7 +32,8 @@ public abstract class Visitor
             RecursiveVisitor(child);
         }
     }
-    private void OpenScope()
+
+    void OpenScope()
     {
         ScopeTable table = new ScopeTable();
         table.previous = _stack.peek();
@@ -39,7 +41,7 @@ public abstract class Visitor
         _stack.push(table);
     }
 
-    private void CloseScope()
+    void CloseScope()
     {
         _stack.pop();
     }
@@ -61,6 +63,39 @@ public abstract class Visitor
 
     }
 
+    public Symbol RetrieveSymbol(String name)
+    {
+        ScopeTable current = _stack.peek();
+        while(current.previous != null)
+        {
+            if (current.table.get(name) != null)
+            {
+                return current.table.get(name);
+            }
+            else
+            {
+                current = current.previous;
+            }
+        }
+        return null;
+    }
+
+    public void EnterSymbol(Symbol symbol) throws Exception
+    {
+        if (DeclaredLocally(symbol._id))
+        {
+            throw new Exception("Dublicate Definition of " + symbol._id);
+        }
+        else
+        {
+            _stack.peek().table.put(symbol._id, symbol);
+        }
+    }
+
+    public boolean DeclaredLocally(String name)
+    {
+        return _stack.peek().table.get(name) != null;
+    }
 
     abstract void Visit(Node node) throws Exception;
 

@@ -22,8 +22,10 @@ public class Visitor2 extends Visitor
             {
                 case "lbrace" :
                     OpenScope();
+                    break;
                 case "rbrace" :
                     CloseScope();
+                    break;
                 case "id":
                     if (!(((NonTerminalNode) (node.parent)).nonterminal.toLowerCase().contains("dcl")))
                     {
@@ -32,6 +34,7 @@ public class Visitor2 extends Visitor
                             throw new Exception("Undeclared symbol: " + ((idToken) ((TerminalNode) node).terminal).spelling);
                         }
                     }
+                    break;
                 default :
             }
         }
@@ -43,30 +46,37 @@ public class Visitor2 extends Visitor
                     EnterSymbol(
                             new Symbol((((idToken) (((TerminalNode)node.leftMostChild.rightSib)).terminal).spelling),
                                     "deck"));
+                    break;
                 case "NumberDcl" :
                     EnterSymbol(
                             new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
                                     "number"));
+                    break;
                 case "CardDcl" :
                     EnterSymbol(
                             new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
                                     "card"));
+                    break;
                 case "HandDcl" :
                     EnterSymbol(
                             new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
                                     "hand"));
+                    break;
                 case "EnumDcl" :
                     EnterSymbol(
                             new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
                                     "enum"));
+                    break;
                 case "StringDcl" :
                     EnterSymbol(
                             new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
                                     "string"));
+                    break;
                 case "FlagDcl" :
                     EnterSymbol(
                             new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
                                     "flag"));
+                    break;
             }
         }
     }

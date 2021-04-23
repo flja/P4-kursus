@@ -22,7 +22,7 @@ public class Scanner1
         Token temp2;
         String word = "";
 
-        FileReader fr = new FileReader("C:\\Users\\Alexander Droob\\Desktop\\SW4\\Test.txt");
+        FileReader fr = new FileReader("C:\\Users\\kills\\Documents\\GitHub\\P4-kursus\\Projektkode\\Test.txt");
         BufferedReader br = new BufferedReader(fr);
 
         try

@@ -31,14 +31,6 @@ public abstract class Visitor
         Visit(node);
         for (Node child : node.GetChildren())
         {
-            if (child instanceof NonTerminalNode)
-            {
-                System.out.println(((NonTerminalNode) child).nonterminal);
-            }
-            else if (child instanceof TerminalNode)
-            {
-                System.out.println(((TerminalNode) child).terminal.getClass().getSimpleName());
-            }
             RecursiveVisitor(child);
         }
     }
@@ -92,10 +84,8 @@ public abstract class Visitor
 
     public void EnterSymbol(Symbol symbol) throws Exception
     {
-        if (symbol._id == "gamedeck")
-        {
-            System.out.println();
-        }
+        System.out.println(symbol._id);
+
         if (DeclaredLocally(symbol._id))
         {
             throw new Exception("Dublicate Definition of " + symbol._id);

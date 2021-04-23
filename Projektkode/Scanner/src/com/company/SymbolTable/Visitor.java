@@ -3,6 +3,7 @@ package com.company.SymbolTable;
 import com.company.AST.AST;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
+import com.company.AST.TerminalNode;
 
 import java.util.Stack;
 
@@ -16,6 +17,7 @@ public abstract class Visitor
     {
         _globalScope = aTable;
         _astTree = aAstTree;
+        _stack.push(_globalScope);
     }
 
     public ScopeTable StartVisitor() throws Exception
@@ -29,6 +31,14 @@ public abstract class Visitor
         Visit(node);
         for (Node child : node.GetChildren())
         {
+            if (child instanceof NonTerminalNode)
+            {
+                System.out.println(((NonTerminalNode) child).nonterminal);
+            }
+            else if (child instanceof TerminalNode)
+            {
+                System.out.println(((TerminalNode) child).terminal.getClass().getSimpleName());
+            }
             RecursiveVisitor(child);
         }
     }
@@ -82,6 +92,10 @@ public abstract class Visitor
 
     public void EnterSymbol(Symbol symbol) throws Exception
     {
+        if (symbol._id == "gamedeck")
+        {
+            System.out.println();
+        }
         if (DeclaredLocally(symbol._id))
         {
             throw new Exception("Dublicate Definition of " + symbol._id);

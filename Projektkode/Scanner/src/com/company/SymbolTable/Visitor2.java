@@ -41,7 +41,7 @@ public class Visitor2 extends Visitor
             {
                 case "DeckDcl" :
                     EnterSymbol(
-                            new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
+                            new Symbol((((idToken) (((TerminalNode)node.leftMostChild.rightSib)).terminal).spelling),
                                     "deck"));
                 case "NumberDcl" :
                     EnterSymbol(

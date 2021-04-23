@@ -3,6 +3,7 @@ import com.company.AST.AST;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
+import com.company.SymbolTable.ScopeTable;
 import com.company.SymbolTable.SymbolTableGenerator;
 
 import java.io.BufferedReader;
@@ -24,9 +25,9 @@ public class Main {
         Parser parser = new Parser();
         AST ast = parser.LLparser(scanner.Lexer());
         Node node = ast.Root;
-        prettyPrintTree(node);
+        prettyPrintAST(node);
         SymbolTableGenerator symbolTableGenerator = new SymbolTableGenerator(ast);
-        
+        ScopeTable SymbolTable = symbolTableGenerator.GenerateSymbolTable();
     }
     public static void printNode(Node node, int indents)
     {
@@ -45,7 +46,7 @@ public class Main {
         }
     }
 
-    public static void prettyPrintTree(Node node)
+    public static void prettyPrintAST(Node node)
     {
         int indent = 0;
         System.out.println("\n\n");
@@ -77,6 +78,37 @@ public class Main {
                 node.visited = false;
             }
         }
+    }
+
+    public static void PrintSymbolTable(ScopeTable globalScope)
+    {
+        int indent = 0;
+        System.out.println("\n\n");
+        System.out.println("SymbolTable:");
+        printScopes(globalScope, 0);
+    }
+
+    public static void printScopes(ScopeTable scopeTable, int indent)
+    {
+        for (String item : scopeTable.table.keySet())
+        {
+            PrintSymbol(scopeTable.table.get(item).toString(), indent);
+        }
+        for (ScopeTable item : scopeTable.subScopes)
+        {
+            printScopes(item, ++indent);
+        }
+
+    }
+
+    public static void PrintSymbol(String symbol, int indents)
+    {
+        String indentation = "";
+        for (int i = 0; i < indents; i++)
+        {
+            indentation += "|   ";
+        }
+        System.out.println(indentation + symbol.toString());
     }
 }
 

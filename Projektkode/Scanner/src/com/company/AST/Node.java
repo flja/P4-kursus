@@ -55,11 +55,14 @@ public class Node
     {
         List<Node> children = new ArrayList<Node>();
         Node child = this.leftMostChild;
-        children.add(child);
-        while(child.rightSib != null)
+        if (child != null)
         {
-            child = child.rightSib;
             children.add(child);
+            while(child.rightSib != null)
+            {
+                child = child.rightSib;
+                children.add(child);
+            }
         }
         return children;
     }

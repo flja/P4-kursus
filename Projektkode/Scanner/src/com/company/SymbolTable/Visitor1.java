@@ -18,11 +18,13 @@ public class Visitor1 extends Visitor
     public Visitor1(ScopeTable aTable, Node aAstTree)
     {
         super(aTable, aAstTree);
+
     }
 
     @Override
     public void Visit(Node node) throws Exception
     {
+
         if (CheckNonTerminalType(node, "FunctionsDef"))
         {
             try

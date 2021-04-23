@@ -8,9 +8,17 @@ import com.company.Tokens.idToken;
 
 public class Visitor2 extends Visitor
 {
-    public Visitor2(ScopeTable aTable, Node aAstTree)
+    public Visitor2(ScopeTable aTable, Node aAstTree) throws  Exception
     {
         super(aTable, aAstTree);
+        Symbol s = new Symbol("king", "number");
+        EnterSymbol(s);
+        s = new Symbol("queen", "number");
+        EnterSymbol(s);
+        s = new Symbol("jack", "number");
+        EnterSymbol(s);
+        s = new Symbol("ace", "number");
+        EnterSymbol(s);
     }
 
     @Override

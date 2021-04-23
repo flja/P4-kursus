@@ -18,6 +18,7 @@ public class SymbolTableGenerator
     {
         _ast = aAST;
     }
+
     public ScopeTable GenerateSymbolTable() throws Exception
     {
         _globalScope = new Visitor1(_globalScope, _ast.Root.GetChildren().get(8)).StartVisitor();

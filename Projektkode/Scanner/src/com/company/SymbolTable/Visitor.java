@@ -68,7 +68,7 @@ public abstract class Visitor
     public Symbol RetrieveSymbol(String name)
     {
         ScopeTable current = _stack.peek();
-        while(current.previous != null)
+        while(current != null)
         {
             if (current.table.get(name) != null)
             {

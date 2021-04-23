@@ -8,17 +8,17 @@ public class AST
         Root = aRoot;
     }
 
-    public void UnvisitNodes()
+    public void ResetVisit()
     {
-        unvisitNode(this.Root);
+        ResetVisits(this.Root);
     }
 
-    private void unvisitNode(Node node)
+    private void ResetVisits(Node node)
     {
         node.visited = false;
         for (Node child : node.GetChildren() )
         {
-            unvisitNode(child);
+            ResetVisits(child);
         }
     }
 }

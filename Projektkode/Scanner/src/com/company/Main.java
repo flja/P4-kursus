@@ -21,6 +21,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception
     {
+        System.out.println(Paths.get(".").toAbsolutePath().normalize().toString());
         Scanner1 scanner = new Scanner1();
         Parser parser = new Parser();
         AST ast = parser.LLparser(scanner.Lexer());

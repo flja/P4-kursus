@@ -4,6 +4,7 @@ import com.company.Tokens.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,7 @@ public class Scanner1
         Token temp;
         Token temp2;
         String word = "";
-
-        FileReader fr = new FileReader("C:\\Users\\kills\\Documents\\GitHub\\P4-kursus\\Projektkode\\Test.txt");
+        FileReader fr = new FileReader(Paths.get(".").toAbsolutePath().normalize().toString() + "\\Test.txt");
         BufferedReader br = new BufferedReader(fr);
 
         try

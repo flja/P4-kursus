@@ -35,7 +35,7 @@ public class Visitor2 extends Visitor
                     CloseScope();
                     break;
                 case "id":
-                    if (!(((NonTerminalNode) (node.parent)).nonterminal.toLowerCase().contains("dcl")))
+                    if (!node.visited)
                     {
                         if (RetrieveSymbol(((idToken) ((TerminalNode) node).terminal).spelling) == null)
                         {
@@ -51,41 +51,82 @@ public class Visitor2 extends Visitor
             switch (((NonTerminalNode) node).nonterminal)
             {
                 case "DeckDcl" :
-                    EnterSymbol(
-                            new Symbol((((idToken) (((TerminalNode)node.leftMostChild.rightSib)).terminal).spelling),
-                                    "deck"));
+                    EnterSymbolHelper(node, "deck");
                     break;
                 case "NumberDcl" :
-                    EnterSymbol(
-                            new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
-                                    "number"));
+                    EnterSymbolHelper(node, "number");
                     break;
                 case "CardDcl" :
-                    EnterSymbol(
-                            new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
-                                    "card"));
+                    EnterSymbolHelper(node, "card");
                     break;
                 case "HandDcl" :
-                    EnterSymbol(
-                            new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
-                                    "hand"));
+                    EnterSymbolHelper(node, "hand");
                     break;
                 case "EnumDcl" :
-                    EnterSymbol(
-                            new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
-                                    "enum"));
+                    EnterSymbolHelper(node, "enum");
                     break;
                 case "StringDcl" :
-                    EnterSymbol(
-                            new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
-                                    "string"));
+                    EnterSymbolHelper(node, "string");
                     break;
                 case "FlagDcl" :
-                    EnterSymbol(
-                            new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
-                                    "flag"));
+                    EnterSymbolHelper(node, "flag");
+                    break;
+                case "ObjectSpecifier" :
+                    String s = HandleObjectSpecifier(node);
+                    if (RetrieveSymbol(s) == null)
+                    {
+                        throw new Exception("Undeclared symbol: " + s );
+                    }
                     break;
             }
         }
+    }
+
+    void EnterSymbolHelper(Node node, String type) throws Exception
+    {
+        EnterSymbol(
+                new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
+                        type));
+        node.visited = true;
+    }
+    String HandleObjectSpecifier(Node node)
+    {
+        String id = "";
+        Node next = null;
+        if (node instanceof NonTerminalNode && node.leftMostChild != null)
+        {
+            switch (((NonTerminalNode) node).nonterminal)
+            {
+                case "ObjectSpecifier":
+                case "FollowObject":
+
+                    next = node.leftMostChild.rightSib;
+                    break;
+                case "FollowObject1":
+                    next = node.rightSib;
+                    break;
+                default:
+                    next = null;
+            }
+        }
+        if (node.leftMostChild instanceof TerminalNode)
+        {
+            switch (Parser.GetName(((TerminalNode) node.leftMostChild).terminal))
+            {
+                case "dot":
+                    id += ".";
+                    break;
+                case "id":
+                    id += ((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling;
+                    node.leftMostChild.visited = true;
+                    break;
+            }
+        }
+        if (next != null)
+        {
+            id += HandleObjectSpecifier(next);
+        }
+        return id;
+
     }
 }

@@ -17,10 +17,12 @@ public class SymbolTableGenerator
     public SymbolTableGenerator(AST aAST)
     {
         _ast = aAST;
+
     }
 
     public ScopeTable GenerateSymbolTable() throws Exception
     {
+        _ast.ResetVisit();
         _globalScope = new Visitor1(_globalScope, _ast.Root.GetChildren().get(8)).StartVisitor();
         _globalScope = new Visitor2(_globalScope, _ast.Root).StartVisitor();
         return _globalScope;

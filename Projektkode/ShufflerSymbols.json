@@ -5,20 +5,20 @@
         {
             "cards":
             [
-                "ones",
-                "twos",
-                "threes",
-                "fours",
-                "fives",
-                "sixes",
-                "sevens",
-                "eights",
-                "nines",
-                "tens",
-                "jacks",
-                "queens",
-                "kings",
-                "aces"
+                "one",
+                "two",
+                "three",
+                "four",
+                "five",
+                "six",
+                "seven",
+                "eight",
+                "nine",
+                "ten",
+                "jack",
+                "queen",
+                "king",
+                "ace"
             ],
             "properties":
             [
@@ -26,6 +26,14 @@
                     "name" : "value",
                     "type" : "number"
                 }
+            ]
+        },
+        "Keywords":
+        {
+            "keywords":
+            [
+                "visible",
+                "hidden"
             ]
         }
     },
@@ -40,6 +48,25 @@
                 {
                     "name" : "value",
                     "type" : "number"
+                },
+                {
+                    "name" : "visibility",
+                    "type" : "Keyword"
+                }
+            ]
+        },
+
+        "deck" :
+        {
+            "properties":
+            [
+                {
+                    "name" : "numberValue",
+                    "type" : "card"
+                },
+                {
+                    "name" : "shuffle",
+                    "type" : "void func ()"
                 }
             ]
         }

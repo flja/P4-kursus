@@ -3,19 +3,25 @@ package com.company.SymbolTable;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
+import com.company.ShufflerSymbols.PropertiesClass;
+import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.Tokens.idToken;
 
+import java.util.List;
+import java.util.Properties;
 import java.util.Stack;
 
 public abstract class Visitor {
     Stack<ScopeTable> _stack = new Stack<ScopeTable>();
     ScopeTable _globalScope;
     Node _astTree;
+    ShufflerSymbols _shufflerSymbols;
 
-    public Visitor(ScopeTable aTable, Node aAstTree) {
+    public Visitor(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) {
         _globalScope = aTable;
         _astTree = aAstTree;
         _stack.push(_globalScope);
+        _shufflerSymbols = aShufflerSymbols;
     }
 
     public ScopeTable StartVisitor() throws Exception {
@@ -85,6 +91,7 @@ public abstract class Visitor {
         {
             scope.table.put(symbol.Id(), symbol);
         }
+        AddPropertiesToTable(symbol, scope);
     }
     Symbol EnterDclSymbolHelper(Node node, String type) throws Exception
     {
@@ -96,9 +103,23 @@ public abstract class Visitor {
         return _stack.peek().table.get(name) != null;
     }
 
-    void AddPropertiesToTable(Symbol symbol, ScopeTable table)
-    {
+    void AddPropertiesToTable(Symbol symbol, ScopeTable table) throws Exception {
+        switch (symbol.Type())
+        {
+            case "hand" :
+                AddProperties(symbol.Id(), _shufflerSymbols.TypeProperties.hand.properties, table);
+                break;
+            case "deck" :
+                AddProperties(symbol.Id(), _shufflerSymbols.TypeProperties.deck.properties, table);
+                break;
+        }
 
+    }
+    void AddProperties(String id, List<PropertiesClass> properties, ScopeTable scopeTable) throws Exception {
+        for (PropertiesClass p : properties) {
+            String s = id + "." + p.name;
+            AddSymbolToTable(new Symbol(s, p.type),scopeTable);
+        }
     }
 
     abstract void Visit(Node node) throws Exception;

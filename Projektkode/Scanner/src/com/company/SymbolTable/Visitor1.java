@@ -4,6 +4,7 @@ import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
 import com.company.Parser;
+import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.Tokens.idToken;
 
 import java.util.ArrayList;
@@ -15,11 +16,10 @@ public class Visitor1 extends Visitor
     int state = 0;
     String ReturnType;
 
-    public Visitor1(ScopeTable aTable, Node aAstTree)
-    {
-        super(aTable, aAstTree);
-
+    public Visitor1(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) {
+        super(aTable, aAstTree, aShufflerSymbols);
     }
+
 
     @Override
     public void Visit(Node node) throws Exception

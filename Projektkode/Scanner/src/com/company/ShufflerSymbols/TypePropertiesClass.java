@@ -2,5 +2,6 @@ package com.company.ShufflerSymbols;
 
 public class TypePropertiesClass
 {
-    HandClass hand;
+    public TypeClass hand;
+    public TypeClass deck;
 }

@@ -2,6 +2,6 @@ package com.company.ShufflerSymbols;
 
 public class PropertiesClass
 {
-    String name;
-    String type;
+    public String name;
+    public String type;
 }

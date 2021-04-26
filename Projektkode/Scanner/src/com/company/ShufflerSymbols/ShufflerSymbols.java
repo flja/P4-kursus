@@ -2,7 +2,7 @@ package com.company.ShufflerSymbols;
 
 public class ShufflerSymbols
 {
-    DefaultSymbolsClass DefaultSymbols;
-    TypePropertiesClass TypeProperties;
-    DefaultFunctionsClass DefaultFunctions;
+    public DefaultSymbolsClass DefaultSymbols;
+    public TypePropertiesClass TypeProperties;
+    public DefaultFunctionsClass DefaultFunctions;
 }

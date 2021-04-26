@@ -4,13 +4,15 @@ import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
 import com.company.Parser;
+import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.Tokens.*;
 
 public class Visitor3 extends Visitor
 {
-    public Visitor3(ScopeTable aTable, Node aAstTree) throws  Exception
-    {
-        super(aTable, aAstTree);
+
+
+    public Visitor3(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) throws Exception {
+        super(aTable, aAstTree, aShufflerSymbols);
         Symbol s = new Symbol("king", "number");
         EnterSymbolToCurrentScope(s);
         s = new Symbol("queen", "number");

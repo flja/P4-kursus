@@ -1,15 +1,18 @@
 package com.company.SymbolTable;
 
 import com.company.AST.AST;
+import com.company.ShufflerSymbols.LoadShufflerSymbols;
+import com.company.ShufflerSymbols.PropertiesClass;
+import com.company.ShufflerSymbols.ShufflerSymbols;
 
 public class SymbolTableGenerator
 {
     AST _ast;
     ScopeTable _globalScope = new ScopeTable();
+    ShufflerSymbols _shufflerSymbols = new LoadShufflerSymbols().Load();
 
 
-    public SymbolTableGenerator(AST aAST)
-    {
+    public SymbolTableGenerator(AST aAST) throws Exception {
         _ast = aAST;
 
     }
@@ -17,9 +20,26 @@ public class SymbolTableGenerator
     public ScopeTable GenerateSymbolTable() throws Exception
     {
         _ast.ResetVisit();
-        _globalScope = new Visitor1(_globalScope, _ast.Root.GetChildren().get(8)).StartVisitor();
-        _globalScope = new Visitor3(_globalScope, _ast.Root).StartVisitor();
+        addDefaultSymbols();
+        _globalScope = new Visitor1(_globalScope, _ast.Root.GetChildren().get(8), _shufflerSymbols).StartVisitor();
+        _globalScope = new Visitor2(_globalScope, _ast.Root.GetChildren().get(2), _shufflerSymbols).StartVisitor();
+        _globalScope = new Visitor3(_globalScope, _ast.Root, _shufflerSymbols).StartVisitor();
         return _globalScope;
+    }
+
+    void addDefaultSymbols()
+    {
+        for (String item : _shufflerSymbols.DefaultSymbols.Cards.cards)
+        {
+            for (PropertiesClass p : _shufflerSymbols.DefaultSymbols.Cards.properties) {
+                String id = item + "." + p.name;
+                _globalScope.table.put(id ,new Symbol(id, p.type));
+            }
+        }
+        for (String item : _shufflerSymbols.DefaultSymbols.Keywords.keywords)
+        {
+                _globalScope.table.put(item ,new Symbol(item, "keyword"));
+        }
     }
 }
 //public class SymbolTableGenerator1

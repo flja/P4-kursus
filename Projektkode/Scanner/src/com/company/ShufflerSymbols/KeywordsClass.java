@@ -2,7 +2,7 @@ package com.company.ShufflerSymbols;
 
 import java.util.List;
 
-public class HandClass
+public class KeywordsClass
 {
-    List<PropertiesClass> properties;
+    public List<String> keywords;
 }

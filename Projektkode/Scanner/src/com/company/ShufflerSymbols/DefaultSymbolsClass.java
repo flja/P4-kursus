@@ -4,6 +4,6 @@ import java.util.List;
 
 public class DefaultSymbolsClass
 {
-    List<String> cards;
-
+    public CardsClass Cards;
+    public KeywordsClass Keywords;
 }

@@ -2,8 +2,7 @@ package com.company.ShufflerSymbols;
 
 import java.util.List;
 
-public class CardsClass
+public class TypeClass
 {
-    public String[] cards;
     public List<PropertiesClass> properties;
 }

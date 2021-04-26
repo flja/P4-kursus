@@ -3,6 +3,7 @@ package com.company.SymbolTable;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
+import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.Tokens.nonZeroNumToken;
 
 public class Visitor2 extends Visitor
@@ -10,16 +11,20 @@ public class Visitor2 extends Visitor
     int playerCnt;
     int state  = 0;
     boolean done = false;
-    public Visitor2(ScopeTable aTable, Node aAstTree)
-    {
-        super(aTable, aAstTree);
+
+    public Visitor2(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) {
+        super(aTable, aAstTree, aShufflerSymbols);
     }
+
 
     @Override
     void RecursiveVisitor(Node node) throws Exception {
-        if (((NonTerminalNode) node).nonterminal == "Setup")
+        if (node instanceof NonTerminalNode)
         {
-            done = true;
+            if (((NonTerminalNode) node).nonterminal == "Setup")
+            {
+                done = true;
+            }
         }
         if (!done)
         {

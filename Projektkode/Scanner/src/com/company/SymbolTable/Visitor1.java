@@ -35,7 +35,7 @@ public class Visitor1 extends Visitor
                 Collections.reverse(parameters);
 
                 Symbol symbol = new FunctionSymbol(id, "func", returnType, parameters);
-                EnterSymbol(symbol);
+                EnterSymbolToCurrentScope(symbol);
 
             } catch (Exception e)
             {

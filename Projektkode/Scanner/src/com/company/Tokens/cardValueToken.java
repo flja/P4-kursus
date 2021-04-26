@@ -2,8 +2,8 @@ package com.company.Tokens;
 
 public class cardValueToken extends Token
 {
-    char facevalue;
-    char suit;
+    public char facevalue;
+    public char suit;
     public cardValueToken(int line, char afacevalue, char asuit){
         super(line);
         facevalue = afacevalue;

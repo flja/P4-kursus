@@ -1,13 +1,7 @@
 package com.company.SymbolTable;
 
 import com.company.AST.AST;
-import com.company.AST.Node;
-import com.company.AST.NonTerminalNode;
-import com.company.AST.TerminalNode;
-import com.company.Parser;
-import com.company.Tokens.idToken;
 
-import java.util.Stack;
 public class SymbolTableGenerator
 {
     AST _ast;
@@ -24,7 +18,7 @@ public class SymbolTableGenerator
     {
         _ast.ResetVisit();
         _globalScope = new Visitor1(_globalScope, _ast.Root.GetChildren().get(8)).StartVisitor();
-        _globalScope = new Visitor2(_globalScope, _ast.Root).StartVisitor();
+        _globalScope = new Visitor3(_globalScope, _ast.Root).StartVisitor();
         return _globalScope;
     }
 }

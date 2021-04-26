@@ -2,7 +2,7 @@ package com.company.Tokens;
 
 public class nonZeroNumToken extends Token
 {
-    int value;
+    public int value;
 
     public nonZeroNumToken(int line, int avalue){
         super(line);

@@ -3,130 +3,135 @@ package com.company.SymbolTable;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
-import com.company.Parser;
-import com.company.Tokens.idToken;
+import com.company.Tokens.nonZeroNumToken;
 
 public class Visitor2 extends Visitor
 {
-    public Visitor2(ScopeTable aTable, Node aAstTree) throws  Exception
+    int playerCnt;
+    int state  = 0;
+    boolean done = false;
+    public Visitor2(ScopeTable aTable, Node aAstTree)
     {
         super(aTable, aAstTree);
-        Symbol s = new Symbol("king", "number");
-        EnterSymbol(s);
-        s = new Symbol("queen", "number");
-        EnterSymbol(s);
-        s = new Symbol("jack", "number");
-        EnterSymbol(s);
-        s = new Symbol("ace", "number");
-        EnterSymbol(s);
     }
 
     @Override
+    void RecursiveVisitor(Node node) throws Exception {
+        if (((NonTerminalNode) node).nonterminal == "Setup")
+        {
+            done = true;
+        }
+        if (!done)
+        {
+            Visit(node);
+            for (Node child : node.GetChildren())
+            {
+                RecursiveVisitor(child);
+            }
+        }
+    }
+    @Override
     void Visit(Node node) throws Exception
     {
-        if (node instanceof TerminalNode)
+        if (node instanceof NonTerminalNode)
         {
-            switch (Parser.GetName(((TerminalNode) node).terminal))
+            if (((NonTerminalNode) node).nonterminal == "PlayerDef")
             {
-                case "lbrace" :
-                    OpenScope();
-                    break;
-                case "rbrace" :
-                    CloseScope();
-                    break;
-                case "id":
-                    if (!node.visited)
-                    {
-                        if (RetrieveSymbol(((idToken) ((TerminalNode) node).terminal).spelling) == null)
-                        {
-                            throw new Exception("Undeclared symbol: " + ((idToken) ((TerminalNode) node).terminal).spelling);
-                        }
-                    }
-                    break;
-                default :
+                playerCnt = ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib.rightSib.rightSib).terminal).value;
+            }
+            if (((NonTerminalNode) node).nonterminal == "TableDef")
+            {
+                state = 1;
             }
         }
-        else if(node instanceof NonTerminalNode)
+        switch (state)
         {
-            switch (((NonTerminalNode) node).nonterminal)
+            case 0:
+                PlayerScope(node);
+                break;
+            case 1:
+                TableScope(node);
+                break;
+
+        }
+
+
+    }
+    void PlayerScope(Node node) throws Exception
+    {
+        if (node instanceof NonTerminalNode)
+        {
             {
-                case "DeckDcl" :
-                    EnterSymbolHelper(node, "deck");
-                    break;
-                case "NumberDcl" :
-                    EnterSymbolHelper(node, "number");
-                    break;
-                case "CardDcl" :
-                    EnterSymbolHelper(node, "card");
-                    break;
-                case "HandDcl" :
-                    EnterSymbolHelper(node, "hand");
-                    break;
-                case "EnumDcl" :
-                    EnterSymbolHelper(node, "enum");
-                    break;
-                case "StringDcl" :
-                    EnterSymbolHelper(node, "string");
-                    break;
-                case "FlagDcl" :
-                    EnterSymbolHelper(node, "flag");
-                    break;
-                case "ObjectSpecifier" :
-                    String s = HandleObjectSpecifier(node);
-                    if (RetrieveSymbol(s) == null)
-                    {
-                        throw new Exception("Undeclared symbol: " + s );
-                    }
-                    break;
+                switch (((NonTerminalNode) node).nonterminal)
+                {
+                    case "DeckDcl" :
+                        EnterPlayerSymbol(EnterDclSymbolHelper(node, "deck"));
+                        break;
+                    case "NumberDcl" :
+                        EnterPlayerSymbol(EnterDclSymbolHelper(node, "number"));
+                        break;
+                    case "CardDcl" :
+                        EnterPlayerSymbol(EnterDclSymbolHelper(node, "card"));
+                        break;
+                    case "HandDcl" :
+                        EnterPlayerSymbol(EnterDclSymbolHelper(node, "hand"));
+                        break;
+                    case "EnumDcl" :
+                        EnterPlayerSymbol(EnterDclSymbolHelper(node, "enum"));
+                        break;
+                    case "StringDcl" :
+                        EnterPlayerSymbol(EnterDclSymbolHelper(node, "string"));
+                        break;
+                    case "FlagDcl" :
+                        EnterPlayerSymbol(EnterDclSymbolHelper(node, "flag"));
+                        break;
+                }
             }
         }
     }
-
-    void EnterSymbolHelper(Node node, String type) throws Exception
+    void EnterPlayerSymbol(Symbol symbol) throws Exception
     {
-        EnterSymbol(
-                new Symbol((((idToken) ((TerminalNode) (node.leftMostChild.rightSib)).terminal).spelling),
-                        type));
-        node.visited = true;
+        for (int i = 1; i <= playerCnt; i++)
+        {
+            EnterGlobalSymbol(new Symbol("player." + i + "." + symbol.Id(), symbol.Type()));
+        }
     }
-    String HandleObjectSpecifier(Node node)
+
+    void TableScope(Node node) throws Exception
     {
-        String id = "";
-        Node next = null;
-        if (node instanceof NonTerminalNode && node.leftMostChild != null)
+        Symbol symbol = null;
+        if (node instanceof NonTerminalNode)
         {
-            switch (((NonTerminalNode) node).nonterminal)
             {
-                case "ObjectSpecifier":
-                case "FollowObject":
-
-                    next = node.leftMostChild.rightSib;
-                    break;
-                case "FollowObject1":
-                    next = node.rightSib;
-                    break;
-                default:
-                    next = null;
+                switch (((NonTerminalNode) node).nonterminal)
+                {
+                    case "DeckDcl" :
+                        symbol = EnterDclSymbolHelper(node, "deck");
+                        break;
+                    case "NumberDcl" :
+                        symbol = EnterDclSymbolHelper(node, "number");
+                        break;
+                    case "CardDcl" :
+                        symbol = EnterDclSymbolHelper(node, "card");
+                        break;
+                    case "HandDcl" :
+                        symbol = EnterDclSymbolHelper(node, "hand");
+                        break;
+                    case "EnumDcl" :
+                        symbol = EnterDclSymbolHelper(node, "enum");
+                        break;
+                    case "StringDcl" :
+                        symbol = EnterDclSymbolHelper(node, "string");
+                        break;
+                    case "FlagDcl" :
+                        symbol = EnterDclSymbolHelper(node, "flag");
+                        break;
+                }
+                if (symbol != null)
+                {
+                    EnterGlobalSymbol(new Symbol("table."+ symbol.Id(), symbol.Type()));
+                }
             }
         }
-        if (node.leftMostChild instanceof TerminalNode)
-        {
-            switch (Parser.GetName(((TerminalNode) node.leftMostChild).terminal))
-            {
-                case "dot":
-                    id += ".";
-                    break;
-                case "id":
-                    id += ((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling;
-                    node.leftMostChild.visited = true;
-                    break;
-            }
-        }
-        if (next != null)
-        {
-            id += HandleObjectSpecifier(next);
-        }
-        return id;
-
     }
 }

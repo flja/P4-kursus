@@ -3,6 +3,8 @@ import com.company.AST.AST;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
+import com.company.ShufflerSymbols.LoadShufflerSymbols;
+import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.SymbolTable.ScopeTable;
 import com.company.SymbolTable.SymbolTableGenerator;
 
@@ -22,6 +24,7 @@ public class Main {
     public static void main(String[] args) throws Exception
     {
         System.out.println(Paths.get(".").toAbsolutePath().normalize().toString());
+        ShufflerSymbols shufflerSymbols = new LoadShufflerSymbols().Load();
         Scanner1 scanner = new Scanner1();
         Parser parser = new Parser();
         AST ast = parser.LLparser(scanner.Lexer());

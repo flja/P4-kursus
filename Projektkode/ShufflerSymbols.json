@@ -1,0 +1,54 @@
+{
+    "DefaultSymbols":
+    {
+        "Cards" : 
+        {
+            "cards":
+            [
+                "ones",
+                "twos",
+                "threes",
+                "fours",
+                "fives",
+                "sixes",
+                "sevens",
+                "eights",
+                "nines",
+                "tens",
+                "jacks",
+                "queens",
+                "kings",
+                "aces"
+            ],
+            "properties":
+            [
+                {
+                    "name" : "value",
+                    "type" : "number"
+                }
+            ]
+        }
+    },
+
+    "TypeProperties": 
+    {
+
+        "hand" :
+        {
+            "properties":
+            [
+                {
+                    "name" : "value",
+                    "type" : "number"
+                }
+            ]
+        }
+    },
+
+    "DefaultFunctions":
+    {
+
+    }
+        
+    
+}

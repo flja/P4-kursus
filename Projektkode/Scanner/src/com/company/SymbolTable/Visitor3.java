@@ -4,8 +4,14 @@ import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
 import com.company.Parser;
+import com.company.ShufflerSymbols.PropertiesClass;
 import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.Tokens.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Visitor3 extends Visitor
 {
@@ -13,14 +19,6 @@ public class Visitor3 extends Visitor
 
     public Visitor3(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) throws Exception {
         super(aTable, aAstTree, aShufflerSymbols);
-        Symbol s = new Symbol("king", "number");
-        EnterSymbolToCurrentScope(s);
-        s = new Symbol("queen", "number");
-        EnterSymbolToCurrentScope(s);
-        s = new Symbol("jack", "number");
-        EnterSymbolToCurrentScope(s);
-        s = new Symbol("ace", "number");
-        EnterSymbolToCurrentScope(s);
     }
 
     @Override
@@ -32,10 +30,7 @@ public class Visitor3 extends Visitor
             {
                 case "lbrace" :
                     OpenScope();
-                    if (((NonTerminalNode) node.parent.parent).nonterminal.equals("Turn"))
-                    {
-                        AddTurntaker();
-                    }
+                    AddScopeSymbols(node);
                     break;
                 case "rbrace" :
                     CloseScope();
@@ -79,23 +74,48 @@ public class Visitor3 extends Visitor
                     break;
                 case "ObjectSpecifier" :
                     String s = HandleObjectSpecifier(node);
+
                     if (RetrieveSymbol(s) == null)
                     {
-                        throw new Exception("Undeclared symbol: " + s );
+                        throw new Exception("Undeclared symbol at line " + ((TerminalNode) node.leftMostChild).terminal.line + ": " + s );
                     }
                     break;
             }
         }
     }
-    void AddTurntaker()
+    void AddScopeSymbols(Node node) throws Exception
     {
+        switch (((NonTerminalNode) node.parent.parent).nonterminal)
+        {
+            case "Turn":
+                AddTurnSymbols();
+                break;
+            case "Endcondition":
+                AddEndconditionSymbols();
+                break;
+        }
+    }
+    void AddEndconditionSymbols() throws Exception
+    {
+        for (PropertiesClass item: _shufflerSymbols.DefaultEndconditionSymbols.symbols ) {
+            AddSymbolToTable(new Symbol(item.name, item.type), _stack.peek());
+        }
+    }
+
+    void AddTurnSymbols() throws Exception
+    {
+        String keyCheck = "player.numberValue";
         for (String key:_globalScope.table.keySet()) {
-            if(key.contains("player.1"))
+            if(key.contains(keyCheck))
             {
-                String id = "turntaker" + key.substring(8);
+                String id = "turntaker" + key.substring(keyCheck.length());
                 _stack.peek().table.put(id,new Symbol(id,_globalScope.table.get(key).Type()));
             }
         }
+        for (PropertiesClass item: _shufflerSymbols.DefaultTurnSymbols.symbols ) {
+            AddSymbolToTable(new Symbol(item.name, item.type),_stack.peek());
+        }
+
     }
     @Override
     Symbol EnterDclSymbolHelper(Node node, String type) throws Exception
@@ -119,28 +139,6 @@ public class Visitor3 extends Visitor
                 case "FollowObject1":
                     next = node.rightSib;
                     break;
-                case "String":
-                    id += "stringValue";
-                    break;
-                case "Number":
-                    if (id == "player.")
-                    {
-                        if (node.leftMostChild instanceof NonTerminalNode)
-                        {
-                            if (node.leftMostChild.leftMostChild == null)
-                            {
-                                id += ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib).terminal).value;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        id += "numberValue";
-                    }
-                    break;
-                case "Card":
-                    id += "cardValue";
-                    break;
                 default:
                     next = null;
             }
@@ -155,6 +153,21 @@ public class Visitor3 extends Visitor
                 case "id":
                     id += ((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling;
                     node.leftMostChild.visited = true;
+                    break;
+            }
+        }
+        else  if (node.leftMostChild instanceof NonTerminalNode)
+        {
+            switch (((NonTerminalNode) node.leftMostChild).nonterminal)
+            {
+                case "String":
+                    id += "stringValue";
+                    break;
+                case "Number":
+                        id += "numberValue";
+                    break;
+                case "Card":
+                    id += "cardValue";
                     break;
             }
         }

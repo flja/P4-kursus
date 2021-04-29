@@ -47,8 +47,9 @@ Round
 
 Turn
 {
-	while(?turntaker.Hand.value < 21)
+	while(?turntaker.Hand.totalValue < 21)
 	{
+		number i;
 		actions
 		{
 			action "Hit" if(?true)
@@ -58,7 +59,7 @@ Turn
 			} endaction;
 			action "Stand" if(?true)
 			{
-				func endturn();
+				func endTurn();
 
 			} endaction;
 			action "Split" if(?turntaker.Hand.size == 2 and turntaker.Hand.1 == turntaker.Hand.2)
@@ -70,29 +71,30 @@ Turn
 	func endcondition.check();
 }
 
-Endcondition(?pilehidden.cards.value + pilevisible.cards.value >= 21 or player.Hand.value >= 21)
+Endcondition(?table.pilehidden.totalValue + table.pilevisible.totalValue >= 21 or players.any.Hand.totalValue >= 21)
 {
-	if(?pilehidden.cards.value + pilevisible.cards.value > 21)
+	if(?table.pilehidden.totalValue + table.pilevisible.totalValue > 21)
 	{
-		assign winner = player;
+		assign winner = player.1;
 	}
-	else if(?pilehidden.cards.value + pilevisible.cards.value == 21)
+	else if(?table.pilehidden.totalValue + table.pilevisible.totalValue == 21)
 	{
 		assign winner = 0;
 	}
-	else if(?player.Hand.value == 21 )
+	else if(?player.1.Hand.totalValue == 21)
 	{
-		assign winner = player;
+		assign winner = player.1;
 	}
-	else if(?player.Hand.value > pilehidden.cards.value + pilevisible.cards.value)
+	else if(?player.1.Hand.totalValue > table.pilehidden.totalValue + table.pilevisible.totalValue)
 	{
-		assign winner = player;
+		assign winner = player.1;
 	}
 	else
 	{
 		assign winner = 0;	
 	} endif; endif; endif; endif;
 }
+
 Functions
 {
 }

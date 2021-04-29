@@ -90,7 +90,7 @@ SelectionStmt⟶actions CompoundStmt endactions semicolon
 SelectionStmt⟶switch lParen Expr rParen CompoundStmt endswitch semicolon 
 LabeledStmt⟶case colon Expr colon Stmts endcase semicolon
 LabeledStmt⟶default colon Stmts enddefault semicolon
-LabeledStmt⟶action id if lParen LogicalExpr rParen CompoundStmt endaction semicolon 
+LabeledStmt⟶action String if lParen LogicalExpr rParen CompoundStmt endaction semicolon 
 OptElse⟶else Stmt endif semicolon
 OptElse⟶endif semicolon
 LoopStmt⟶while lParen LogicalExpr rParen Stmt endwhile semicolon

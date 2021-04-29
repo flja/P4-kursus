@@ -1,4 +1,4 @@
-Prog⟶DeckDcls CardsDef PlayerDef TableDef Setup Round Turn Endcondition Functions eof 
+Prog⟶DeckDcls CardsDef PlayerDef TableDef Setup Round Turn Endcondition Functions $ 
 DeckDcls⟶DeckDcl assign Deck semicolon DeckDcls
 DeckDcls⟶
 CardsDef⟶define cards lBrace Assignments rBrace 
@@ -90,9 +90,9 @@ SelectionStmt⟶actions CompoundStmt endactions semicolon
 SelectionStmt⟶switch lParen Expr rParen CompoundStmt endswitch semicolon 
 LabeledStmt⟶case colon Expr colon Stmts endcase semicolon
 LabeledStmt⟶default colon Stmts enddefault semicolon
-LabeledStmt⟶action id if lParen LogicalExpr rParen CompoundStmt endaction semicolon 
+LabeledStmt⟶action String if lParen LogicalExpr rParen CompoundStmt endaction semicolon 
 OptElse⟶else Stmt endif semicolon
-OptElse⟶endif semicolon 
+OptElse⟶endif semicolon
 LoopStmt⟶while lParen LogicalExpr rParen Stmt endwhile semicolon
 LoopStmt⟶for lParen Expr semicolon Expr semicolon Expr rParen Stmt 
 Exprs⟶Expr Exprs

@@ -43,7 +43,7 @@ public class Visitor2 extends Visitor
             if (((NonTerminalNode) node).nonterminal.equals("PlayerDef"))
             {
                 playerCnt = ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib.rightSib.rightSib).terminal).value;
-                AddPlayerProperties(playerCnt);
+                AddPlayerProperties();
             }
             if (((NonTerminalNode) node).nonterminal.equals("TableDef"))
             {
@@ -98,10 +98,8 @@ public class Visitor2 extends Visitor
     void EnterPlayerSymbol(Symbol symbol) throws Exception
     {
         EnterGlobalSymbol(new Symbol("players." + symbol.Id(), symbol.Type()));
-        for (int i = 1; i <= playerCnt; i++)
-        {
-            EnterGlobalSymbol(new Symbol("player." + i + "." + symbol.Id(), symbol.Type()));
-        }
+        EnterGlobalSymbol(new Symbol("players.any." + symbol.Id(), symbol.Type()));
+        EnterGlobalSymbol(new Symbol("player.numberValue" + "." + symbol.Id(), symbol.Type()));
     }
 
     void TableScope(Node node) throws Exception
@@ -141,10 +139,9 @@ public class Visitor2 extends Visitor
             }
         }
     }
-    void AddPlayerProperties(int playerCnt) throws Exception
+    void AddPlayerProperties() throws Exception
     {
-        for (int i = 1; i <= playerCnt; i++) {
-            AddProperties("Player." + i, _shufflerSymbols.TypeProperties.player.properties, _globalScope);
-        }
+            AddSymbolToTable(new Symbol("player.numberValue", "player"), _globalScope);
+            AddProperties("player." + "numberValue", _shufflerSymbols.TypeProperties.player.properties, _globalScope);
     }
 }

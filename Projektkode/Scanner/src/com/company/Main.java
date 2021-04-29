@@ -8,16 +8,7 @@ import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.SymbolTable.ScopeTable;
 import com.company.SymbolTable.SymbolTableGenerator;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Stack;
 
 public class Main {
 
@@ -32,6 +23,7 @@ public class Main {
         prettyPrintAST(node);
         SymbolTableGenerator symbolTableGenerator = new SymbolTableGenerator(ast);
         ScopeTable SymbolTable = symbolTableGenerator.GenerateSymbolTable();
+        PrintSymbolTable(SymbolTable);
     }
     public static void printNode(Node node, int indents)
     {
@@ -86,23 +78,29 @@ public class Main {
 
     public static void PrintSymbolTable(ScopeTable globalScope)
     {
-        int indent = 0;
+        int indent = 1;
         System.out.println("\n\n");
         System.out.println("SymbolTable:");
-        printScopes(globalScope, 0);
+        printScopes(globalScope, indent);
     }
-
+    static int j = 0;
     public static void printScopes(ScopeTable scopeTable, int indent)
     {
+        if (scopeTable.table.keySet().size() <= 0)
+        {
+            //System.out
+        }
+        System.out.println("Scope " + j);
         for (String item : scopeTable.table.keySet())
         {
-            PrintSymbol(scopeTable.table.get(item).toString(), indent);
+            PrintSymbol(scopeTable.table.get(item).ToString(), indent);
         }
+        j++;
+        indent++;
         for (ScopeTable item : scopeTable.subScopes)
         {
-            printScopes(item, ++indent);
+            printScopes(item, indent);
         }
-
     }
 
     public static void PrintSymbol(String symbol, int indents)

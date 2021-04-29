@@ -46,16 +46,24 @@
             "properties":
             [
                 {
-                    "name" : "value",
-                    "type" : "number"
-                },
-                {
                     "name" : "visibility",
                     "type" : "Keyword"
                 },
                 {
                     "name" : "drawfrom",
                     "type" : "card func ()"
+                },
+                {
+                    "name" : "size",
+                    "type" : "number"
+                },
+                {
+                    "name" : "numberValue",
+                    "type" : "number"
+                },
+                {
+                    "name" : "totalValue",
+                    "type" : "number"
                 }
             ]
         },
@@ -82,7 +90,11 @@
                 },
                 {
                     "name" : "totalValue",
-                    "type" : "number func ()"
+                    "type" : "number"
+                },
+                {
+                    "name" : "size",
+                    "type" : "number"
                 }
             ]
         },
@@ -112,5 +124,27 @@
                         "type" : "func void ()"
                     }
                 ]
+    },
+
+    "DefaultTurnSymbols":
+    {
+        "symbols":
+        [
+            {
+                "name": "endTurn",
+                "type": "void func ()"
+            }
+        ]
+    },
+
+    "DefaultEndconditionSymbols":
+    {
+        "symbols":
+        [
+            {
+                "name": "winner",
+                "type": "keyword"
+            }
+        ]
     }
 }

@@ -8,30 +8,25 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\Alexander Droob\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\alexa\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Alexander Droob\\source\\repos\\Generate-ParsingTable\\Generate-ParsingTable\\Generate-ParseTable.csproj",
+      "projectUniqueName": "C:\\Users\\alexa\\Desktop\\SW4\\SW4 github\\P4-kursus\\Generate-ParsingTable\\Generate-ParsingTable\\Generate-ParseTable.csproj",
       "projectName": "Generate-ParseTable",
-      "projectPath": "C:\\Users\\Alexander Droob\\source\\repos\\Generate-ParsingTable\\Generate-ParsingTable\\Generate-ParseTable.csproj",
-      "packagesPath": "C:\\Users\\Alexander Droob\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Alexander Droob\\source\\repos\\Generate-ParsingTable\\Generate-ParsingTable\\obj\\",
+      "projectPath": "C:\\Users\\alexa\\Desktop\\SW4\\SW4 github\\P4-kursus\\Generate-ParsingTable\\Generate-ParsingTable\\Generate-ParseTable.csproj",
+      "packagesPath": "C:\\Users\\alexa\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\alexa\\Desktop\\SW4\\SW4 github\\P4-kursus\\Generate-ParsingTable\\Generate-ParsingTable\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
-        "C:\\Microsoft\\Xamarin\\NuGet\\",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Alexander Droob\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\alexa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
@@ -70,7 +65,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

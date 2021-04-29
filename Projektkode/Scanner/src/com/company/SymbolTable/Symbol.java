@@ -19,6 +19,7 @@ public class Symbol
         this._id = aId;
         this._type = aType;
     }
+
     public String ToString()
     {
         return _id + ", " + _type;

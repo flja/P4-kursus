@@ -288,10 +288,14 @@ public class Scanner1
             case "joker":
                 token = new jokerToken(lineNum);
                 break;
+            case "TRUE":
             case "True":
+            case "true":
                 token = new trueToken(lineNum);
                 break;
+            case "FALSE":
             case "False":
+            case "false":
                 token = new falseToken(lineNum);
                 break;
             case "actions":

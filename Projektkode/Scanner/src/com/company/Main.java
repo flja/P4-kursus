@@ -86,10 +86,6 @@ public class Main {
     static int j = 0;
     public static void printScopes(ScopeTable scopeTable, int indent)
     {
-        if (scopeTable.table.keySet().size() <= 0)
-        {
-            //System.out
-        }
         System.out.println("Scope " + j);
         for (String item : scopeTable.table.keySet())
         {

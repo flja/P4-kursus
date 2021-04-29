@@ -1,0 +1,139 @@
+1,define, deck
+2,deck
+3,define
+4,define
+5,define
+6,define
+7,setup
+8,round
+9,turn
+10,endcondition
+11,functions
+12,deck, number, card, hand, enum, string, flag
+13,lBrace, rBrace, lParen, nonZeroNum, rParen, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE, break, assignSpecifier, if, actions, switch, case, default, action, while, for, questionmark, func
+14,deck
+15,number
+16,card
+17,hand
+18,enum
+19,string
+20,flag
+21,deck
+22,number
+23,assign
+24,semicolon
+25,card
+26,hand
+27,enum
+28,string
+29,assign
+30,semicolon
+31,flag
+32,assign
+33,semicolon
+34,standard
+35,hearts, spades, diamonds, clubs, cardValue, joker
+36,plus
+37,semicolon
+38,cardValue, joker
+39,hearts
+40,spades
+41,diamonds
+42,clubs
+43,cardValue
+44,joker
+45,zero
+46,nonZeroNum, neg
+47,neg
+48,nonZeroNum
+49,stringValue
+50,id
+51,assign
+52,comma
+53,comma
+54,rBrace
+55,TRUE
+56,FALSE
+57,nonZeroNum, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE
+58,rParen
+59,nonZeroNum, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE
+60,comma
+61,rParen
+62,stringValue
+63,nonZeroNum, zero, neg
+64,TRUE, FALSE
+65,cardValue, joker
+66,id
+67,lBrace, lParen, nonZeroNum, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE, break, assignSpecifier, if, actions, switch, case, default, action, while, for, questionmark, func
+68,rBrace, endcase, enddefault
+69,assignSpecifier
+70,lBrace
+71,if, actions, switch
+72,while, for
+73,lParen, nonZeroNum, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE, questionmark, func
+74,case, default, action
+75,break
+76,assignSpecifier
+77,rBrace
+78,assignSpecifier
+79,id
+80,dot
+81,assign, semicolon, rBrace, lParen, nonZeroNum, rParen, id, plus, cardValue, joker, zero, neg, stringValue, comma, TRUE, FALSE, colon, hyphen, star, slash, mod, questionmark, or, and, xor, lessthan, greaterthan, equal, notequal, lessthanorequal, greaterthanorequal, func
+82,stringValue
+83,nonZeroNum, zero, neg
+84,TRUE, FALSE
+85,cardValue, joker
+86,id
+87,lBrace
+88,if
+89,actions
+90,switch
+91,case
+92,default
+93,action
+94,else
+95,endif
+96,while
+97,for
+98,lParen, nonZeroNum, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE, questionmark, func
+99
+100,lParen, nonZeroNum, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE
+101,questionmark
+102,func
+103,lParen, nonZeroNum, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE
+104,plus
+105,hyphen
+106,semicolon, lParen, nonZeroNum, rParen, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE, colon, questionmark, or, and, xor, lessthan, greaterthan, equal, notequal, lessthanorequal, greaterthanorequal, func
+107,lParen, nonZeroNum, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE
+108,star
+109,slash
+110,mod
+111,semicolon, lParen, nonZeroNum, rParen, id, plus, cardValue, joker, zero, neg, stringValue, TRUE, FALSE, colon, hyphen, questionmark, or, and, xor, lessthan, greaterthan, equal, notequal, lessthanorequal, greaterthanorequal, func
+112,lParen
+113,nonZeroNum, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE
+114,questionmark
+115,or
+116,and
+117,xor
+118,semicolon, lParen, nonZeroNum, rParen, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE, colon, questionmark, func
+119,lParen, nonZeroNum, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE
+120,lessthan, greaterthan, equal, notequal, lessthanorequal, greaterthanorequal
+121,semicolon, lParen, nonZeroNum, rParen, id, cardValue, joker, zero, neg, stringValue, TRUE, FALSE, colon, questionmark, or, and, xor, func
+122,lessthan
+123,greaterthan
+124,equal
+125,notequal
+126,lessthanorequal
+127,greaterthanorequal
+128,func
+129,id
+130,deck, number, card, enum, string, flag, void
+131,rBrace
+132,deck, number, card, enum, string, flag, void
+133,deck
+134,card
+135,number
+136,string
+137,flag
+138,enum
+139,void

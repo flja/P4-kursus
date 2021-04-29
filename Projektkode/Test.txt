@@ -26,21 +26,21 @@ Define Table
 Setup
 {
 	func gamedeck.shuffle();
-	func player.Hand.drawfrom(gamedeck, 2);
-	func pilehidden.drawfrom(gamedeck, 1);
-	func pilevisible.drawfrom(gamedeck, 1);
+	func players.Hand.drawfrom(gamedeck, 2);
+	func table.pilehidden.drawfrom(gamedeck, 1);
+	func table.pilevisible.drawfrom(gamedeck, 1);
 }
 
 Round
 {
-	while(?pilehidden.cards.value + pilevisible.cards.value < 17)
+	while(?table.pilehidden.totalValue + table.pilevisible.totalValue < 17)
 	{
-		func pilevisible.drawfrom(gamedeck, 1);
+		func table.pilevisible.drawfrom(gamedeck, 1);
 	} endwhile;
 
-	if(?pilehidden.cards.value + pilevisible.cards.value < 21)
+	if(?table.pilehidden.totalValue + table.pilevisible.totalValue < 21)
 	{
-		func player.taketurn();
+		func players.takeTurn();
 	} endif;
 	func endcondition.check();
 }
@@ -51,17 +51,17 @@ Turn
 	{
 		actions
 		{
-			action Hit if(?true)
+			action "Hit" if(?true)
 			{
 				func turntaker.Hand.drawfrom(gamedeck, 1);
 
 			} endaction;
-			action Stand if(?true)
+			action "Stand" if(?true)
 			{
 				func endturn();
 
 			} endaction;
-			action Split if(?turntaker.Hand.size == 2 and turntaker.Hand.1 == turntaker.Hand.2)
+			action "Split" if(?turntaker.Hand.size == 2 and turntaker.Hand.1 == turntaker.Hand.2)
 			{
 
 			} endaction;

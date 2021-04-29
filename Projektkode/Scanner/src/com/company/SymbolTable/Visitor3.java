@@ -32,6 +32,10 @@ public class Visitor3 extends Visitor
             {
                 case "lbrace" :
                     OpenScope();
+                    if (((NonTerminalNode) node.parent.parent).nonterminal.equals("Turn"))
+                    {
+                        AddTurntaker();
+                    }
                     break;
                 case "rbrace" :
                     CloseScope();
@@ -80,6 +84,16 @@ public class Visitor3 extends Visitor
                         throw new Exception("Undeclared symbol: " + s );
                     }
                     break;
+            }
+        }
+    }
+    void AddTurntaker()
+    {
+        for (String key:_globalScope.table.keySet()) {
+            if(key.contains("player.1"))
+            {
+                String id = "turntaker" + key.substring(8);
+                _stack.peek().table.put(id,new Symbol(id,_globalScope.table.get(key).Type()));
             }
         }
     }

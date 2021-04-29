@@ -52,6 +52,10 @@
                 {
                     "name" : "visibility",
                     "type" : "Keyword"
+                },
+                {
+                    "name" : "drawfrom",
+                    "type" : "card func ()"
                 }
             ]
         },
@@ -67,15 +71,46 @@
                 {
                     "name" : "shuffle",
                     "type" : "void func ()"
+                },
+                {
+                    "name" : "visibility",
+                    "type" : "Keyword"
+                },
+                {
+                    "name" : "drawfrom",
+                    "type" : "card func ()"
+                },
+                {
+                    "name" : "totalValue",
+                    "type" : "number func ()"
+                }
+            ]
+        },
+        "player":
+        {
+            "properties":
+            [
+                {
+                    "name" : "takeTurn",
+                    "type" : "func void ()"
                 }
             ]
         }
+
     },
 
     "DefaultFunctions":
     {
-
+        "functions":
+                [
+                    {
+                        "name" : "players.takeTurn",
+                        "type" : "func void ()"
+                    },
+                    {
+                        "name" : "endcondition.check",
+                        "type" : "func void ()"
+                    }
+                ]
     }
-        
-    
 }

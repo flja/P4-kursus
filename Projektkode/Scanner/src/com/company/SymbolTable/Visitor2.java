@@ -21,7 +21,7 @@ public class Visitor2 extends Visitor
     void RecursiveVisitor(Node node) throws Exception {
         if (node instanceof NonTerminalNode)
         {
-            if (((NonTerminalNode) node).nonterminal == "Setup")
+            if (((NonTerminalNode) node).nonterminal.equals("Setup"))
             {
                 done = true;
             }
@@ -40,11 +40,12 @@ public class Visitor2 extends Visitor
     {
         if (node instanceof NonTerminalNode)
         {
-            if (((NonTerminalNode) node).nonterminal == "PlayerDef")
+            if (((NonTerminalNode) node).nonterminal.equals("PlayerDef"))
             {
                 playerCnt = ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib.rightSib.rightSib).terminal).value;
+                AddPlayerProperties(playerCnt);
             }
-            if (((NonTerminalNode) node).nonterminal == "TableDef")
+            if (((NonTerminalNode) node).nonterminal.equals("TableDef"))
             {
                 state = 1;
             }
@@ -96,6 +97,7 @@ public class Visitor2 extends Visitor
     }
     void EnterPlayerSymbol(Symbol symbol) throws Exception
     {
+        EnterGlobalSymbol(new Symbol("players." + symbol.Id(), symbol.Type()));
         for (int i = 1; i <= playerCnt; i++)
         {
             EnterGlobalSymbol(new Symbol("player." + i + "." + symbol.Id(), symbol.Type()));
@@ -137,6 +139,12 @@ public class Visitor2 extends Visitor
                     EnterGlobalSymbol(new Symbol("table."+ symbol.Id(), symbol.Type()));
                 }
             }
+        }
+    }
+    void AddPlayerProperties(int playerCnt) throws Exception
+    {
+        for (int i = 1; i <= playerCnt; i++) {
+            AddProperties("Player." + i, _shufflerSymbols.TypeProperties.player.properties, _globalScope);
         }
     }
 }

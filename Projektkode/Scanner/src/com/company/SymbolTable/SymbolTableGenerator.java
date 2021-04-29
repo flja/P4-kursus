@@ -20,14 +20,16 @@ public class SymbolTableGenerator
     public ScopeTable GenerateSymbolTable() throws Exception
     {
         _ast.ResetVisit();
-        addDefaultSymbols();
+        AddDefaultSymbols();
+        AddDefaultFunctions();
         _globalScope = new Visitor1(_globalScope, _ast.Root.GetChildren().get(8), _shufflerSymbols).StartVisitor();
         _globalScope = new Visitor2(_globalScope, _ast.Root.GetChildren().get(2), _shufflerSymbols).StartVisitor();
+        _globalScope = new Visitor2(_globalScope, _ast.Root.GetChildren().get(3), _shufflerSymbols).StartVisitor();
         _globalScope = new Visitor3(_globalScope, _ast.Root, _shufflerSymbols).StartVisitor();
         return _globalScope;
     }
 
-    void addDefaultSymbols()
+    void AddDefaultSymbols()
     {
         for (String item : _shufflerSymbols.DefaultSymbols.Cards.cards)
         {
@@ -39,6 +41,12 @@ public class SymbolTableGenerator
         for (String item : _shufflerSymbols.DefaultSymbols.Keywords.keywords)
         {
                 _globalScope.table.put(item ,new Symbol(item, "keyword"));
+        }
+    }
+    void AddDefaultFunctions()
+    {
+        for (PropertiesClass item :_shufflerSymbols.DefaultFunctions.functions ) {
+            _globalScope.table.put(item.name, new Symbol(item.name, item.type));
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.company.SymbolTable;
+package com.company.ContextualAnalyzer;
 
 import java.util.ArrayList;
 import java.util.List;

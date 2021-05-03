@@ -1,4 +1,4 @@
-package com.company.SymbolTable;
+package com.company.ContextualAnalyzer;
 
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
@@ -8,7 +8,6 @@ import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.Tokens.idToken;
 
 import java.util.List;
-import java.util.Properties;
 import java.util.Stack;
 
 public abstract class Visitor {

@@ -1,33 +1,39 @@
-package com.company.SymbolTable;
+package com.company.ContextualAnalyzer;
 
 import com.company.AST.AST;
 import com.company.ShufflerSymbols.LoadShufflerSymbols;
 import com.company.ShufflerSymbols.PropertiesClass;
 import com.company.ShufflerSymbols.ShufflerSymbols;
 
-public class SymbolTableGenerator
+public class Analyzer
 {
     AST _ast;
-    ScopeTable _globalScope = new ScopeTable();
+    public ScopeTable _globalScope = new ScopeTable();
     ShufflerSymbols _shufflerSymbols = new LoadShufflerSymbols().Load();
 
 
-    public SymbolTableGenerator(AST aAST) throws Exception {
+    public Analyzer(AST aAST) throws Exception {
         _ast = aAST;
 
     }
-
-    public ScopeTable GenerateSymbolTable() throws Exception
+    public AST RunAnalyzer() throws Exception
+    {
+        GenerateSymbolTable();
+        _ast.ResetVisit();
+        return _ast;
+    }
+    void GenerateSymbolTable() throws Exception
     {
         _ast.ResetVisit();
         AddDefaultSymbols();
         AddDefaultFunctions();
-        _globalScope = new Visitor1(_globalScope, _ast.Root.GetChildren().get(8), _shufflerSymbols).StartVisitor();
-        _globalScope = new Visitor2(_globalScope, _ast.Root.GetChildren().get(2), _shufflerSymbols).StartVisitor();
-        _globalScope = new Visitor2(_globalScope, _ast.Root.GetChildren().get(3), _shufflerSymbols).StartVisitor();
-        _globalScope = new Visitor3(_globalScope, _ast.Root, _shufflerSymbols).StartVisitor();
-        return _globalScope;
+        _globalScope = new VisitorFunctionDCLs(_globalScope, _ast.Root.GetChildren().get(8), _shufflerSymbols).StartVisitor();
+        _globalScope = new VisitorDefineScopes(_globalScope, _ast.Root.GetChildren().get(2), _shufflerSymbols).StartVisitor();
+        _globalScope = new VisitorDefineScopes(_globalScope, _ast.Root.GetChildren().get(3), _shufflerSymbols).StartVisitor();
+        _globalScope = new VisitorVarDCLAndCheck(_globalScope, _ast.Root, _shufflerSymbols).StartVisitor();
     }
+
+
 
     void AddDefaultSymbols()
     {

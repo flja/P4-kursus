@@ -5,8 +5,8 @@ import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
 import com.company.ShufflerSymbols.LoadShufflerSymbols;
 import com.company.ShufflerSymbols.ShufflerSymbols;
-import com.company.SymbolTable.ScopeTable;
-import com.company.SymbolTable.SymbolTableGenerator;
+import com.company.ContextualAnalyzer.ScopeTable;
+import com.company.ContextualAnalyzer.Analyzer;
 
 import java.nio.file.Paths;
 
@@ -21,8 +21,9 @@ public class Main {
         AST ast = parser.LLparser(scanner.Lexer());
         Node node = ast.Root;
         prettyPrintAST(node);
-        SymbolTableGenerator symbolTableGenerator = new SymbolTableGenerator(ast);
-        ScopeTable SymbolTable = symbolTableGenerator.GenerateSymbolTable();
+        Analyzer analyzer = new Analyzer(ast);
+        analyzer.RunAnalyzer();
+        ScopeTable SymbolTable = analyzer._globalScope;
         PrintSymbolTable(SymbolTable);
     }
     public static void printNode(Node node, int indents)

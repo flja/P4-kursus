@@ -1,4 +1,4 @@
-package com.company.SymbolTable;
+package com.company.ContextualAnalyzer;
 
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
@@ -8,16 +8,11 @@ import com.company.ShufflerSymbols.PropertiesClass;
 import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.Tokens.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-
-public class Visitor3 extends Visitor
+public class VisitorVarDCLAndCheck extends Visitor
 {
 
 
-    public Visitor3(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) throws Exception {
+    public VisitorVarDCLAndCheck(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) throws Exception {
         super(aTable, aAstTree, aShufflerSymbols);
     }
 

@@ -12,6 +12,7 @@ public class Node
     public Node rightSib = null;
     public Node leftMostSib = this;
     public boolean visited = false;
+    public String type = null;
 
     public Node MakeSiblings(Node node)
     {

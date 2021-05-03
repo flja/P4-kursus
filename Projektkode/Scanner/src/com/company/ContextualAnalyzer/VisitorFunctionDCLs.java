@@ -1,4 +1,4 @@
-package com.company.SymbolTable;
+package com.company.ContextualAnalyzer;
 
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Visitor1 extends Visitor
+public class VisitorFunctionDCLs extends Visitor
 {
     int state = 0;
     String ReturnType;
 
-    public Visitor1(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) {
+    public VisitorFunctionDCLs(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) {
         super(aTable, aAstTree, aShufflerSymbols);
     }
 

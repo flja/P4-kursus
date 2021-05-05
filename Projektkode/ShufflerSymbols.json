@@ -5,7 +5,6 @@
         {
             "cards":
             [
-                "one",
                 "two",
                 "three",
                 "four",
@@ -18,13 +17,18 @@
                 "jack",
                 "queen",
                 "king",
-                "ace"
+                "ace",
+                "joker"
             ],
             "properties":
             [
                 {
                     "name" : "value",
                     "type" : "number"
+                },
+                {
+                    "name" : "suit",
+                    "type" : "string"
                 }
             ]
         },
@@ -143,7 +147,11 @@
         [
             {
                 "name": "winner",
-                "type": "keyword"
+                "type": "player"
+            },
+            {
+                "name": "none",
+                "type": "player"
             }
         ]
     }

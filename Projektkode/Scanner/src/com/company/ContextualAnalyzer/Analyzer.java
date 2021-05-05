@@ -31,6 +31,7 @@ public class Analyzer
         _globalScope = new VisitorDefineScopes(_globalScope, _ast.Root.GetChildren().get(2), _shufflerSymbols).StartVisitor();
         _globalScope = new VisitorDefineScopes(_globalScope, _ast.Root.GetChildren().get(3), _shufflerSymbols).StartVisitor();
         _globalScope = new VisitorVarDCLAndCheck(_globalScope, _ast.Root, _shufflerSymbols).StartVisitor();
+        _ast = new VisitorTypeCheck(_globalScope, _ast.Root, _shufflerSymbols).StartVisitor();
     }
 
 

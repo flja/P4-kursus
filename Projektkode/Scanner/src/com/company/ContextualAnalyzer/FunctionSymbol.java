@@ -19,9 +19,9 @@ public class FunctionSymbol extends Symbol
         String parameters = " (";
         for (String item : _parameters)
         {
-            parameters += item + ", ";
+            parameters += item + "; ";
         }
-        parameters = parameters.substring(0,parameters.length() - 2) + ")";
+        parameters = _parameters.size() > 0 ? parameters.substring(0,parameters.length() - 1) + ")" : parameters + ")";
         return _id + ", " + _returnType + " " + _type + parameters ;
     }
 }

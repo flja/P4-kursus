@@ -48,33 +48,33 @@ public class VisitorFunctionDCLs extends Visitor
     {
         List<String> list = new ArrayList<String>();
         node = node.leftMostChild;
-        if (((NonTerminalNode) node).nonterminal == "DCL")
-        {
-            switch (((NonTerminalNode) node.leftMostChild).nonterminal)
-            {
-                case "DeckDcl" :
-                    list.add("deck");
-                    break;
-                case "NumberDcl" :
-                    list.add("number");
-                    break;
-                case "CardDcl" :
-                    list.add("card");
-                    break;
-                case "HandDcl" :
-                    list.add("hand");
-                    break;
-                case "EnumDcl" :
-                    list.add("enum");
-                    break;
-                case "StringDcl" :
-                    list.add("string");
-                    break;
-                case "FlagDcl" :
-                    list.add("flag");
-                    break;
+        if (node != null) {
+            if (((NonTerminalNode) node).nonterminal.equals("Dcl")) {
+                switch (((NonTerminalNode) node.leftMostChild).nonterminal) {
+                    case "DeckDcl":
+                        list.add("deck");
+                        break;
+                    case "NumberDcl":
+                        list.add("number");
+                        break;
+                    case "CardDcl":
+                        list.add("card");
+                        break;
+                    case "HandDcl":
+                        list.add("hand");
+                        break;
+                    case "EnumDcl":
+                        list.add("enum");
+                        break;
+                    case "StringDcl":
+                        list.add("string");
+                        break;
+                    case "FlagDcl":
+                        list.add("flag");
+                        break;
+                }
+                list.addAll(GetParameterTypes(node.rightSib.rightSib));
             }
-            list.addAll(GetParameterTypes(node.rightSib.rightSib));
         }
         return list;
     }

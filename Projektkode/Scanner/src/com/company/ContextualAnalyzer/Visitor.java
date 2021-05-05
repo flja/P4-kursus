@@ -48,7 +48,7 @@ public abstract class Visitor {
 
     boolean CheckNonTerminalType(Node node, String nonTerminal) {
         if (node instanceof NonTerminalNode) {
-            if (((NonTerminalNode) node).nonterminal == nonTerminal) {
+            if (((NonTerminalNode) node).nonterminal.equals(nonTerminal)) {
                 return true;
             }
         }

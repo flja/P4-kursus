@@ -79,7 +79,7 @@ Endcondition(?table.pilehidden.totalValue + table.pilevisible.totalValue >= 21 o
 	}
 	else if(?table.pilehidden.totalValue + table.pilevisible.totalValue == 21)
 	{
-		assign winner = 0;
+		assign winner = none;
 	}
 	else if(?player.1.Hand.totalValue == 21)
 	{
@@ -91,10 +91,19 @@ Endcondition(?table.pilehidden.totalValue + table.pilevisible.totalValue >= 21 o
 	}
 	else
 	{
-		assign winner = 0;	
+		assign winner = none;	
 	} endif; endif; endif; endif;
 }
 
 Functions
 {
+	void myFunc ( number i; number k; )
+	{
+		number j;
+		assign j = i;
+		if(?j > k)
+		{
+			assign k = j;
+		}endif;
+	}
 }

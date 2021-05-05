@@ -19,12 +19,13 @@ public class Main {
         Scanner1 scanner = new Scanner1();
         Parser parser = new Parser();
         AST ast = parser.LLparser(scanner.Lexer());
-        Node node = ast.Root;
-        prettyPrintAST(node);
         Analyzer analyzer = new Analyzer(ast);
-        analyzer.RunAnalyzer();
+        ast = analyzer.RunAnalyzer();
         ScopeTable SymbolTable = analyzer._globalScope;
         PrintSymbolTable(SymbolTable);
+        Node node = ast.Root;
+        ast.ResetVisit();
+        prettyPrintAST(node);
     }
     public static void printNode(Node node, int indents)
     {
@@ -35,11 +36,11 @@ public class Main {
         }
         if(node instanceof TerminalNode)
         {
-            System.out.println(indentation  + ((TerminalNode) node).terminal.getClass().getSimpleName());
+            System.out.println(indentation  + ((TerminalNode) node).terminal.getClass().getSimpleName() + " " + node.type);
         }
         else
         {
-            System.out.println(indentation + ((NonTerminalNode) node).nonterminal);
+            System.out.println(indentation + ((NonTerminalNode) node).nonterminal + " " + node.type);
         }
     }
 
@@ -50,13 +51,13 @@ public class Main {
         printNode(node, indent);
         while (node != null)
         {
-            if (node.leftMostChild != null && node.leftMostChild.visited)
+            if (node.leftMostChild != null && !node.leftMostChild.visited)
             {
                 node = node.leftMostChild;
                 indent += 1;
                 printNode(node, indent);
             }
-            else if (node.rightSib != null && node.rightSib.visited)
+            else if (node.rightSib != null && !node.rightSib.visited)
             {
                 node = node.rightSib;
                 printNode(node, indent);
@@ -72,7 +73,7 @@ public class Main {
             }
             if (node != null)
             {
-                node.visited = false;
+                node.visited = true;
             }
         }
     }

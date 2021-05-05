@@ -3,6 +3,7 @@ package com.company.ContextualAnalyzer;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
+import com.company.Main;
 import com.company.Parser;
 import com.company.ShufflerSymbols.PropertiesClass;
 import com.company.ShufflerSymbols.ShufflerSymbols;
@@ -14,6 +15,13 @@ public class VisitorVarDCLAndCheck extends Visitor
 
     public VisitorVarDCLAndCheck(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) throws Exception {
         super(aTable, aAstTree, aShufflerSymbols);
+    }
+
+    @Override
+    public ScopeTable StartVisitor() throws Exception {
+        Main.PrintSymbolTable(_globalScope);
+        RecursiveVisitor(_astTree);
+        return _globalScope;
     }
 
     @Override

@@ -45,9 +45,9 @@ public class Analyzer
                 _globalScope.table.put(id ,new Symbol(id, p.type));
             }
         }
-        for (String item : _shufflerSymbols.DefaultSymbols.Keywords.keywords)
+        for (PropertiesClass item : _shufflerSymbols.DefaultSymbols.Keywords.keywords)
         {
-                _globalScope.table.put(item ,new Symbol(item, "keyword"));
+                _globalScope.table.put(item.name ,new Symbol(item.name, item.type));
         }
     }
     void AddDefaultFunctions()

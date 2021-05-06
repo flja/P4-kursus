@@ -36,8 +36,14 @@
         {
             "keywords":
             [
-                "visible",
-                "hidden"
+                {
+                    "name" : "visible",
+                    "type" : "visibility"
+                },
+                {
+                    "name" : "hidden",
+                    "type" : "visibility"
+                }
             ]
         }
     },
@@ -51,7 +57,7 @@
             [
                 {
                     "name" : "visibility",
-                    "type" : "Keyword"
+                    "type" : "visibility"
                 },
                 {
                     "name" : "drawfrom",
@@ -86,7 +92,7 @@
                 },
                 {
                     "name" : "visibility",
-                    "type" : "Keyword"
+                    "type" : "visibility"
                 },
                 {
                     "name" : "drawfrom",

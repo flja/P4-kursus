@@ -1,8 +1,9 @@
 package com.company.ShufflerSymbols;
 
 import java.util.List;
+import java.util.Properties;
 
 public class KeywordsClass
 {
-    public List<String> keywords;
+    public List<PropertiesClass> keywords;
 }

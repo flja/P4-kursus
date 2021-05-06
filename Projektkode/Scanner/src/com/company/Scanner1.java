@@ -24,7 +24,6 @@ public class Scanner1
         String word = "";
         FileReader fr = new FileReader(Paths.get(".").toAbsolutePath().normalize().toString() + "/Test.txt");
         BufferedReader br = new BufferedReader(fr);
-
         try
         {
             while ((line = br.readLine()) != null)

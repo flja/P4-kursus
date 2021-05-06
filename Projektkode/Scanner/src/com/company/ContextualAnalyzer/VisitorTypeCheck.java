@@ -68,7 +68,9 @@ public class VisitorTypeCheck{
                 case "FunctionCall":
                     VisitFunctionCall(node);
                     break;
-
+                case "Dcl":
+                    VisitDcl(node);
+                    break;
             }
         }
     }
@@ -99,6 +101,13 @@ public class VisitorTypeCheck{
             }
         }
         return null;
+    }
+    void VisitDcl(Node node)
+    {
+        String type = Parser.GetName(((TerminalNode) node.leftMostChild.leftMostChild).terminal);
+        node.visited = true;
+        node.type = type;
+        node.leftMostChild.type = type;
     }
 
     void VisitAssignment(Node node) throws Exception{
@@ -226,15 +235,15 @@ public class VisitorTypeCheck{
         }
         String leftType = VisitLogicalTerm(node.leftMostChild.rightSib);
         String rightType = VisitLogicalExpr1(node.leftMostChild.rightSib.rightSib);
-        if (leftType.equals(rightType) && leftType.equals("flag"))
-        {
-            node.type = leftType;
-            return leftType;
+        if (leftType.equals("flag")) {
+            if (leftType.equals(rightType) || rightType.equals(""))
+            {
+                node.type = leftType;
+                return leftType;
+            }
         }
-        else
-        {
-            throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild).terminal.line + ": Illegal logical expression");
-        }
+        throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild).terminal.line + ": Illegal logical expression");
+
     }
 
     String VisitLogicalTerm(Node node) throws Exception
@@ -248,8 +257,8 @@ public class VisitorTypeCheck{
         }
         else if (rightType.equals(leftType))
         {
-            node.type = leftType;
-            return leftType;
+            node.type = "flag";
+            return "flag";
         }
         else
         {
@@ -431,7 +440,6 @@ public class VisitorTypeCheck{
                 default:
                     operator = " mod ";
                     break;
-
             }
             throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.rightSib.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator +rightType + "\"");
         }
@@ -495,12 +503,14 @@ public class VisitorTypeCheck{
         String type;
         if(((NonTerminalNode) node.leftMostChild).nonterminal.equals("ObjectSpecifier")) {
             type = RetrieveSymbol(VisitObjectSpecifier(node.leftMostChild))._type.toLowerCase();
+            node.leftMostChild.type = type;
+            node.type = type;
         }
         else
         {
             type = ((NonTerminalNode) node.leftMostChild).nonterminal.toLowerCase();
+            SetSubnodeTypes(node, type);
         }
-        SetSubnodeTypes(node, type);
         node.visited = true;
         return type;
     }

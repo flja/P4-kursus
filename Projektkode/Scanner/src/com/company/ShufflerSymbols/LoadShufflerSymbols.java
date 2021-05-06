@@ -11,9 +11,9 @@ public class LoadShufflerSymbols
 {
     public ShufflerSymbols Load() throws Exception
     {
-        FileReader fr = new FileReader(Paths.get(".").toAbsolutePath().normalize().toString() + "\\ShufflerSymbols.json");
+        FileReader fr = new FileReader(Paths.get(".").toAbsolutePath().normalize().toString() + "/ShufflerSymbols.json");
         BufferedReader br = new BufferedReader(fr);
-        String json = Files.readString(Paths.get(".\\ShufflerSymbols.json").toAbsolutePath().normalize());
+        String json = Files.readString(Paths.get("./ShufflerSymbols.json").toAbsolutePath().normalize());
 
         return ReadJson(json);
     }

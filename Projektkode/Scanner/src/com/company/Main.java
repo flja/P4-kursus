@@ -20,9 +20,9 @@ public class Main {
         Parser parser = new Parser();
         AST ast = parser.LLparser(scanner.Lexer());
         Analyzer analyzer = new Analyzer(ast);
-        ast = analyzer.RunAnalyzer();
-        ScopeTable SymbolTable = analyzer._globalScope;
-        PrintSymbolTable(SymbolTable);
+        //ast = analyzer.RunAnalyzer();
+        //ScopeTable SymbolTable = analyzer._globalScope;
+        //PrintSymbolTable(SymbolTable);
         Node node = ast.Root;
         ast.ResetVisit();
         prettyPrintAST(node);

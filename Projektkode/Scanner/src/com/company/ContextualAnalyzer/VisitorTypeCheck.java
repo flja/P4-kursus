@@ -56,6 +56,19 @@ public class VisitorTypeCheck{
                 case "Assignment":
                     VisitAssignment(node);
                     break;
+                case "Expr":
+                    VisitExpr(node);
+                    break;
+                case "AddExpr":
+                    VisitAddExpr(node);
+                    break;
+                case "LogicalExpr":
+                    VisitLogicalExpr(node);
+                    break;
+                case "FunctionCall":
+                    VisitFunctionCall(node);
+                    break;
+
             }
         }
     }
@@ -105,21 +118,29 @@ public class VisitorTypeCheck{
     String VisitExpr(Node node) throws Exception
     {
         node.visited = true;
-        switch (((NonTerminalNode) node.leftMostChild).nonterminal)
+        String type = null;
+        String Switch = ((NonTerminalNode) node.leftMostChild).nonterminal;
+        switch (Switch)
         {
             case "AddExpr" :
-                return VisitAddExpr(node.leftMostChild);
+                type = VisitAddExpr(node.leftMostChild);
+                break;
             case "LogicalExpr" :
-                return VisitLogicalExpr(node.leftMostChild);
+                type = VisitLogicalExpr(node.leftMostChild);
+                break;
             case "FunctionCall" :
-                return VisitFunctionCall(node.leftMostChild);
+                type = VisitFunctionCall(node.leftMostChild);
+                break;
         }
-        return null;
+        node.type = type;
+        return type;
     }
 
     String VisitFunctionCall(Node node) throws Exception
     {
-        return VisitFunctionCall1(node);
+        String type = VisitFunctionCall1(node.leftMostChild.rightSib);
+        node.type = type;
+        return type;
     }
     String VisitFunctionCall1(Node node) throws Exception
     {
@@ -139,6 +160,7 @@ public class VisitorTypeCheck{
         {
             String returnType = RetrieveSymbol(VisitObjectSpecifier(node.leftMostChild)).Type();
             returnType = returnType.substring(0, returnType.indexOf(" ") - 1);
+            node.type = returnType;
             return returnType;
         }
         else throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.rightSib).terminal.line + ": Number of parameters does not match function definition");
@@ -146,35 +168,50 @@ public class VisitorTypeCheck{
 
     List<String> FindExpectedParameterTypes(Node node)
     {
-        List<String> list = new ArrayList<String>();
+        List<String> list;
         String funcType = RetrieveSymbol(VisitObjectSpecifier(node))._type;
-        String parameterTypes = funcType.substring(funcType.indexOf("(") + 1, funcType.indexOf(")") - 1);
-        parameterTypes = parameterTypes.substring(0, parameterTypes.lastIndexOf(";") - 1);
-        list = Arrays.asList(parameterTypes.split(";"));
+        if (funcType.substring(funcType.indexOf("("), funcType.indexOf(")")).length() > 2)
+        {
+            String parameterTypes = funcType.substring(funcType.indexOf("(") + 1, funcType.indexOf(")") - 1);
+            //parameterTypes = parameterTypes.substring(0, parameterTypes.lastIndexOf(";") - 1);
+            list = Arrays.asList(parameterTypes.split("; "));
+        }
+        else
+        {
+            list = new ArrayList<String>();
+        }
         return list;
     }
+
     List<String> VisitParameters(Node node, List<String> parameterTypes)
     {
-        parameterTypes = VisitParameters1(node, parameterTypes);
+        if (node.leftMostChild != null) {
+            parameterTypes = VisitParameters1(node.leftMostChild, parameterTypes);
+        }
         return parameterTypes;
     }
     List<String> VisitParameters1(Node node, List<String> parameterTypes)
     {
+
         parameterTypes.add(VisitVal(node.leftMostChild));
         parameterTypes = VisitParameters2(node.leftMostChild.rightSib, parameterTypes);
         return parameterTypes;
     }
     List<String> VisitParameters2(Node node, List<String> parameterTypes)
     {
-        parameterTypes = VisitParameters1(node, parameterTypes);
+        if (node.leftMostChild != null)
+        {
+            parameterTypes = VisitParameters1(node.leftMostChild.rightSib, parameterTypes);
+        }
         return parameterTypes;
     }
     String VisitLogicalExpr(Node node) throws Exception
     {
-        String rightType = VisitLogicalTerm(node.leftMostChild.rightSib);
-        String leftType = VisitLogicalExpr1(node.leftMostChild.rightSib.rightSib);
-        if (leftType.equals("Flag")) {
+        String leftType = VisitLogicalTerm(node.leftMostChild.rightSib);
+        String rightType = VisitLogicalExpr1(node.leftMostChild.rightSib.rightSib);
+        if (leftType.equals("flag")) {
             if (rightType.equals("") || rightType.equals(leftType) ) {
+                node.type = leftType;
                 return leftType;
             }
         }
@@ -184,12 +221,14 @@ public class VisitorTypeCheck{
     {
         if (node.leftMostChild == null)
         {
+            node.type = "";
             return "";
         }
         String leftType = VisitLogicalTerm(node.leftMostChild.rightSib);
         String rightType = VisitLogicalExpr1(node.leftMostChild.rightSib.rightSib);
-        if (leftType.equals(rightType) && leftType.equals("Flag"))
+        if (leftType.equals(rightType) && leftType.equals("flag"))
         {
+            node.type = leftType;
             return leftType;
         }
         else
@@ -204,10 +243,12 @@ public class VisitorTypeCheck{
         String rightType = VisitLogicalTerm1(node.leftMostChild.rightSib);
         if (rightType.equals(""))
         {
+            node.type = leftType;
             return leftType;
         }
         else if (rightType.equals(leftType))
         {
+            node.type = leftType;
             return leftType;
         }
         else
@@ -239,23 +280,24 @@ public class VisitorTypeCheck{
     }
     String VisitLogicalTerm1(Node node) throws Exception
     {
+        String type;
         if (node.leftMostChild == null)
         {
-            return "";
+            type = "";
         }
         else
         {
             String operator = Parser.GetName(((TerminalNode) node.leftMostChild.leftMostChild).terminal);
-            String termType = VisitTerm(node.leftMostChild.rightSib);
+            String termType = VisitLogicalTerm(node.leftMostChild.rightSib);
             if (operator.equals("equal") || operator.equals("notequal"))
             {
-                return termType;
+                type = termType;
             }
             else
             {
-                if (termType.equals("Number"))
+                if (termType.equals("number"))
                 {
-                    return termType;
+                    type = termType;
                 }
                 else
                 {
@@ -280,10 +322,12 @@ public class VisitorTypeCheck{
                             break;
 
                     }
-                    throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.leftMostChild).terminal.line + ": cannot resolve \"" + operator + termType);
+                    throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.leftMostChild).terminal.line + ": cannot resolve \"" + operator + termType + "\"");
                 }
             }
         }
+        node.type = type;
+        return type;
     }
 
 
@@ -295,6 +339,7 @@ public class VisitorTypeCheck{
         String rightType = VisitAddExpr1(node.leftMostChild.rightSib);
         if (leftType.equals(rightType) || rightType.equals(""))
         {
+            node.type = leftType;
             return leftType;
         }
         else {
@@ -318,6 +363,7 @@ public class VisitorTypeCheck{
     {
         if (node.leftMostChild == null)
         {
+            node.type = "";
             return "";
         }
         else
@@ -330,6 +376,7 @@ public class VisitorTypeCheck{
                 {
                     if (leftType.equals("number") || leftType.equals("string"))
                     {
+                        node.type = leftType;
                         return leftType;
                     }
                 }
@@ -337,9 +384,14 @@ public class VisitorTypeCheck{
                 {
                     if (leftType.equals("number"))
                     {
+                        node.type = leftType;
                         return leftType;
                     }
                 }
+            }
+            else if (rightType.equals(""))
+            {
+                return leftType;
             }
             String operator;
             switch (Parser.GetName(((TerminalNode) node.leftMostChild.rightSib.leftMostChild).terminal))
@@ -362,6 +414,7 @@ public class VisitorTypeCheck{
         String rightType = VisitTerm1(node.leftMostChild.rightSib).toLowerCase();
         if (leftType.equals(rightType) || rightType.equals(""))
         {
+            node.type = leftType;
             return leftType;
         }
         else
@@ -386,9 +439,10 @@ public class VisitorTypeCheck{
 
     String VisitTerm1(Node node) throws Exception
     {
+        String type;
         if (node.leftMostChild == null)
         {
-            return "";
+            type = "";
         }
         else
         {
@@ -396,7 +450,7 @@ public class VisitorTypeCheck{
             String rightType = VisitTerm1(node.leftMostChild.rightSib.rightSib).toLowerCase();
             if ((leftType.equals(rightType) && leftType.equals("number")) || rightType.equals(""))
             {
-                return leftType;
+                type = leftType;
             }
             else
             {
@@ -417,19 +471,24 @@ public class VisitorTypeCheck{
                 throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType + "\"");
             }
         }
+        node.type = type;
+        return type;
     }
 
     String VisitFactor(Node node) throws Exception
     {
+        String type;
         if (node.leftMostChild instanceof TerminalNode)
         {
-            return VisitAddExpr(node.leftMostChild.rightSib).toLowerCase();
+            type = VisitAddExpr(node.leftMostChild.rightSib).toLowerCase();
         }
         else
         {
-            return VisitVal(node.leftMostChild).toLowerCase();
+            type = VisitVal(node.leftMostChild).toLowerCase();
 
         }
+        node.type = type;
+        return type;
     }
     String VisitVal(Node node)
     {
@@ -441,7 +500,7 @@ public class VisitorTypeCheck{
         {
             type = ((NonTerminalNode) node.leftMostChild).nonterminal.toLowerCase();
         }
-        node.type = type;
+        SetSubnodeTypes(node, type);
         node.visited = true;
         return type;
     }
@@ -500,5 +559,12 @@ public class VisitorTypeCheck{
         return id;
     }
 
-
+    void SetSubnodeTypes(Node node, String type)
+    {
+        node.type = type;
+        for (Node item : node.GetChildren())
+        {
+            SetSubnodeTypes(item, type);
+        }
+    }
 }

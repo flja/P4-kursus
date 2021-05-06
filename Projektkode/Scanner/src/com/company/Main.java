@@ -36,7 +36,7 @@ public class Main {
         }
         if(node instanceof TerminalNode)
         {
-            System.out.println(indentation  + ((TerminalNode) node).terminal.getClass().getSimpleName() + " " + node.type);
+            System.out.println(indentation  + ((TerminalNode) node).terminal.getClass().getSimpleName() + " " + node.type + " " + ((TerminalNode) node).terminal.line);
         }
         else
         {

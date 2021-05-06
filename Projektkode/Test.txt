@@ -33,7 +33,7 @@ Setup
 
 Round
 { 
-	while(?table.pilehidden.totalValue + table.pilevisible.totalValue < 17)
+	while(?(table.pilehidden.totalValue + table.pilevisible.totalValue) < 17)
 	{
 		func table.pilevisible.drawfrom(gamedeck, 1);
 	} endwhile;

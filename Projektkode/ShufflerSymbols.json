@@ -55,7 +55,7 @@
                 },
                 {
                     "name" : "drawfrom",
-                    "type" : "card func ()"
+                    "type" : "deck func (deck; number;)"
                 },
                 {
                     "name" : "size",
@@ -90,7 +90,7 @@
                 },
                 {
                     "name" : "drawfrom",
-                    "type" : "card func ()"
+                    "type" : "deck func (deck; number;)"
                 },
                 {
                     "name" : "totalValue",

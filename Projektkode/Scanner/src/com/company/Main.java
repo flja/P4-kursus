@@ -85,6 +85,7 @@ public class Main {
         System.out.println("SymbolTable:");
         printScopes(globalScope, indent);
     }
+
     static int j = 0;
     public static void printScopes(ScopeTable scopeTable, int indent)
     {

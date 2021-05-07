@@ -192,7 +192,7 @@ public class Scanner1
         return token;
     }
 
-    private Token HandleValue(String value)
+    public Token HandleValue(String value)
     {
 
         try
@@ -220,7 +220,7 @@ public class Scanner1
         return null;
     }
 
-    private Token HandleKeywords(String word)
+    public Token HandleKeywords(String word)
     {
         Token token = null;
         switch (word)

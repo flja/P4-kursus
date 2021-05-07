@@ -26,4 +26,21 @@ class ParserTest {
         assertTrue(result==true); // Forventer at expected svarer til den aktuelle
         assertFalse(result==false); // Forventer at expected og aktuelle ikke er ens
     }
+
+    @Test
+    void GetNameTest(){
+        //arrange
+        String expectedName = "cards";
+        Token token = new cardsToken(3);
+        Token wrongToken = new playerToken(7);
+
+        //act
+        String actualName = Parser.GetName(token);
+        String wrongName = Parser.GetName(wrongToken);
+
+        //assert
+        assertEquals(expectedName,actualName);
+        assertFalse(expectedName==wrongName);
+
+    }
 }

@@ -388,7 +388,7 @@ public class Scanner1
         return word.matches("^[a-zA-Z_][\\w]*$") ? new idToken(lineNum, word) : null;
     }
 
-    private void AddToken(Token token)
+    public void AddToken(Token token)
     {
         tokens.add(token);
     }

@@ -1,0 +1,110 @@
+deck gamedeck= standard; 
+Define cards 
+{
+ assign king.value= 10!= ; 
+assign queen.value= 10!= ; 
+assign jack.value= 10!= ; 
+assign ace.value= 11!= ; 
+}
+Define player (1!= )
+{
+ hand Hand; 
+assign Hand.visibility= visible; 
+}
+Define Table 
+{
+ deck pilehidden; 
+deck pilevisible; 
+assign pilehidden.visibility= hidden; 
+assign pilevisible.visibility= visible; 
+}
+Setup 
+{
+ func gamedeck.shuffle(); 
+func players.Hand.drawfrom(gamedeck, 2!= ); 
+func table.pilehidden.drawfrom(gamedeck, 1!= ); 
+func table.pilevisible.drawfrom(gamedeck, 1!= ); 
+}
+Round 
+{
+ while (? (table.pilehidden.totalValue+ table.pilevisible.totalValue)< 17!= )
+{
+ func table.pilevisible.drawfrom(gamedeck, 1!= ); 
+}
+endwhile ; 
+if (? table.pilehidden.totalValue+ table.pilevisible.totalValue< 21!= )
+{
+ func players.takeTurn(); 
+}
+endif ; 
+func endcondition.check(); 
+}
+Turn 
+{
+ while (? turntaker.Hand.totalValue< 21!= )
+{
+ number i; 
+actions 
+{
+ action "Hit"if (? true )
+{
+ func turntaker.Hand.drawfrom(gamedeck, 1!= ); 
+}
+endaction ; 
+action "Stand"if (? true )
+{
+ func endTurn(); 
+}
+endaction ; 
+action "Split"if (? turntaker.Hand.size== 2!= and turntaker.Hand.1!= == turntaker.Hand.2!= )
+{
+ }
+endaction ; 
+}
+endactions ; 
+}
+endwhile ; 
+func endcondition.check(); 
+}
+endcondition (? table.pilehidden.totalValue+ table.pilevisible.totalValue>= 21!= or players.any.Hand.totalValue>= 21!= )
+{
+ if (? table.pilehidden.totalValue+ table.pilevisible.totalValue> 21!= )
+{
+ assign winner= player.1!= ; 
+}
+else if (? table.pilehidden.totalValue+ table.pilevisible.totalValue== 21!= )
+{
+ assign winner= none; 
+}
+else if (? player.1!= .Hand.totalValue== 21!= )
+{
+ assign winner= player.1!= ; 
+}
+else if (? player.1!= .Hand.totalValue> table.pilehidden.totalValue+ table.pilevisible.totalValue)
+{
+ assign winner= player.1!= ; 
+}
+else 
+{
+ assign winner= none; 
+}
+endif ; 
+endif ; 
+endif ; 
+endif ; 
+}
+Functions 
+{
+ void myFunc(number i; 
+number k; 
+)
+{
+ number j; 
+assign j= i; 
+if (? j> k)
+{
+ assign k= j; 
+}
+endif ; 
+}
+}

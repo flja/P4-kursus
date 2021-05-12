@@ -3,6 +3,7 @@ import com.company.AST.AST;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
+import com.company.CodeGenerator.Generator;
 import com.company.ShufflerSymbols.LoadShufflerSymbols;
 import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.ContextualAnalyzer.ScopeTable;
@@ -26,6 +27,9 @@ public class Main {
         Node node = ast.Root;
         ast.ResetVisit();
         prettyPrintAST(node);
+        Generator Codegenerator = new Generator(ast);
+        Codegenerator.StartGenerator(node);
+        Codegenerator.WriteToFile();
     }
     public static void printNode(Node node, int indents)
     {

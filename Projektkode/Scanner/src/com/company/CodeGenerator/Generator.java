@@ -20,6 +20,7 @@ public class Generator
 {
     AST _ast;
     String code = "";
+    int _indent = 0;
 
     public Generator(AST aAst) {
         this._ast = aAst;
@@ -191,6 +192,7 @@ public class Generator
                     break;
                 case "lbrace":
                     Emit("\n{\n");
+                    _indent++;
                     break;
                 case "lessthanorequal":
                     Emit("<= ");
@@ -209,6 +211,7 @@ public class Generator
                     break;
                 case "nonzeronum":
                     Emit(String.valueOf(((nonZeroNumToken) ((TerminalNode) node).terminal).value));
+                    break;
                 case "notequal":
                     Emit("!= ");
                     break;
@@ -231,6 +234,7 @@ public class Generator
                     Emit("? ");
                     break;
                 case "rbrace":
+                    _indent--;
                     Emit("}\n");
                     break;
                 case "round":
@@ -304,6 +308,18 @@ public class Generator
 
     void Emit(String input)
     {
+        String s = "";
+        if (code.length() != 0)
+        {
+            if(code.charAt(code.length() - 1) == '\n' || input.charAt(0) == '\n')
+            {
+                for (int i = 0; i < _indent; i++)
+                {
+                    s += "   ";
+                }
+                input = input.charAt(0) == '\n' ? input.replaceFirst("\n", "\n" + s) : s + input;
+            }
+        }
         code += input;
     }
 

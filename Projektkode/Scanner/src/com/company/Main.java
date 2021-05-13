@@ -4,6 +4,10 @@ import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
 import com.company.CodeGenerator.Generator;
+import com.company.CodeGenerator.JavaGenerator;
+import com.company.CodeGenerator.TemplateCode.DeckClass;
+import com.company.CodeGenerator.TemplateCode.HelpMethods;
+import com.company.CodeGenerator.ValidationCodeGenerator;
 import com.company.ShufflerSymbols.LoadShufflerSymbols;
 import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.ContextualAnalyzer.ScopeTable;
@@ -27,9 +31,14 @@ public class Main {
         Node node = ast.Root;
         ast.ResetVisit();
         prettyPrintAST(node);
-        Generator Codegenerator = new Generator(ast);
-        Codegenerator.StartGenerator(node);
-        Codegenerator.WriteToFile();
+        ValidationCodeGenerator ValidationGenerator = new ValidationCodeGenerator(ast);
+        ValidationGenerator.StartGenerator(node);
+        ValidationGenerator.WriteToFile();
+
+        JavaGenerator javaGenerator = new JavaGenerator();
+        System.out.println(javaGenerator.DeckGenerator(ast.Root.leftMostChild.leftMostChild.rightSib.rightSib));
+        Generator codeGenerator = new Generator(ast);
+        codeGenerator.StartGenerator();
     }
     public static void printNode(Node node, int indents)
     {

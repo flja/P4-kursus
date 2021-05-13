@@ -1,4 +1,4 @@
-deck gamedeck= standard; 
+deck gamedeck= standard+ hearts + cardvalue ; 
 Define cards 
 {
    assign king.value= 10; 

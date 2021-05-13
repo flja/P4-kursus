@@ -1,6 +1,5 @@
 package com.company.CodeGenerator;
 
-
 import com.company.AST.AST;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
@@ -8,42 +7,34 @@ import com.company.AST.TerminalNode;
 import com.company.Parser;
 import com.company.Tokens.idToken;
 import com.company.Tokens.nonZeroNumToken;
-import com.company.Tokens.stringToken;
 import com.company.Tokens.stringValueToken;
 
-import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Paths;
 
-public class Generator
-{
+public class ValidationCodeGenerator {
     AST _ast;
+    String code = "";
     int _indent = 0;
-    JavaGenerator javagenerator = new JavaGenerator();
 
-    public Generator(AST aAst) {
+    public ValidationCodeGenerator(AST aAst) {
         this._ast = aAst;
     }
 
-    public void StartGenerator() throws Exception
+    public void StartGenerator(Node node) throws Exception
     {
-
         _ast.ResetVisit();
-        javagenerator.generateTemplate();
         RecursiveVisitor(_ast.Root);
-        javagenerator.WriteToFile();
-
     }
 
-    public void RecursiveVisitor(Node node) throws Exception
+    void RecursiveVisitor(Node node) throws Exception
     {
         Visit(node);
         for (Node child : node.GetChildren())
         {
             if (!child.visited)
             {
-            RecursiveVisitor(child);
+                RecursiveVisitor(child);
             }
         }
     }
@@ -54,25 +45,8 @@ public class Generator
         {
             switch(((NonTerminalNode) node).nonterminal)
             {
-                case "Deck":
-                    javagenerator.Emit(javagenerator.DeckGenerator(node));
+                case "":
                     break;
-                case "CardsDef":
-                    javagenerator.Emit(javagenerator.CardDefGenerator(node));
-                    break;
-                case "PlayerDef":
-                    javagenerator.Emit(javagenerator.PlayerDefGenerator(node));
-                    break;
-                case "HandDcl":
-                    javagenerator.Emit(javagenerator.HandDclGenerator(node));
-                    break;
-                case "DeckDcl":
-                    javagenerator.Emit(javagenerator.DeckDclGenerator(node));
-                    break;
-                case "TableDef":
-                    javagenerator.Emit(javagenerator.TableDefGenerator(node));
-                    break;
-
             }
         }
         else if (node instanceof TerminalNode)
@@ -80,237 +54,240 @@ public class Generator
             switch (Parser.GetName(((TerminalNode) node).terminal))
             {
                 case "actions":
-                   //make
+                    Emit("actions ");
                     break;
                 case "action":
-                    //make
+                    Emit("action ");
                     break;
                 case "and":
-                    javagenerator.Emit("&&");
+                    Emit("and ");
                     break;
                 case "assignspecifier":
-                    //ignore
+                    Emit("assign ");
                     break;
                 case "assign":
-                    javagenerator.Emit("= ");
+                    Emit("= ");
                     break;
                 case "break":
-                    javagenerator.Emit("break");
+                    Emit("break");
                     break;
                 case "cards":
-                    //make
+                    Emit("cards ");
                     break;
                 case "card":
-                    javagenerator.Emit("card ");
+                    Emit("card ");
                     break;
                 case "cardvalue":
-                    //make
+                    Emit("cardvalue ");
                     break;
                 case "case":
-                    javagenerator.Emit("case ");
+                    Emit("case ");
                     break;
                 case "clubs":
-                    //ignore
+                    Emit("clubs ");
                     break;
                 case "colon":
-                    javagenerator.Emit(": ");
+                    Emit(": ");
                     break;
                 case "comma":
-                    javagenerator.Emit(", ");
+                    Emit(", ");
                     break;
                 case "deck":
-                    javagenerator.Emit("DeckClass ");
+                    Emit("deck ");
                     break;
                 case "default":
-                    javagenerator.Emit("default ");
+                    Emit("default ");
                     break;
                 case "define":
-                    //ignore
+                    Emit("Define ");
                     break;
                 case "diamonds":
-                    //ignore
+                    Emit("diamonds ");
                     break;
                 case "dot":
-                    javagenerator.Emit(".");
+                    Emit("."); //Mellemrum?
                     break;
                 case "else":
-                    javagenerator.Emit("else ");
+                    Emit("else ");
                     break;
                 case "endactions":
-                    //make
+                    Emit("endactions ");
                     break;
                 case "endaction":
-                    //ignore
+                    Emit("endaction ");
                     break;
                 case "endcase":
-                    //ignore
+                    Emit("endcase ");
                     break;
                 case "endcondition":
-                    //make
+                    Emit("endcondition ");
                     break;
                 case "enddefault":
-                    //ignore
+                    Emit("enddefault ");
                     break;
                 case "endelse":
-                    //ignore
+                    Emit("endelse ");
                     break;
                 case "endif":
-                    //ignore
+                    Emit("endif ");
                     break;
                 case "endoffile":
-                    //ignore
+                    Emit("endoffile ");
                     break;
                 case "endswitch":
-                    //ignore
+                    Emit("endswitch ");
                     break;
                 case "endwhile":
-                    //ignore
+                    Emit("endwhile ");
                     break;
                 case "enum":
-                    //make
+                    Emit("enum ");
                     break;
                 case "equal":
-                    javagenerator.Emit("== ");
+                    Emit("== ");
                     break;
                 case "false":
-                    javagenerator.Emit("false ");
+                    Emit("false ");
                     break;
                 case "flag":
-                    javagenerator.Emit("boolean ");
+                    Emit("flag ");
                     break;
                 case "for":
-                    javagenerator.Emit("for");
+                    Emit("for ");
                     break;
                 case "functions":
-                    //make
+                    Emit("Functions ");
                     break;
                 case "func":
-                    //ignore
+                    Emit("func ");
                     break;
                 case "greaterthanorequal":
-                    javagenerator.Emit(">= ");
+                    Emit(">= ");
                     break;
                 case "greaterthan":
-                    javagenerator.Emit("> ");
+                    Emit("> ");
                     break;
                 case "hand":
-                    javagenerator.Emit("hand ");
+                    Emit("hand ");
                     break;
                 case "hearts":
-                    //ignore
+                    Emit("hearts ");
                     break;
                 case "hyphen":
-                    javagenerator.Emit("- ");
+                    Emit("- ");
                     break;
                 case "id":
-                    javagenerator.Emit(String.valueOf(((idToken) ((TerminalNode) node).terminal).spelling));
+                    Emit(String.valueOf(((idToken) ((TerminalNode) node).terminal).spelling));
                     break;
                 case "if":
-                    javagenerator.Emit("if ");
+                    Emit("if ");
                     break;
                 case "joker":
-                    //ignore
+                    Emit("joker ");
                     break;
                 case "lbrace":
-                    javagenerator.Emit("\n{\n");
+                    Emit("\n{\n");
                     _indent++;
                     break;
                 case "lessthanorequal":
-                    javagenerator.Emit("<= ");
+                    Emit("<= ");
                     break;
                 case "lessthan":
-                    javagenerator.Emit("< ");
+                    Emit("< ");
                     break;
                 case "lparen":
-                    javagenerator.Emit("(");
+                    Emit("(");
                     break;
                 case "mod":
-                    javagenerator.Emit("% ");
+                    Emit("mod ");
                     break;
                 case "neg":
-                    javagenerator.Emit("-");
+                    Emit("neg ");
                     break;
                 case "nonzeronum":
-                    javagenerator.Emit(String.valueOf(((nonZeroNumToken) ((TerminalNode) node).terminal).value));
+                    Emit(String.valueOf(((nonZeroNumToken) ((TerminalNode) node).terminal).value));
                     break;
                 case "notequal":
-                    javagenerator.Emit("!= ");
+                    Emit("!= ");
                     break;
                 case "not":
-                    javagenerator.Emit("! ");
+                    Emit("! ");
                     break;
                 case "number":
-                    javagenerator.Emit("int ");
+                    Emit("number ");
                     break;
                 case "or":
-                    javagenerator.Emit("or ");
+                    Emit("or ");
                     break;
                 case "player":
-                    //make
+                    Emit("player ");
                     break;
                 case "plus":
-                    javagenerator.Emit("+ ");
+                    Emit("+ ");
                     break;
                 case "questionmark":
-                    //ignore
+                    Emit("? ");
                     break;
                 case "rbrace":
                     _indent--;
-                    javagenerator.Emit("}\n");
+                    Emit("}\n");
                     break;
                 case "round":
-                    //make
+                    Emit("Round ");
                     break;
                 case "rparen":
-                    javagenerator.Emit(")");
+                    Emit(")");
                     break;
                 case "semicolon":
-                    javagenerator.Emit("; \n");
+                    Emit("; \n");
                     break;
                 case "setup":
-                    //make
+                    Emit("Setup ");
                     break;
                 case "slash":
-                    javagenerator.Emit("/ ");
+                    Emit("/ ");
                     break;
                 case "spades":
-                    //ignore
+                    Emit("spades ");
                     break;
                 case "standard":
-                    //ignore
+                    Emit("standard");
                     break;
                 case "star":
-                    javagenerator.Emit("* ");
+                    Emit("* ");
                     break;
                 case "string":
-                    javagenerator.Emit("String ");
+                    Emit("string ");
                     break;
                 case "stringvalue":
-                    javagenerator.Emit(String.valueOf(((stringValueToken) ((TerminalNode) node).terminal).value));
+                    Emit(String.valueOf(((stringValueToken) ((TerminalNode) node).terminal).value));
                     break;
                 case "switch":
-                    javagenerator.Emit("switch");
+                    Emit("switch ");
                     break;
                 case "table":
-                    //make
+                    Emit("Table ");
                     break;
                 case "true":
-                    javagenerator.Emit("true ");
+                    Emit("true ");
                     break;
                 case "turn":
-                    //make
+                    Emit("Turn ");
                     break;
                 case "void":
-                    javagenerator.Emit("void ");
+                    Emit("void ");
                     break;
                 case "while":
-                    javagenerator.Emit("while ");
+                    Emit("while ");
+                    break;
+                case "whitespace":
+                    Emit("");
                     break;
                 case "xor":
-                    javagenerator.Emit("^ ");
+                    Emit("xor ");
                     break;
                 case "zero":
-                    javagenerator.Emit("0 ");
+                    Emit("0 ");
                     break;
                 default:
             }
@@ -322,5 +299,30 @@ public class Generator
             throw new Exception("Fejl i generator");
 
         }
+    }
+
+    void Emit(String input)
+    {
+        String s = "";
+        if (code.length() != 0)
+        {
+            if(code.charAt(code.length() - 1) == '\n' || input.charAt(0) == '\n')
+            {
+                for (int i = 0; i < _indent; i++)
+                {
+                    s += "   ";
+                }
+                input = input.charAt(0) == '\n' ? input.replaceFirst("\n", "\n" + s) : s + input;
+            }
+        }
+        code += input;
+    }
+
+    public void WriteToFile() throws Exception {
+        String path = Paths.get(".").toAbsolutePath().normalize().toString() + "/ValidationCode.txt";
+        FileWriter fw = new FileWriter(path);
+        fw.write(code);
+        fw.flush();
+        fw.close();
     }
 }

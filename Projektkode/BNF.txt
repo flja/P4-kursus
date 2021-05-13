@@ -36,7 +36,7 @@ Deck⟶Cards
 Add⟶plus Cards
 Add⟶ 
 Cards⟶Card Add
-Cards⟶ hearts Add
+Cards⟶hearts Add
 Cards⟶spades Add
 Cards⟶diamonds Add
 Cards⟶clubs Add 

@@ -1,4 +1,4 @@
-deck gamedeck = standard;
+deck gamedeck = standard + hearts + 2h;
 
 Define Cards
 {

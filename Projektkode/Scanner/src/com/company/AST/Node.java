@@ -67,5 +67,17 @@ public class Node
         }
         return children;
     }
+    public void VisitSuptree()
+    {
+        RecursiveVisitSubtree(this);
+    }
+    public void RecursiveVisitSubtree(Node node)
+    {
+        node.visited = true;
+        for (Node child : node.GetChildren())
+        {
+            RecursiveVisitSubtree(child);
+        }
+    }
 
 }

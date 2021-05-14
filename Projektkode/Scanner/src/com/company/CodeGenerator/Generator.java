@@ -72,7 +72,17 @@ public class Generator
                 case "TableDef":
                     javagenerator.Emit(javagenerator.TableDefGenerator(node));
                     break;
-
+                case "Setup":
+                    javagenerator.Emit(javagenerator.SetupGenerator(node));
+                    break;
+                case "Round":
+                    javagenerator.Emit(javagenerator.RoundGenerator(node));
+                    break;
+                case "Turn":
+                    javagenerator.Emit(javagenerator.TurnGenerator(node));
+                    break;
+                case "SelectionStmt":
+                    javagenerator.Emit(javagenerator.SelectionStatementGenerator(node));
             }
         }
         else if (node instanceof TerminalNode)

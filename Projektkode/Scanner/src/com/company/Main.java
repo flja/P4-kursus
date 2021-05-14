@@ -5,6 +5,7 @@ import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
 import com.company.CodeGenerator.Generator;
 import com.company.CodeGenerator.JavaGenerator;
+import com.company.CodeGenerator.TemplateCode.ActionClass;
 import com.company.CodeGenerator.TemplateCode.DeckClass;
 import com.company.CodeGenerator.TemplateCode.HelpMethods;
 import com.company.CodeGenerator.ValidationCodeGenerator;
@@ -14,6 +15,8 @@ import com.company.ContextualAnalyzer.ScopeTable;
 import com.company.ContextualAnalyzer.Analyzer;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 

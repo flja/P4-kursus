@@ -43,7 +43,6 @@ Turn
 {
    while (? turntaker.Hand.totalValue< 21)
    {
-      number i; 
       actions 
       {
          action "Hit"if (? true )

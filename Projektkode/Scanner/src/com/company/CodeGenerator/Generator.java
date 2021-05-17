@@ -32,8 +32,8 @@ public class Generator
         _ast.ResetVisit();
         javagenerator.generateTemplate();
         RecursiveVisitor(_ast.Root);
+        javagenerator.code += "\n}";
         javagenerator.WriteToFile();
-
     }
 
     public void RecursiveVisitor(Node node) throws Exception
@@ -83,6 +83,26 @@ public class Generator
                     break;
                 case "SelectionStmt":
                     javagenerator.Emit(javagenerator.SelectionStatementGenerator(node));
+                    break;
+                case "LoopStmt":
+                    javagenerator.Emit(javagenerator.LoopStmtGenerator(node));
+                    break;
+                case "LabeledStmt":
+                    javagenerator.Emit(javagenerator.LabeledStmtGenerator(node));
+                    break;
+                case "Endcondition":
+                    javagenerator.Emit(javagenerator.EndConditionGenerator(node));
+                    break;
+                case "Functions":
+                    javagenerator.Emit(javagenerator.FunctionsGenerator(node));
+                    break;
+                case "FunctionsDef":
+                    javagenerator.Emit(javagenerator.FunctionDefsGenerator(node));
+                    break;
+                case "FollowObject1":
+                    javagenerator.Emit(javagenerator.FollowObject1Generator(node));
+                    break;
+
             }
         }
         else if (node instanceof TerminalNode)
@@ -96,13 +116,13 @@ public class Generator
                     //make
                     break;
                 case "and":
-                    javagenerator.Emit("&&");
+                    javagenerator.Emit(" &&");
                     break;
                 case "assignspecifier":
                     //ignore
                     break;
                 case "assign":
-                    javagenerator.Emit("= ");
+                    javagenerator.Emit(" = ");
                     break;
                 case "break":
                     javagenerator.Emit("break");
@@ -123,7 +143,7 @@ public class Generator
                     //ignore
                     break;
                 case "colon":
-                    javagenerator.Emit(": ");
+                    javagenerator.Emit(" : ");
                     break;
                 case "comma":
                     javagenerator.Emit(", ");
@@ -180,16 +200,16 @@ public class Generator
                     //make
                     break;
                 case "equal":
-                    javagenerator.Emit("== ");
+                    javagenerator.Emit(" == ");
                     break;
                 case "false":
-                    javagenerator.Emit("false ");
+                    javagenerator.Emit(" false ");
                     break;
                 case "flag":
-                    javagenerator.Emit("boolean ");
+                    javagenerator.Emit(" boolean ");
                     break;
                 case "for":
-                    javagenerator.Emit("for");
+                    javagenerator.Emit(" for");
                     break;
                 case "functions":
                     //make
@@ -198,19 +218,19 @@ public class Generator
                     //ignore
                     break;
                 case "greaterthanorequal":
-                    javagenerator.Emit(">= ");
+                    javagenerator.Emit(" >= ");
                     break;
                 case "greaterthan":
-                    javagenerator.Emit("> ");
+                    javagenerator.Emit(" > ");
                     break;
                 case "hand":
-                    javagenerator.Emit("hand ");
+                    javagenerator.Emit(" hand ");
                     break;
                 case "hearts":
                     //ignore
                     break;
                 case "hyphen":
-                    javagenerator.Emit("- ");
+                    javagenerator.Emit(" - ");
                     break;
                 case "id":
                     javagenerator.Emit(String.valueOf(((idToken) ((TerminalNode) node).terminal).spelling));
@@ -226,16 +246,16 @@ public class Generator
                     _indent++;
                     break;
                 case "lessthanorequal":
-                    javagenerator.Emit("<= ");
+                    javagenerator.Emit(" <= ");
                     break;
                 case "lessthan":
-                    javagenerator.Emit("< ");
+                    javagenerator.Emit(" < ");
                     break;
                 case "lparen":
                     javagenerator.Emit("(");
                     break;
                 case "mod":
-                    javagenerator.Emit("% ");
+                    javagenerator.Emit(" % ");
                     break;
                 case "neg":
                     javagenerator.Emit("-");
@@ -244,22 +264,22 @@ public class Generator
                     javagenerator.Emit(String.valueOf(((nonZeroNumToken) ((TerminalNode) node).terminal).value));
                     break;
                 case "notequal":
-                    javagenerator.Emit("!= ");
+                    javagenerator.Emit(" != ");
                     break;
                 case "not":
-                    javagenerator.Emit("! ");
+                    javagenerator.Emit(" ! ");
                     break;
                 case "number":
-                    javagenerator.Emit("int ");
+                    javagenerator.Emit(" int ");
                     break;
                 case "or":
-                    javagenerator.Emit("or ");
+                    javagenerator.Emit(" || ");
                     break;
                 case "player":
                     //make
                     break;
                 case "plus":
-                    javagenerator.Emit("+ ");
+                    javagenerator.Emit(" + ");
                     break;
                 case "questionmark":
                     //ignore
@@ -275,13 +295,13 @@ public class Generator
                     javagenerator.Emit(")");
                     break;
                 case "semicolon":
-                    javagenerator.Emit("; \n");
+                    javagenerator.Emit(" ; \n");
                     break;
                 case "setup":
                     //make
                     break;
                 case "slash":
-                    javagenerator.Emit("/ ");
+                    javagenerator.Emit(" / ");
                     break;
                 case "spades":
                     //ignore
@@ -290,7 +310,7 @@ public class Generator
                     //ignore
                     break;
                 case "star":
-                    javagenerator.Emit("* ");
+                    javagenerator.Emit(" * ");
                     break;
                 case "string":
                     javagenerator.Emit("String ");
@@ -317,10 +337,13 @@ public class Generator
                     javagenerator.Emit("while ");
                     break;
                 case "xor":
-                    javagenerator.Emit("^ ");
+                    javagenerator.Emit(" ^ ");
                     break;
                 case "zero":
-                    javagenerator.Emit("0 ");
+                    javagenerator.Emit(" 0 ");
+                    break;
+                case "return":
+                    javagenerator.Emit(" return ");
                     break;
                 default:
             }

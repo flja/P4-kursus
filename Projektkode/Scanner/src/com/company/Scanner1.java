@@ -378,6 +378,9 @@ public class Scanner1
             case "mod" :
                 token = new modToken(lineNum);
                 break;
+            case "return" :
+                token = new returnToken(lineNum);
+                break;
         }
         return token;
     }

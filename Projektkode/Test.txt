@@ -47,6 +47,17 @@ Round
 
 Turn
 {
+	number i = 0;
+	switch(i)
+	{
+		case : 0 :
+		assign i = 3;
+		break;
+		endcase;
+		default:
+		enddefault;
+	}
+	endswitch;
 	while(?turntaker.Hand.totalValue < 21)
 	{
 		actions
@@ -96,7 +107,7 @@ Endcondition(?table.pilehidden.totalValue + table.pilevisible.totalValue >= 21 o
 
 Functions
 {
-	void myFunc ( number i; number k; )
+	number myFunc ( number i; number k; )
 	{
 		number j;
 		assign j = i;
@@ -104,5 +115,6 @@ Functions
 		{
 			assign k = j;
 		}endif;
+		return i;
 	}
 }

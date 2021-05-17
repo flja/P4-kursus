@@ -72,7 +72,8 @@ Stmt⟶SelectionStmt
 Stmt⟶LoopStmt
 Stmt⟶Expr semicolon
 Stmt⟶LabeledStmt
-Stmt⟶break semicolon 
+Stmt⟶break semicolon
+Stmt⟶return Val semicolon 
 Assignments⟶Assignment Assignments
 Assignments⟶
 Assignment⟶assignSpecifier ObjectSpecifier assign Expr semicolon 

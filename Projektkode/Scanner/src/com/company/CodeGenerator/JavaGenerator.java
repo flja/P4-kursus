@@ -205,6 +205,60 @@ public class JavaGenerator {
         node.VisitSuptree();
         return TurnBlock;
     }
+    public String EndConditionGenerator(Node node) throws Exception {
+        String EndconditionBlock =  "public class Endcondition\n" +
+                "{\n" +
+                "Player winner;\n" +
+                "Player none = new player();\n" +
+                "boolean end = false;\n";
+        Generator DclGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.leftMostChild.rightSib)); //Endcondition -> CompoundStmt -> Dcls
+        DclGen.RecursiveVisitor(DclGen._ast.Root);
+        EndconditionBlock += DclGen.javagenerator.code;
+        EndconditionBlock += "public void check()\n" +
+                "{\n" +
+                "if(";
+        Generator LogicGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib));//Endcondition -> LogicalExpr
+        LogicGen.RecursiveVisitor(LogicGen._ast.Root);
+        EndconditionBlock += LogicGen.javagenerator.code;
+        EndconditionBlock += ")\n{";
+        Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.leftMostChild.rightSib.rightSib));//EndCondition -> CompoundStmt -> Stmts
+        StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        EndconditionBlock += StmtGen.javagenerator.code;
+        EndconditionBlock += "end = true;\n}\n}\n}\n";
+        node.VisitSuptree();
+        return EndconditionBlock;
+    }
+    public String FunctionsGenerator(Node node) throws Exception {
+        Generator FunctionDefsGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib));
+        FunctionDefsGen.RecursiveVisitor(FunctionDefsGen._ast.Root);
+        String functionDefs = FunctionDefsGen.javagenerator.code;
+        node.VisitSuptree();
+        return functionDefs;
+    }
+
+    public String FunctionDefsGenerator(Node node) throws Exception
+    {
+        Generator TypeGen = new Generator(new AST(node.leftMostChild));
+        TypeGen.RecursiveVisitor(TypeGen._ast.Root);
+        String s = TypeGen.javagenerator.code;
+        s += " " + ((idToken) ((TerminalNode) node.leftMostChild.rightSib).terminal).spelling;
+        s += "(";
+        Generator DclsGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib));
+        DclsGen.RecursiveVisitor(DclsGen._ast.Root);
+        String temp = DclsGen.javagenerator.code;
+        if (temp.length() > 1)
+        {
+            temp = temp.replaceAll(";", ",");
+            temp = temp.substring(0, temp.lastIndexOf(","));
+        }
+        s += temp;
+        s += ")";
+        Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.rightSib));
+        StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        s += StmtGen.javagenerator.code;
+        node.VisitSuptree();
+        return s;
+    }
 
     public String SelectionStatementGenerator(Node node) throws Exception
     {
@@ -268,6 +322,7 @@ public class JavaGenerator {
                     item.body +
                     "break;\n";
         }
+        s += "}";
         node.VisitSuptree();
         return s;
 
@@ -310,4 +365,79 @@ public class JavaGenerator {
         return s;
     }
 
+    public String LoopStmtGenerator(Node node) throws Exception
+    {
+        switch (Parser.GetName(((TerminalNode) node.leftMostChild).terminal))
+        {
+            case "while" :
+                return WhileLoopGenerator(node);
+            default:
+                return "";
+        }
+    }
+
+    public String WhileLoopGenerator(Node node) throws Exception
+    {
+        String s = "while(";
+        Generator LogicGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib));
+        LogicGen.RecursiveVisitor(LogicGen._ast.Root);
+        s += LogicGen.javagenerator.code;
+        s+= ")";
+        Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib));
+        StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        s+= StmtGen.javagenerator.code;
+        node.VisitSuptree();
+        return s;
+    }
+
+    public String LabeledStmtGenerator(Node node) throws Exception {
+        switch (Parser.GetName(((TerminalNode) node.leftMostChild).terminal))
+        {
+            case "case" :
+                return CaseGenerator(node);
+            case "default":
+                return DefaultGenerator(node);
+            default:
+                return "";
+        }
+    }
+    public String CaseGenerator(Node node) throws Exception {
+
+        String s = "case ";
+        Generator ExprGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib)); //LabeledStmt -> Expr
+        ExprGen.RecursiveVisitor(ExprGen._ast.Root);
+        s += ExprGen.javagenerator.code;
+        s += " : ";
+        Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib)); //LabeledStmt -> Stmt
+        StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        s += StmtGen.javagenerator.code;
+        node.VisitSuptree();
+        return s;
+    }
+    public String DefaultGenerator(Node node) throws Exception {
+        String s = "default : ";
+        Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib)); //LabeledStmt -> Stmt
+        StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        s += StmtGen.javagenerator.code;
+        node.VisitSuptree();
+        return s;
+    }
+
+    public String FollowObject1Generator(Node node) throws Exception
+    {
+        String s = "";
+        if (node.leftMostChild instanceof NonTerminalNode)
+        {
+            if (((NonTerminalNode) node.leftMostChild).nonterminal.equals("Number"))
+            {
+                s = "get(";
+                Generator NumberGen = new Generator(new AST(node.leftMostChild));
+                NumberGen.RecursiveVisitor(NumberGen._ast.Root);
+                s += NumberGen.javagenerator.code;
+                s += ")";
+                node.VisitSuptree();
+            }
+        }
+        return s;
+    }
 }

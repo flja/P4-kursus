@@ -20,40 +20,71 @@ import java.util.List;
 import java.util.Scanner;
 
 public class JavaGenerator {
-    String path = Paths.get(".").toAbsolutePath().normalize().toString() + "/Javafile.java";
+    String path = Paths.get(".").toAbsolutePath().normalize().toString() + "/Scanner/src/shufflerCode/Shuffler.java";
     String code = "";
+    String functions ="";
+    int playeranycnt = 0;
+
+
 
     public JavaGenerator() {
 
     }
 
-    public void generateTemplate() {
+    public void generateTemplate(Node node) throws Exception{
         code = "package shufflerCode;\n" +
-                "import com.company.CodeGenerator.TemplateCode;\n" +
-                "public class Main \n    {\n" +
-                "    public static void main(String[] args)\n{\n" +
+                "import com.company.CodeGenerator.TemplateCode.HelpMethods;\n" +
+                "import com.company.CodeGenerator.TemplateCode.ActionClass;\n" +
+                "import com.company.CodeGenerator.TemplateCode.CardClass;\n" +
+                "import com.company.CodeGenerator.TemplateCode.DeckClass;\n" +
+                "import com.company.CodeGenerator.TemplateCode.two;\n" +
+                "import com.company.CodeGenerator.TemplateCode.three;\n" +
+                "import com.company.CodeGenerator.TemplateCode.four;\n" +
+                "import com.company.CodeGenerator.TemplateCode.five;\n" +
+                "import com.company.CodeGenerator.TemplateCode.six;\n" +
+                "import com.company.CodeGenerator.TemplateCode.seven;\n" +
+                "import com.company.CodeGenerator.TemplateCode.eight;\n" +
+                "import com.company.CodeGenerator.TemplateCode.nine;\n" +
+                "import com.company.CodeGenerator.TemplateCode.ten;\n" +
+                "import com.company.CodeGenerator.TemplateCode.jack;\n" +
+                "import com.company.CodeGenerator.TemplateCode.queen;\n" +
+                "import com.company.CodeGenerator.TemplateCode.king;\n" +
+                "import com.company.CodeGenerator.TemplateCode.joker;\n" +
+                "import com.company.CodeGenerator.TemplateCode.ace;\n" +
+                "\n" +
+                "import java.util.ArrayList;\n" +
+                "import java.util.Arrays;\n" +
+                "import java.util.List;\n" +
+                "import java.util.Scanner;" +
+                "public class Shuffler\n{\n" +
+                "int _playerCnt = " + ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib.rightSib.rightSib).terminal).value + ";\n" +
+                "Cards cards = new Cards();\n" +
+                "List<Player> players = GeneratePlayers(_playerCnt);\n" +
+                "Table table = new Table();\n" +
+                "Setup setup = new Setup();\n" +
+                "Round round = new Round();\n" +
+                "Turn turn = new Turn();\n" +
+                "Endcondition endcondition = new Endcondition();\n" +
+                "public Shuffler() throws Exception\n" +
+                " {\n" +
+                " }" +
+                "public List<Player> GeneratePlayers(int cnt) throws Exception\n" +
+                "{\n" +
+                "List<Player> list = new ArrayList<Player>();\n" +
+                "for(int i = 0; i < cnt; i++)\n" +
+                "{\n" +
+                "list.add(new Player());\n" +
+                "}\n" +
+                "return list;\n" +
+                "}\n" +
+                "public void ShufflerRun() throws Exception\n{\n" +
+                "setup.run();\n" +
+                "while (!endcondition.end) \n" +
+                "{\n" +
+                "round.run();\n" +
+                "}\n" +
                 "}\n";
     }
-
-    /*public void main() throws Exception {
-        //setup
-        Cards cards = new Cards();
-        List<Player> players = new Player().GeneratePlayers;
-        Table table = new Table();
-        Setup setup = new Setup();
-        Round round = new Round();
-        Turn turn = new Turn();
-        Endcondition endcondition = new Endcondition();
-        //flow
-        cards.run();
-        setup.run();
-        while (!endcondition.end) {
-            round.run();
-        }
-
-
-        DeckClass gamedeck = new DeckClass(new String[]{"Standard"});
-    }*/
 
     public void WriteToFile() throws Exception {
         FileWriter fw = new FileWriter(path);
@@ -69,6 +100,11 @@ public class JavaGenerator {
 
     public String DeckGenerator(Node node)
     {
+        String delete = "new DeckClass() = ";
+        if (code.length() >= delete.length())
+        {
+            code = code.substring(0, code.length() - delete.length());
+        }
         String s = "{";
         s = DeckGeneratorRecursion(node, s);
         s = s.substring(0,s.length() - 2);
@@ -84,12 +120,12 @@ public class JavaGenerator {
             {
                 case "cardvalue":
                     cardValueToken cardvalueToken = (cardValueToken) ((TerminalNode) node).terminal;
-                    s += Character.toString(cardvalueToken.facevalue) + Character.toString(cardvalueToken.suit) + ", ";
+                    s += "\"" + Character.toString(cardvalueToken.facevalue) + Character.toString(cardvalueToken.suit) + "\", ";
                     break;
                 case "plus":
                     break;
                 default:
-                    s += cards + ", ";
+                    s += "\"" + cards + "\", ";
                     break;
             }
         }
@@ -103,10 +139,11 @@ public class JavaGenerator {
     public String CardDefGenerator(Node node) throws Exception {
         String CardDefBlock =  "public class Cards\n" +
                                 "{\n" +
-                                "public Cards()\n" +
+                                "public Cards() throws Exception\n" +
                                 "{\n";
         Generator gen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib));
         gen.RecursiveVisitor(gen._ast.Root);
+        functions += gen.javagenerator.functions;
         CardDefBlock += gen.javagenerator.code;
         CardDefBlock += "}\n}\n";
         node.VisitSuptree();
@@ -114,17 +151,22 @@ public class JavaGenerator {
     }
     public String PlayerDefGenerator(Node node) throws Exception {
         String PlayerDefBlock =  "public class Player\n" +
-                "{\n";
+                "{\n" +
+                "public void takeTurn() throws Exception\n" +
+                "{\n" +
+                "turn.run(this);\n" +
+                "}\n";
         Generator DclGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.rightSib.leftMostChild.rightSib)); //PlayerDef -> CompoundStmt -> Dcls
         DclGen.RecursiveVisitor(DclGen._ast.Root);
+        functions += DclGen.javagenerator.functions;
         PlayerDefBlock += DclGen.javagenerator.code;
-        PlayerDefBlock += "public Player()\n" +
+        PlayerDefBlock += "public Player() throws Exception\n" +
                 "{\n";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.rightSib.leftMostChild.rightSib.rightSib));//PlayerDef -> CompoundStmt -> Stmts
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         PlayerDefBlock += StmtGen.javagenerator.code;
         PlayerDefBlock += "}\n}\n";
-        PlayerDefBlock += "int PlayerCnt = " + ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib.rightSib.rightSib).terminal).value + ";\n";
         node.VisitSuptree();
 
         return PlayerDefBlock;
@@ -133,7 +175,7 @@ public class JavaGenerator {
     public String HandDclGenerator(Node node) throws Exception
     {
         node.VisitSuptree();
-        return "hand " + ((idToken) ((TerminalNode) node.leftMostChild.rightSib).terminal).spelling + " = new hand()";
+        return "DeckClass " + ((idToken) ((TerminalNode) node.leftMostChild.rightSib).terminal).spelling + " = new DeckClass()";
     }
     public String DeckDclGenerator(Node node) throws Exception
     {
@@ -146,11 +188,13 @@ public class JavaGenerator {
                 "{\n";
         Generator DclGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.leftMostChild.rightSib)); //TableDef -> CompoundStmt -> Dcls
         DclGen.RecursiveVisitor(DclGen._ast.Root);
+        functions += DclGen.javagenerator.functions;
         TableDefBlock += DclGen.javagenerator.code;
-        TableDefBlock += "public Table()\n" +
+        TableDefBlock += "public Table() throws Exception\n" +
                 "{\n";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.leftMostChild.rightSib.rightSib));//TableDef -> CompoundStmt -> Stmts
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         TableDefBlock += StmtGen.javagenerator.code;
         TableDefBlock += "}\n}\n";
         node.VisitSuptree();
@@ -163,11 +207,13 @@ public class JavaGenerator {
                 "{\n";
         Generator DclGen = new Generator(new AST(node.leftMostChild.rightSib.leftMostChild.rightSib)); //Setup -> CompoundStmt -> Dcls
         DclGen.RecursiveVisitor(DclGen._ast.Root);
+        functions += DclGen.javagenerator.functions;
         SetupBlock += DclGen.javagenerator.code;
-        SetupBlock += "public void run()\n" +
+        SetupBlock += "public void run() throws Exception\n" +
                 "{\n";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.leftMostChild.rightSib.rightSib));//Setup -> CompoundStmt -> Stmts
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         SetupBlock += StmtGen.javagenerator.code;
         SetupBlock += "}\n}\n";
         node.VisitSuptree();
@@ -179,11 +225,13 @@ public class JavaGenerator {
                 "{\n";
         Generator DclGen = new Generator(new AST(node.leftMostChild.rightSib.leftMostChild.rightSib)); //Round -> CompoundStmt -> Dcls
         DclGen.RecursiveVisitor(DclGen._ast.Root);
+        functions += DclGen.javagenerator.functions;
         RoundBlock += DclGen.javagenerator.code;
-        RoundBlock += "public void run()\n" +
+        RoundBlock += "public void run() throws Exception\n" +
                 "{\n";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.leftMostChild.rightSib.rightSib));//Round -> CompoundStmt -> Stmts
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         RoundBlock += StmtGen.javagenerator.code;
         RoundBlock += "}\n}\n";
         node.VisitSuptree();
@@ -195,11 +243,13 @@ public class JavaGenerator {
                 "{\n";
         Generator DclGen = new Generator(new AST(node.leftMostChild.rightSib.leftMostChild.rightSib)); //Turn -> CompoundStmt -> Dcls
         DclGen.RecursiveVisitor(DclGen._ast.Root);
+        functions += DclGen.javagenerator.functions;
         TurnBlock += DclGen.javagenerator.code;
-        TurnBlock += "public void run()\n" +
+        TurnBlock += "public void run(Player turntaker) throws Exception\n" +
                 "{\n";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.leftMostChild.rightSib.rightSib));//Turn -> CompoundStmt -> Stmts
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         TurnBlock += StmtGen.javagenerator.code;
         TurnBlock += "}\n}\n";
         node.VisitSuptree();
@@ -209,28 +259,46 @@ public class JavaGenerator {
         String EndconditionBlock =  "public class Endcondition\n" +
                 "{\n" +
                 "Player winner;\n" +
-                "Player none = new player();\n" +
-                "boolean end = false;\n";
+                "Player none = new Player();\n" +
+                "boolean end = false;\n" +
+                "public Endcondition() throws Exception\n" +
+                "{\n" +
+                "}\n";
         Generator DclGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.leftMostChild.rightSib)); //Endcondition -> CompoundStmt -> Dcls
         DclGen.RecursiveVisitor(DclGen._ast.Root);
+        functions += DclGen.javagenerator.functions;
         EndconditionBlock += DclGen.javagenerator.code;
-        EndconditionBlock += "public void check()\n" +
+        EndconditionBlock += "public void check() throws Exception\n" +
                 "{\n" +
                 "if(";
         Generator LogicGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib));//Endcondition -> LogicalExpr
         LogicGen.RecursiveVisitor(LogicGen._ast.Root);
+        functions += LogicGen.javagenerator.functions;
         EndconditionBlock += LogicGen.javagenerator.code;
         EndconditionBlock += ")\n{";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.leftMostChild.rightSib.rightSib));//EndCondition -> CompoundStmt -> Stmts
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         EndconditionBlock += StmtGen.javagenerator.code;
-        EndconditionBlock += "end = true;\n}\n}\n}\n";
+        EndconditionBlock += "end = true;\n" +
+                "if(winner == none)\n" +
+                "{\n" +
+                "System.out.println(\"No one wins\");\n" +
+                "}\n" +
+                "else\n" +
+                "{\n" +
+                "System.out.println(\" The winner is player\" + players.indexOf(winner));\n" +
+                "}\n" +
+                "}\n}\n}\n";
         node.VisitSuptree();
         return EndconditionBlock;
+
+
     }
     public String FunctionsGenerator(Node node) throws Exception {
         Generator FunctionDefsGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib));
         FunctionDefsGen.RecursiveVisitor(FunctionDefsGen._ast.Root);
+        functions += FunctionDefsGen.javagenerator.functions;
         String functionDefs = FunctionDefsGen.javagenerator.code;
         node.VisitSuptree();
         return functionDefs;
@@ -240,11 +308,13 @@ public class JavaGenerator {
     {
         Generator TypeGen = new Generator(new AST(node.leftMostChild));
         TypeGen.RecursiveVisitor(TypeGen._ast.Root);
+        functions += TypeGen.javagenerator.functions;
         String s = TypeGen.javagenerator.code;
         s += " " + ((idToken) ((TerminalNode) node.leftMostChild.rightSib).terminal).spelling;
         s += "(";
         Generator DclsGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib));
         DclsGen.RecursiveVisitor(DclsGen._ast.Root);
+        functions += DclsGen.javagenerator.functions;
         String temp = DclsGen.javagenerator.code;
         if (temp.length() > 1)
         {
@@ -255,6 +325,7 @@ public class JavaGenerator {
         s += ")";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.rightSib));
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         s += StmtGen.javagenerator.code;
         node.VisitSuptree();
         return s;
@@ -278,10 +349,12 @@ public class JavaGenerator {
         String s = "if(";
         Generator logicalGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib)); //SelectionStmt -> LogicalExpr
         logicalGen.RecursiveVisitor(logicalGen._ast.Root);
+        functions += logicalGen.javagenerator.functions;
         s += logicalGen.javagenerator.code;
         s += ")";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib)); //SelectionStmt -> Stmt
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         s += StmtGen.javagenerator.code;
         s += OptElseGenerator(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.rightSib);//SelectionStmt -> OptElse
         node.VisitSuptree();
@@ -294,6 +367,7 @@ public class JavaGenerator {
             s = "else\n";
             Generator stmtGen = new Generator(new AST(node.leftMostChild.rightSib)); //OptElse -> Stmt
             stmtGen.RecursiveVisitor(stmtGen._ast.Root);
+            functions += stmtGen.javagenerator.functions;
             s += stmtGen.javagenerator.code;
         }
         return s;
@@ -337,9 +411,11 @@ public class JavaGenerator {
                     String name = ((stringValueToken) ((TerminalNode) node.leftMostChild.rightSib.leftMostChild).terminal).value; // LabeledStmt -> String -> stringValue
                     Generator logicGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib)); // LabeledStmt -> LogicalExpr
                     logicGen.RecursiveVisitor(logicGen._ast.Root);
+                    functions += logicGen.javagenerator.functions;
                     String logicalExpr = logicGen.javagenerator.code;
                     Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.rightSib.rightSib)); // LabeledStmt -> CompoundStmt
                     StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+                    functions += StmtGen.javagenerator.functions;
                     String body = StmtGen.javagenerator.code;
                     list.add(new ActionClass(name, logicalExpr, body));
                     return list;
@@ -356,10 +432,12 @@ public class JavaGenerator {
         String s = "switch(";
         Generator ExprGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib)); //SelectionStmt -> Expr
         ExprGen.RecursiveVisitor(ExprGen._ast.Root);
+        functions += ExprGen.javagenerator.functions;
         s += ExprGen.javagenerator.code;
         s += ")";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib)); //SelectionStmt -> CompoundStmt
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         s += StmtGen.javagenerator.code;
         node.VisitSuptree();
         return s;
@@ -381,10 +459,12 @@ public class JavaGenerator {
         String s = "while(";
         Generator LogicGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib));
         LogicGen.RecursiveVisitor(LogicGen._ast.Root);
+        functions += LogicGen.javagenerator.functions;
         s += LogicGen.javagenerator.code;
         s+= ")";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib));
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         s+= StmtGen.javagenerator.code;
         node.VisitSuptree();
         return s;
@@ -406,10 +486,12 @@ public class JavaGenerator {
         String s = "case ";
         Generator ExprGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib)); //LabeledStmt -> Expr
         ExprGen.RecursiveVisitor(ExprGen._ast.Root);
+        functions += ExprGen.javagenerator.functions;
         s += ExprGen.javagenerator.code;
         s += " : ";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib)); //LabeledStmt -> Stmt
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         s += StmtGen.javagenerator.code;
         node.VisitSuptree();
         return s;
@@ -418,6 +500,7 @@ public class JavaGenerator {
         String s = "default : ";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib)); //LabeledStmt -> Stmt
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
+        functions += StmtGen.javagenerator.functions;
         s += StmtGen.javagenerator.code;
         node.VisitSuptree();
         return s;
@@ -430,14 +513,97 @@ public class JavaGenerator {
         {
             if (((NonTerminalNode) node.leftMostChild).nonterminal.equals("Number"))
             {
+                code += "_test_";
+                if (code.contains("player._test_"))
+                {
+                    code = code.substring(0, code.length() - 7);
+                    code += "s.";
+                }
+                else
+                {
+                    code = code.substring(0, code.length() - 6);
+                }
                 s = "get(";
                 Generator NumberGen = new Generator(new AST(node.leftMostChild));
                 NumberGen.RecursiveVisitor(NumberGen._ast.Root);
+                functions += NumberGen.javagenerator.functions;
                 s += NumberGen.javagenerator.code;
                 s += ")";
                 node.VisitSuptree();
             }
         }
+        return s;
+    }
+    public String FunctionCall1Generator(Node node) throws Exception
+    {
+        String s = "";
+        if (((idToken) ((TerminalNode) node.leftMostChild.leftMostChild).terminal).spelling.equals("players")) // functioncall1 -> objectspecifier -> id
+        {
+            s = "for(Player item : players)\n" +
+                    "{\n" +
+                    "item";
+            Generator FollowGen = new Generator(new AST(node.leftMostChild.leftMostChild.rightSib)); // functioncall1 -> objectspecifier -> Followobject
+            FollowGen.RecursiveVisitor(FollowGen._ast.Root);
+            functions += FollowGen.javagenerator.functions;
+            s += FollowGen.javagenerator.code;
+            s += "(";
+            Generator ParamGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib));// functioncall1 -> Parameters
+            ParamGen.RecursiveVisitor(ParamGen._ast.Root);
+            functions += ParamGen.javagenerator.functions;
+            s+= ParamGen.javagenerator.code;
+            s+= ");\n}\n";
+            node.parent.parent.parent.VisitSuptree();
+        }
+        return s;
+    }
+
+    public String LogicalTermGenerator(Node node) throws Exception
+    {
+        String s = "";
+        if (node.leftMostChild.leftMostChild.leftMostChild.leftMostChild instanceof NonTerminalNode)
+        {
+            if (((NonTerminalNode) node.leftMostChild.leftMostChild.leftMostChild.leftMostChild.leftMostChild).nonterminal.equals("ObjectSpecifier"))
+            {
+                Node ObjectSpecifiernode = node.leftMostChild.leftMostChild.leftMostChild.leftMostChild.leftMostChild;
+                Generator ObjectGen = new Generator(new AST(node.leftMostChild.leftMostChild.leftMostChild.leftMostChild.leftMostChild));
+                ObjectGen.RecursiveVisitor(ObjectGen._ast.Root);
+                functions += ObjectGen.javagenerator.functions;
+                String ObjectSpecifier = ObjectGen.javagenerator.code;
+                String[] ids = ObjectSpecifier.split("\\.");
+                if (ids.length > 1)
+                {
+                    if (ids[1].equals("any"))
+                    {
+                        return playerAnyGenerator(node, ObjectSpecifier);
+                    }
+                }
+                ObjectSpecifiernode.VisitSuptree();
+                s = ObjectSpecifier;
+            }
+        }
+        return s;
+    }
+    public String playerAnyGenerator(Node node, String line) throws Exception
+    {
+        line = line.substring(line.indexOf(".") + 1);
+        line = line.substring(line.indexOf(".") + 1);
+        Generator LogicGen = new Generator(new AST(node.leftMostChild.rightSib));
+        functions += LogicGen.javagenerator.functions;
+        LogicGen.RecursiveVisitor(LogicGen._ast.Root);
+        line += LogicGen.javagenerator.code;
+        String s = "_playeranyfunc" + playeranycnt + "()";
+        functions += "public boolean " + s + "\n" +
+                "{\n" +
+                "for(Player p : players)\n" +
+                "{\n" +
+                "if (p." + line + ")\n" +
+                "{\n" +
+                "return true;\n" +
+                "}\n" +
+                "}\n" +
+                "return false;\n" +
+                "}\n";
+        node.VisitSuptree();
         return s;
     }
 }

@@ -36,14 +36,6 @@
         {
             "keywords":
             [
-                {
-                    "name" : "visible",
-                    "type" : "visibility"
-                },
-                {
-                    "name" : "hidden",
-                    "type" : "visibility"
-                }
             ]
         }
     },
@@ -56,10 +48,6 @@
             "properties":
             [
                 {
-                    "name" : "visibility",
-                    "type" : "visibility"
-                },
-                {
                     "name" : "drawfrom",
                     "type" : "deck func (deck; number;)"
                 },
@@ -69,7 +57,7 @@
                 },
                 {
                     "name" : "numberValue",
-                    "type" : "number"
+                    "type" : "card"
                 },
                 {
                     "name" : "totalValue",
@@ -89,10 +77,6 @@
                 {
                     "name" : "shuffle",
                     "type" : "void func ()"
-                },
-                {
-                    "name" : "visibility",
-                    "type" : "visibility"
                 },
                 {
                     "name" : "drawfrom",
@@ -140,10 +124,6 @@
     {
         "symbols":
         [
-            {
-                "name": "endTurn",
-                "type": "void func ()"
-            }
         ]
     },
 

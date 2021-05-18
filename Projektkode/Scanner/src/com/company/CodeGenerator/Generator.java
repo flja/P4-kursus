@@ -30,8 +30,9 @@ public class Generator
     {
 
         _ast.ResetVisit();
-        javagenerator.generateTemplate();
+        javagenerator.generateTemplate(_ast.Root.leftMostChild.rightSib.rightSib);
         RecursiveVisitor(_ast.Root);
+        javagenerator.code += javagenerator.functions;
         javagenerator.code += "\n}";
         javagenerator.WriteToFile();
     }
@@ -101,6 +102,12 @@ public class Generator
                     break;
                 case "FollowObject1":
                     javagenerator.Emit(javagenerator.FollowObject1Generator(node));
+                    break;
+                case "FunctionCall1":
+                    javagenerator.Emit(javagenerator.FunctionCall1Generator(node));
+                    break;
+                case "LogicalTerm":
+                    javagenerator.Emit(javagenerator.LogicalTermGenerator(node));
                     break;
 
             }
@@ -224,7 +231,7 @@ public class Generator
                     javagenerator.Emit(" > ");
                     break;
                 case "hand":
-                    javagenerator.Emit(" hand ");
+                    javagenerator.Emit(" DeckClass ");
                     break;
                 case "hearts":
                     //ignore

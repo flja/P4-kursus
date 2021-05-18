@@ -9,14 +9,11 @@ Define cards
 Define player (1)
 {
    hand Hand; 
-   assign Hand.visibility= visible; 
 }
 Define Table 
 {
    deck pilehidden; 
    deck pilevisible; 
-   assign pilehidden.visibility= hidden; 
-   assign pilevisible.visibility= visible; 
 }
 Setup 
 {
@@ -41,15 +38,6 @@ Round
 }
 Turn 
 {
-   number i= 0 ; 
-   switch (i)
-   {
-      case : 0 : assign i= 3; 
-      break; 
-      endcase ; 
-      default : enddefault ; 
-   }
-   endswitch ; 
    while (? turntaker.Hand.totalValue< 21)
    {
       actions 
@@ -61,7 +49,6 @@ Turn
          endaction ; 
          action "Stand"if (? true )
          {
-            func endTurn(); 
          }
          endaction ; 
          action "Split"if (? turntaker.Hand.size== 2and turntaker.Hand.1== turntaker.Hand.2)

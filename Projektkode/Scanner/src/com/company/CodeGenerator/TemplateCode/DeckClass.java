@@ -1,13 +1,14 @@
 package com.company.CodeGenerator.TemplateCode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DeckClass {
-    List<CardClass> cards;
+    List<CardClass> cards = new ArrayList<CardClass>();
 
     public int size = cards.size();
-    public String visibility; //String or bool?
+    public int totalValue = getTotalValue();
     public DeckClass(String[] aCards) throws Exception {
         GenerateDeck(aCards);
     }
@@ -17,30 +18,41 @@ public class DeckClass {
         String[] a = {cards};
         GenerateDeck(a);
     }
-
+    public int getTotalValue()
+    {
+        int i = 0;
+        for (CardClass c: cards)
+        {
+            i += c.Value;
+        }
+        return i;
+    }
+    public CardClass get(int number)
+    {
+        return cards.get(number);
+    }
 
     void GenerateDeck(String[] Cards) throws Exception
     {
         cards = new ArrayList<CardClass>();
         for (String s : Cards) {
-            switch (s) {
+            switch (s.toLowerCase()) {
                 case "standard":
-                case "Standard":
                     cards.addAll(HelpMethods.CreateSuitDeck("h"));
                     cards.addAll(HelpMethods.CreateSuitDeck("c"));
                     cards.addAll(HelpMethods.CreateSuitDeck("d"));
                     cards.addAll(HelpMethods.CreateSuitDeck("s"));
                     break;
-                case "Hearts":
+                case "hearts":
                     cards.addAll(HelpMethods.CreateSuitDeck("h"));
                     break;
-                case "Clubs":
+                case "clubs":
                     cards.addAll(HelpMethods.CreateSuitDeck("c"));
                     break;
-                case "Diamonds":
+                case "diamonds":
                     cards.addAll(HelpMethods.CreateSuitDeck("d"));
                     break;
-                case "Spades":
+                case "spades":
                     cards.addAll(HelpMethods.CreateSuitDeck("s"));
                     break;
                 default:
@@ -48,6 +60,24 @@ public class DeckClass {
                     break;
             }
         }
+    }
+
+    public void drawfrom(DeckClass deck, int cnt)
+    {
+        for (int i = 0; i < cnt; i++)
+        {
+            if (deck.size > 0)
+            {
+                CardClass card = deck.cards.get(0);
+                deck.cards.remove(0);
+                this.cards.add(card);
+            }
+        }
+    }
+
+    public void shuffle()
+    {
+        Collections.shuffle(cards);
     }
 
     @Override

@@ -70,6 +70,9 @@ public class Generator
                 case "DeckDcl":
                     javagenerator.Emit(javagenerator.DeckDclGenerator(node));
                     break;
+                case "FlagDcl":
+                    javagenerator.Emit(javagenerator.FlagDclGenerator(node));
+                    break;
                 case "TableDef":
                     javagenerator.Emit(javagenerator.TableDefGenerator(node));
                     break;
@@ -109,7 +112,6 @@ public class Generator
                 case "LogicalTerm":
                     javagenerator.Emit(javagenerator.LogicalTermGenerator(node));
                     break;
-
             }
         }
         else if (node instanceof TerminalNode)

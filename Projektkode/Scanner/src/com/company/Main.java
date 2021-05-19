@@ -45,6 +45,7 @@ public class Main {
         //codeGenerator.StartGenerator();
         Shuffler shuffler = new Shuffler();
         shuffler.ShufflerRun();
+
     }
     public static void printNode(Node node, int indents)
     {

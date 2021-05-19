@@ -168,7 +168,7 @@ public class VisitorTypeCheck{
         if (matchCnt == parameterTypes.size() && matchCnt == ExpectedTypes.size())
         {
             String returnType = RetrieveSymbol(VisitObjectSpecifier(node.leftMostChild)).Type();
-            returnType = returnType.substring(0, returnType.indexOf(" ") - 1);
+            returnType = returnType.substring(0, returnType.indexOf(" "));
             node.type = returnType;
             return returnType;
         }
@@ -284,7 +284,7 @@ public class VisitorTypeCheck{
                     break;
 
             }
-            throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType);
+            throw new Exception("Error at line " + ((TerminalNode) node.parent.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType);
         }
     }
     String VisitLogicalTerm1(Node node) throws Exception

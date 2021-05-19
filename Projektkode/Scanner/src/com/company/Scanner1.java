@@ -13,7 +13,9 @@ public class Scanner1
     int lineNum = 0;
     List<Token> tokens = new ArrayList<Token>();
 
-    public Scanner1() {}
+    public Scanner1()
+    {
+    }
 
     List<Token> Lexer() throws Exception
     {
@@ -22,6 +24,7 @@ public class Scanner1
         Token temp;
         Token temp2;
         String word = "";
+        int stringcnt = 0;
         FileReader fr = new FileReader(Paths.get(".").toAbsolutePath().normalize().toString() + "/Test.txt");
         BufferedReader br = new BufferedReader(fr);
         try
@@ -32,26 +35,27 @@ public class Scanner1
                 for (current = 0; current < line.length(); current++)
                 {
                     temp = ScanSingleChar(line.charAt(current));
-                    if (temp != null)
-                    {  //If a single char token is found
+                    if (temp != null && stringcnt == 0)
+                    {   //If a single char token is found
                         //word handling:
                         if (word.length() > 0)
                         { //Check if we have created a word
-                            temp2 = HandleKeywords(word); //if we have crafted a word check if it's a keyword
-                            if (temp2 == null)
-                            { // if it's not a keyword
-                                temp2 = HandleValue(word); // then check if its a value
+
+                                temp2 = HandleKeywords(word); //if we have crafted a word check if it's a keyword
                                 if (temp2 == null)
-                                {  // if it's not a value
-                                    temp2 = HandleId(word); // then check if it's an id
+                                { // if it's not a keyword
+                                    temp2 = HandleValue(word); // then check if its a value
                                     if (temp2 == null)
-                                    { // if it's not an id
-                                        throw new Exception("Invalid"); // then throw error
+                                    {  // if it's not a value
+                                        temp2 = HandleId(word); // then check if it's an id
+                                        if (temp2 == null)
+                                        { // if it's not an id
+                                            throw new Exception("Invalid" + lineNum); // then throw error
+                                        }
                                     }
                                 }
-                            }
-                            AddToken(temp2); // if no error is thrown add the token to the token list
-                            word = ""; // reset word
+                                AddToken(temp2); // if no error is thrown add the token to the token list
+                                word = ""; // reset word
                         }
                         if (!(temp instanceof WhitespaceToken))
                         { // if the single char found is not whitespace
@@ -60,15 +64,35 @@ public class Scanner1
                                 temp2 = CheckCombined(line.charAt(current), line.charAt(current + 1), temp); // check for a combined token
                                 current = temp == temp2 ? current : current + 1; //if a combined token is found count the current up one else just keep current
                                 AddToken(temp2); //add the token to the token list
-                            } else
+                            }
+                            else
                             {
                                 AddToken(temp); //if we are at end of file then just add the token.
                             }
                         }
 
-                    } else
+                    }
+                    else
                     {
-                        word += IgnoreControlChar(line.charAt(current));
+                        if (stringcnt > 0)
+                        {
+                            word += line.charAt(current);
+                        }
+                        else
+                        {
+                            word += IgnoreControlChar(line.charAt(current));
+                        }
+                        if (IgnoreControlChar(line.charAt(current)).equals("\""))
+                        {
+                            if (stringcnt == 1)
+                            {
+                                stringcnt = 0;
+                            }
+                            else
+                            {
+                                stringcnt++;
+                            }
+                        }
                     }
                 }
                 if (!word.isEmpty())
@@ -78,7 +102,8 @@ public class Scanner1
                     {
                         AddToken(temp2);
                         word = "";
-                    } else
+                    }
+                    else
                     {
                         throw new Exception("no end");
                     }
@@ -200,9 +225,10 @@ public class Scanner1
             if (i == 0)
             {
                 return new zeroToken(lineNum);
-            } else
+            }
+            else
             {
-                return new nonZeroNumToken(lineNum,i);
+                return new nonZeroNumToken(lineNum, i);
             }
         } catch (Exception e)
         {
@@ -357,28 +383,28 @@ public class Scanner1
             case "Functions":
                 token = new functionsToken(lineNum);
                 break;
-            case "break" :
+            case "break":
                 token = new breakToken(lineNum);
                 break;
-            case "case" :
+            case "case":
                 token = new caseToken(lineNum);
                 break;
-            case "endcase" :
+            case "endcase":
                 token = new endcaseToken(lineNum);
                 break;
-            case "default" :
+            case "default":
                 token = new defaultToken(lineNum);
                 break;
-            case "enddefault" :
+            case "enddefault":
                 token = new enddefaultToken(lineNum);
                 break;
-            case "for" :
+            case "for":
                 token = new forToken(lineNum);
                 break;
-            case "mod" :
+            case "mod":
                 token = new modToken(lineNum);
                 break;
-            case "return" :
+            case "return":
                 token = new returnToken(lineNum);
                 break;
         }

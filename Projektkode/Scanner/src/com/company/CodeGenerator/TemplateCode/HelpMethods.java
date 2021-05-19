@@ -62,5 +62,28 @@ public class HelpMethods {
         }
         return list;
     }
-
+    public static void printDeck(DeckClass deck)
+    {
+        for (CardClass card : deck.cards)
+        {
+            printCard(card);
+            System.out.print(" ");
+        }
+    }
+    public static void printCard(CardClass card)
+    {
+        System.out.print(card);
+    }
+    public static void printString(String string)
+    {
+        System.out.print(string);
+    }
+    public static void printNumber(int i)
+    {
+        System.out.print(i);
+    }
+    public static void printFlag(Boolean bool)
+    {
+        System.out.print(bool);
+    }
 }

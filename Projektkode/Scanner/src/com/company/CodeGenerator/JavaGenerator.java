@@ -258,8 +258,8 @@ public class JavaGenerator {
     public String EndConditionGenerator(Node node) throws Exception {
         String EndconditionBlock =  "public class Endcondition\n" +
                 "{\n" +
-                "Player winner;\n" +
                 "Player none = new Player();\n" +
+                "Player winner = none;\n" +
                 "boolean end = false;\n" +
                 "public Endcondition() throws Exception\n" +
                 "{\n" +
@@ -283,17 +283,14 @@ public class JavaGenerator {
         EndconditionBlock += "end = true;\n" +
                 "if(winner == none)\n" +
                 "{\n" +
-                "System.out.println(\"No one wins\");\n" +
                 "}\n" +
                 "else\n" +
                 "{\n" +
-                "System.out.println(\" The winner is player\" + players.indexOf(winner));\n" +
+                "System.out.println(\" The winner is player\" + (players.indexOf(winner) + 1));\n" +
                 "}\n" +
                 "}\n}\n}\n";
         node.VisitSuptree();
         return EndconditionBlock;
-
-
     }
     public String FunctionsGenerator(Node node) throws Exception {
         Generator FunctionDefsGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib));
@@ -377,19 +374,18 @@ public class JavaGenerator {
         List<ActionClass> actions = new ArrayList<ActionClass>();
         actions = FindActions(node.leftMostChild.rightSib, actions);
         String s = "int _ActionCnt = 1;\n";
-        s += "int[] _ActionMapping = new int[" + actions.size() + "];\n";
+        s += "ArrayList<Integer> _ActionMapping = new ArrayList<Integer>();\n";
 
         for (ActionClass item: actions) {
             s += "if(" + item.logicalExpr + ")" +
                     "\n{System.out.println(_ActionCnt" + " + \": \" + " + item.name + ");\n" +
-                    "_ActionMapping[" + actions.indexOf(item) + "] = _ActionCnt;\n" +
+                    "_ActionMapping.add(_ActionCnt);\n" +
                     "_ActionCnt++;\n}\n";
         }
-
        s += "System.out.println(\"Choose an action to perform: \");" +
         "Scanner _ActionScanner = new Scanner(System.in);\n" +
-        "int _ActionInput = _ActionScanner.nextInt();\n" +
-        "switch (Arrays.asList(_ActionMapping).indexOf(_ActionInput))\n{\n";
+        "Integer _ActionInput = _ActionScanner.nextInt();\n" +
+        "switch (_ActionMapping.indexOf(_ActionInput))\n{\n";
         for(ActionClass item : actions)
         {
             s+= "case " + actions.indexOf(item) + ":" +
@@ -527,7 +523,8 @@ public class JavaGenerator {
                 Generator NumberGen = new Generator(new AST(node.leftMostChild));
                 NumberGen.RecursiveVisitor(NumberGen._ast.Root);
                 functions += NumberGen.javagenerator.functions;
-                s += NumberGen.javagenerator.code;
+                int a = Integer.parseInt(NumberGen.javagenerator.code);
+                s += a-1;
                 s += ")";
                 node.VisitSuptree();
             }
@@ -617,9 +614,26 @@ public class JavaGenerator {
                 return "totalValue()";
             case "Value" :
                 return "Value()";
+            case "printHand" :
+                spelling = "printDeck";
+            case "printDeck" :
+            case "printCard" :
+            case "printString" :
+            case "printNumber" :
+            case "printFlag" :
+                return "HelpMethods." + spelling;
             default:
                 return spelling;
         }
 
+    }
+
+    public String FlagDclGenerator(Node node) throws Exception
+    {
+        String s = "boolean ";
+        s += ((idToken) ((TerminalNode) node.leftMostChild.rightSib).terminal).spelling;
+        s += " = false";
+        node.VisitSuptree();
+        return s;
     }
 }

@@ -98,7 +98,7 @@
             [
                 {
                     "name" : "takeTurn",
-                    "type" : "func void ()"
+                    "type" : "void func ()"
                 }
             ]
         }
@@ -111,11 +111,35 @@
                 [
                     {
                         "name" : "players.takeTurn",
-                        "type" : "func void ()"
+                        "type" : "void func ()"
                     },
                     {
                         "name" : "endcondition.check",
-                        "type" : "func void ()"
+                        "type" : "void func ()"
+                    },
+                    {
+                        "name" : "printDeck",
+                        "type" : "void func (deck;)"
+                    },
+                    {
+                        "name" : "printCard",
+                        "type" : "void func (card;)"
+                    },
+                    {
+                        "name" : "printString",
+                        "type" : "void func (string;)"
+                    },
+                    {
+                        "name" : "printNumber",
+                        "type" : "void func (number;)"
+                    },
+                    {
+                        "name" : "printHand",
+                        "type" : "void func (hand;)"
+                    },
+                    {
+                        "name" : "printFlag",
+                        "type" : "void func (flag;)"
                     }
                 ]
     },

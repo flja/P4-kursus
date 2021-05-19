@@ -7,8 +7,6 @@ import java.util.List;
 public class DeckClass {
     List<CardClass> cards = new ArrayList<CardClass>();
 
-    public int size = cards.size();
-    public int totalValue = getTotalValue();
     public DeckClass(String[] aCards) throws Exception {
         GenerateDeck(aCards);
     }
@@ -18,12 +16,17 @@ public class DeckClass {
         String[] a = {cards};
         GenerateDeck(a);
     }
-    public int getTotalValue()
+    public int size()
+    {
+        return cards.size();
+    }
+
+    public int totalValue()
     {
         int i = 0;
         for (CardClass c: cards)
         {
-            i += c.Value;
+            i += c.Value();
         }
         return i;
     }
@@ -66,7 +69,7 @@ public class DeckClass {
     {
         for (int i = 0; i < cnt; i++)
         {
-            if (deck.size > 0)
+            if (deck.size() > 0)
             {
                 CardClass card = deck.cards.get(0);
                 deck.cards.remove(0);

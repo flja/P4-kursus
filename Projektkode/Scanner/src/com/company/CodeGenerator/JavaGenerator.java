@@ -606,4 +606,20 @@ public class JavaGenerator {
         node.VisitSuptree();
         return s;
     }
+
+    public String IdGenerator(String spelling)
+    {
+        switch (spelling)
+        {
+            case "size" :
+                return "size()";
+            case "totalValue" :
+                return "totalValue()";
+            case "Value" :
+                return "Value()";
+            default:
+                return spelling;
+        }
+
+    }
 }

@@ -43,6 +43,7 @@ Round
 
 Turn
 {
+	flag a;
 	while(?turntaker.Hand.totalValue < 21)
 	{
 		actions

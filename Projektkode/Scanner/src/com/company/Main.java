@@ -41,7 +41,7 @@ public class Main {
 
         JavaGenerator javaGenerator = new JavaGenerator();
         System.out.println(javaGenerator.DeckGenerator(ast.Root.leftMostChild.leftMostChild.rightSib.rightSib));
-        //Generator codeGenerator = new Generator(ast);
+        Generator codeGenerator = new Generator(ast);
         //codeGenerator.StartGenerator();
         Shuffler shuffler = new Shuffler();
         shuffler.ShufflerRun();

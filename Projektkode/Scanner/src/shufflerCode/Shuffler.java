@@ -54,7 +54,6 @@ public class Shuffler
         setup.run();
         while (!endcondition.end)
         {
-            System.out.println("Hello");
             round.run();
         }
     }
@@ -114,11 +113,11 @@ public class Shuffler
     {
         public void run() throws Exception
         {
-            while ((table.pilehidden.totalValue + table.pilevisible.totalValue) < 17)
+            while ((table.pilehidden.totalValue() + table.pilevisible.totalValue()) < 17)
             {
                 table.pilevisible.drawfrom(gamedeck, 1);
             }
-            if (table.pilehidden.totalValue + table.pilevisible.totalValue < 21)
+            if (table.pilehidden.totalValue() + table.pilevisible.totalValue() < 21)
             {
                 for (Player item : players)
                 {
@@ -133,7 +132,7 @@ public class Shuffler
     {
         public void run(Player turntaker) throws Exception
         {
-            while (turntaker.Hand.totalValue < 21)
+            while (turntaker.Hand.totalValue() < 21)
             {
                 int _ActionCnt = 1;
                 int[] _ActionMapping = new int[3];
@@ -149,7 +148,7 @@ public class Shuffler
                     _ActionMapping[1] = _ActionCnt;
                     _ActionCnt++;
                 }
-                if (turntaker.Hand.size == 2 && turntaker.Hand.get(1) == turntaker.Hand.get(2))
+                if (turntaker.Hand.size() == 2 && turntaker.Hand.get(1) == turntaker.Hand.get(2))
                 {
                     System.out.println(_ActionCnt + ": " + "Split");
                     _ActionMapping[2] = _ActionCnt;
@@ -191,21 +190,21 @@ public class Shuffler
 
         public void check() throws Exception
         {
-            if (table.pilehidden.totalValue + table.pilevisible.totalValue >= 21 || _playeranyfunc0())
+            if (table.pilehidden.totalValue() + table.pilevisible.totalValue() >= 21 || _playeranyfunc0())
             {
-                if (table.pilehidden.totalValue + table.pilevisible.totalValue > 21)
+                if (table.pilehidden.totalValue() + table.pilevisible.totalValue() > 21)
                 {
                     winner = players.get(1);
                 }
-                else if (table.pilehidden.totalValue + table.pilevisible.totalValue == 21)
+                else if (table.pilehidden.totalValue() + table.pilevisible.totalValue() == 21)
                 {
                     winner = none;
                 }
-                else if (players.get(1).Hand.totalValue == 21)
+                else if (players.get(1).Hand.totalValue() == 21)
                 {
                     winner = players.get(1);
                 }
-                else if (players.get(1).Hand.totalValue > table.pilehidden.totalValue + table.pilevisible.totalValue)
+                else if (players.get(1).Hand.totalValue() > table.pilehidden.totalValue() + table.pilevisible.totalValue())
                 {
                     winner = players.get(1);
                 }
@@ -243,7 +242,7 @@ public class Shuffler
     {
         for (Player p : players)
         {
-            if (p.Hand.totalValue >= 21)
+            if (p.Hand.totalValue() >= 21)
             {
                 return true;
             }

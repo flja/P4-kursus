@@ -99,6 +99,10 @@
                 {
                     "name" : "takeTurn",
                     "type" : "void func ()"
+                },
+                {
+                    "name" : "Number",
+                    "type" : "number"
                 }
             ]
         }
@@ -140,6 +144,10 @@
                     {
                         "name" : "printFlag",
                         "type" : "void func (flag;)"
+                    },
+                    {
+                        "name" : "getPlayerCount",
+                        "type" : "number func ()"
                     }
                 ]
     },

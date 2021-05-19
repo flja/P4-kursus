@@ -67,13 +67,18 @@ public class JavaGenerator {
                 "Endcondition endcondition = new Endcondition();\n" +
                 "public Shuffler() throws Exception\n" +
                 " {\n" +
-                " }" +
+                " }\n" +
+                "public int getPlayerCount()\n" +
+                "{\n" +
+                "return _playerCnt;" +
+                "}\n" +
                 "public List<Player> GeneratePlayers(int cnt) throws Exception\n" +
                 "{\n" +
                 "List<Player> list = new ArrayList<Player>();\n" +
                 "for(int i = 0; i < cnt; i++)\n" +
                 "{\n" +
                 "list.add(new Player());\n" +
+                "list.get(i).Number = i+1;\n" +
                 "}\n" +
                 "return list;\n" +
                 "}\n" +
@@ -152,6 +157,7 @@ public class JavaGenerator {
     public String PlayerDefGenerator(Node node) throws Exception {
         String PlayerDefBlock =  "public class Player\n" +
                 "{\n" +
+                "public int Number;" +
                 "public void takeTurn() throws Exception\n" +
                 "{\n" +
                 "turn.run(this);\n" +
@@ -505,9 +511,10 @@ public class JavaGenerator {
     public String FollowObject1Generator(Node node) throws Exception
     {
         String s = "";
-        if (node.leftMostChild instanceof NonTerminalNode)
+        String test = node.leftMostChild.type;
+        if (test != null )
         {
-            if (((NonTerminalNode) node.leftMostChild).nonterminal.equals("Number"))
+            if (test.equals("number"))
             {
                 code += "_test_";
                 if (code.contains("player._test_"))
@@ -523,8 +530,7 @@ public class JavaGenerator {
                 Generator NumberGen = new Generator(new AST(node.leftMostChild));
                 NumberGen.RecursiveVisitor(NumberGen._ast.Root);
                 functions += NumberGen.javagenerator.functions;
-                int a = Integer.parseInt(NumberGen.javagenerator.code);
-                s += a-1;
+                s += NumberGen.javagenerator.code + "-1";
                 s += ")";
                 node.VisitSuptree();
             }

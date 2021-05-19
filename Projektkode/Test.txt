@@ -8,7 +8,7 @@ Define Cards
 	assign ace.value = 11;	
 }
 
-Define Player(1)
+Define Player(2)
 {
 	hand playerHand;
 }
@@ -41,8 +41,7 @@ Round
 	func printString("\n Dealers cards add up to a total value of: ");
 	func printNumber(table.dealerHand.totalValue);
 	func printString("\n");
-
-	while(?table.dealerHand.totalValue < 17 and player.1.playerHand.totalValue < 22)
+	while(?table.dealerHand.totalValue < 17 and players.any.playerHand.totalValue < 21)
 	{
 		func table.dealerHand.drawfrom(gamedeck, 1);
 		func printString("Dealer draws\n Dealers hand now consists of: ");
@@ -59,8 +58,12 @@ Round
 Turn
 {
 	flag endturn;
+	number cnt;
+	assign cnt = func getPlayerCount();
 	assign endturn = false;
-	func printString("Your hand contains: \n");
+	func printString("Player ");
+	func printNumber(turntaker.Number);
+	func printString("\nYour hand contains: \n");
 	func printHand(turntaker.playerHand);
 	func printString("\n Your cards add up to a total value of: ");
 	func printNumber(turntaker.playerHand.totalValue);
@@ -94,45 +97,84 @@ Turn
 
 Endcondition(?true)
 {
-	if(?table.dealerHand.totalValue > 21)
+	number i;
+	number playercount;
+	assign playercount = func getPlayerCount();
+	while(?i < playercount)
 	{
-		func printString("Dealer has over 21\n");
-		assign winner = player.1;
-	}
-	else if(?player.1.playerHand.totalValue > 21)
-	{
-		func printString("The player has over 21\n");
-		func printString("Dealer wins");
-	}
-	else if(?player.1.playerHand.totalValue == table.dealerHand.totalValue and table.dealerHand.totalValue == 21)
-	{
-		func printString("The game is a tie");
-	}
-	else if(?player.1.playerHand.totalValue == table.dealerHand.totalValue)
-	{
-		func printString("The dealer has the same card as the player the dealer wins by tie\n");
-		func printString("Dealer wins");
-	}
-	else if(?table.dealerHand.totalValue == 21)
-	{
-		func printString("Dealer has 21\n");
-		func printString("Dealer wins");
-	}
-	else if(?player.1.playerHand.totalValue == 21)
-	{
-		func printString("Player has 21\n");
-		assign winner = player.1;
-	}
-	else if(?player.1.playerHand.totalValue > table.dealerHand.totalValue)
-	{
-		func printString("Player has a higher value than dealer\n");
-		assign winner = player.1;
-	}
-	else
-	{
-		func printString("Dealer has a higher value than player\n");
-		func printString("Dealer wins");
-	} endif; endif; endif; endif; endif; endif; endif;
+		number j;
+		assign j = i + 1;
+
+		if(?player.j.playerHand.totalValue > 21)
+		{
+			func printString("Player ");
+			func printNumber(j);
+			func printString(" has over 21\n");
+			func printString("Dealer wins against ");
+			func printString("Player ");
+			func printNumber(j);
+			func printString("\n");
+		}
+		else if(?table.dealerHand.totalValue > 21)
+		{
+			func printString("Dealer has over 21\n");
+			func printString("Player ");
+			func printNumber(j);
+			func printString(" wins\n");
+		}
+		else if(?player.j.playerHand.totalValue == table.dealerHand.totalValue and table.dealerHand.totalValue == 21)
+		{
+			func printString("Both Player ");
+			func printNumber(j);
+			func printString("and the dealer has 21\nPlayer ");
+			func printNumber(j);
+			func printString(" ties with the dealer\n");
+		}
+		else if(?player.j.playerHand.totalValue == table.dealerHand.totalValue)
+		{
+			func printString("The dealer and player ");
+			func printNumber(j);
+			func printString("Has the same amount of points, the dealer wins by tie\n");
+		}
+		else if(?table.dealerHand.totalValue == 21)
+		{
+			func printString("Dealer has 21\n");
+			func printString("Dealer wins against ");
+			func printString("Player ");
+			func printNumber(j);
+			func printString("\n");
+		}
+		else if(?player.j.playerHand.totalValue == 21)
+		{
+			func printString("Player ");
+			func printNumber(j);
+			func printString(" has 21\n");
+			func printString("Player ");
+			func printNumber(j);
+			func printString(" wins\n");
+
+		}
+		else if(?player.j.playerHand.totalValue > table.dealerHand.totalValue)
+		{
+			func printString("Player ");
+			func printNumber(j);
+			func printString(" has a higher value than dealer\n");
+			func printString("Player ");
+			func printNumber(j);
+			func printString(" wins\n");
+		}
+		else
+		{
+			func printString("Dealer has a higher value than player");
+			func printNumber(j);
+			func printString("\nDealer wins against");
+			func printString("Player ");
+			func printNumber(j);
+			func printString("\n");
+		} endif; endif; endif; endif; endif; endif; endif;
+		assign i = i + 1;
+		func printString("\n");
+	}endwhile;
 }
 
 Functions

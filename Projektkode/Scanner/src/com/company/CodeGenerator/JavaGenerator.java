@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class JavaGenerator {
-    String path = Paths.get(".").toAbsolutePath().normalize().toString() + "/Scanner/src/shufflerCode/Shuffler.java";
+    String path = Paths.get(".").toAbsolutePath().normalize().toString() + "\\shufflerCode\\src\\Shuffler.java";
     String code = "";
     String functions ="";
     int playeranycnt = 0;
@@ -33,24 +33,24 @@ public class JavaGenerator {
 
     public void generateTemplate(Node node) throws Exception{
         code = "package shufflerCode;\n" +
-                "import shufflerCode.TemplateCode.HelpMethods;\n" +
-                "import shufflerCode.TemplateCode.ActionClass;\n" +
-                "import shufflerCode.TemplateCode.CardClass;\n" +
-                "import shufflerCode.TemplateCode.DeckClass;\n" +
-                "import shufflerCode.TemplateCode.two;\n" +
-                "import shufflerCode.TemplateCode.three;\n" +
-                "import shufflerCode.TemplateCode.four;\n" +
-                "import shufflerCode.TemplateCode.five;\n" +
-                "import shufflerCode.TemplateCode.six;\n" +
-                "import shufflerCode.TemplateCode.seven;\n" +
-                "import shufflerCode.TemplateCode.eight;\n" +
-                "import shufflerCode.TemplateCode.nine;\n" +
-                "import shufflerCode.TemplateCode.ten;\n" +
-                "import shufflerCode.TemplateCode.jack;\n" +
-                "import shufflerCode.TemplateCode.queen;\n" +
-                "import shufflerCode.TemplateCode.king;\n" +
-                "import shufflerCode.TemplateCode.joker;\n" +
-                "import shufflerCode.TemplateCode.ace;\n" +
+                "import shufflerCode.HelpMethods;\n" +
+                "import shufflerCode.ActionClass;\n" +
+                "import shufflerCode.CardClass;\n" +
+                "import shufflerCode.DeckClass;\n" +
+                "import shufflerCode.two;\n" +
+                "import shufflerCode.three;\n" +
+                "import shufflerCode.four;\n" +
+                "import shufflerCode.five;\n" +
+                "import shufflerCode.six;\n" +
+                "import shufflerCode.seven;\n" +
+                "import shufflerCode.eight;\n" +
+                "import shufflerCode.nine;\n" +
+                "import shufflerCode.ten;\n" +
+                "import shufflerCode.jack;\n" +
+                "import shufflerCode.queen;\n" +
+                "import shufflerCode.king;\n" +
+                "import shufflerCode.joker;\n" +
+                "import shufflerCode.ace;\n" +
                 "\n" +
                 "import java.util.ArrayList;\n" +
                 "import java.util.Arrays;\n" +

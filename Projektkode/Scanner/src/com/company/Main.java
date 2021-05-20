@@ -14,11 +14,11 @@ public class Main
     public static void main(String[] args) throws Exception
     {
         //new ShufflerExecuter().Execute();
-        //new Compiler().Compile();
+        new Compiler().Compile();
         //Process p = Runtime.getRuntime().exec();
         //new OutputCompiler().run();
 
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        /*JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         int result = compiler.run(null, null, null,"C:\\Users\\alexa\\Desktop\\SW4\\SW4_github\\P4-kursus\\Projektkode\\Scanner\\src\\shufflerCode\\Shuffler.java");
         System.out.println(result);
         File classesDir = new File("C:\\Users\\alexa\\Desktop\\SW4\\SW4_github\\P4-kursus\\Projektkode\\Scanner\\src\\shufflerCode");
@@ -33,7 +33,7 @@ public class Main
         } catch (Exception e)
         {
             e.printStackTrace();
-        }
+        }*/
         /*try
         {
             System.out.println("************");

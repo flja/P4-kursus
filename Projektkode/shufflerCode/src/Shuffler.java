@@ -23,9 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;public class Shuffler
 {
-public static void main(String[] args)
+public static void main(String[] args) throws Exception
     {
-        System.out.println("Hey");
+        new Shuffler().ShufflerRun();
     }int _playerCnt = 2;
 Cards cards = new Cards();
 List<Player> players = GeneratePlayers(_playerCnt);
@@ -57,16 +57,15 @@ while (!endcondition.end)
 {
 round.run();
 }
+System.out.println("Press any key to terminate program");
+System.in.read();
 }
-DeckClass gamedeck = new DeckClass(new String[]{"standard", "hearts", "2h"}) ; 
+DeckClass gamedeck = new DeckClass(new String[]{"standard"}) ; 
 public class Cards
 {
 public Cards() throws Exception
 {
-king.value = 10 ; 
-queen.value = 10 ; 
-jack.value = 10 ; 
-ace.value = 11 ; 
+ace.value = 14 ; 
 }
 }
 public class Player
@@ -75,92 +74,112 @@ public int Number;public void takeTurn() throws Exception
 {
 turn.run(this);
 }
-DeckClass playerHand = new DeckClass() ; 
+DeckClass mainDeck = new DeckClass() ; 
+DeckClass trickDeck = new DeckClass() ; 
+DeckClass warDeck = new DeckClass() ; 
 public Player() throws Exception
 {
 }
 }
 public class Table
 {
-DeckClass dealerHand = new DeckClass() ; 
 public Table() throws Exception
 {
 }
 }
 public class Setup
 {
+ int i ; 
+ int j ; 
 public void run() throws Exception
 {
+i = gamedeck.size() / 2 ; 
 gamedeck.shuffle() ; 
 for(Player item : players)
 {
-item.playerHand.drawfrom(gamedeck, 2);
+item.mainDeck.drawfrom(gamedeck, i);
 }
-table.dealerHand.drawfrom(gamedeck, 2) ; 
 }
 }
 public class Round
 {
+ int decksize ; 
+ int i ; 
+ int j ; 
 public void run() throws Exception
-{
-HelpMethods.printString("The dealers visible card is: ") ; 
-HelpMethods.printCard(table.dealerHand.get(1-1)) ; 
-HelpMethods.printString("\n") ; 
-if(table.dealerHand.totalValue() < 21)
 {
 for(Player item : players)
 {
 item.takeTurn();
 }
-}
-HelpMethods.printString("The dealers hand consists of ") ; 
-HelpMethods.printDeck(table.dealerHand) ; 
-HelpMethods.printString("\n Dealers cards add up to a total value of: ") ; 
-HelpMethods.printNumber(table.dealerHand.totalValue()) ; 
-HelpMethods.printString("\n") ; 
-while(table.dealerHand.totalValue() < 17 &&_playeranyfunc0())
+i = players.get(1-1).warDeck.size() ; 
+j = players.get(2-1).warDeck.size() ; 
+checkShuffle() ; 
+if(players.get(1-1).warDeck.get(i-1).Value() > players.get(2-1).warDeck.get(j-1).Value())
 {
-table.dealerHand.drawfrom(gamedeck, 1) ; 
-HelpMethods.printString("Dealer draws\n Dealers hand now consists of: ") ; 
-HelpMethods.printDeck(table.dealerHand) ; 
-HelpMethods.printString("\n Dealers cards add up to a total value of: ") ; 
-HelpMethods.printNumber(table.dealerHand.totalValue()) ; 
-HelpMethods.printString("\n") ; 
-}
+HelpMethods.printString("Player 1 played a: ") ; 
+HelpMethods.printCard(players.get(1-1).warDeck.get(i-1)) ; 
+HelpMethods.printString("\nPlayer 2 played a: ") ; 
+HelpMethods.printCard(players.get(2-1).warDeck.get(j-1)) ; 
+HelpMethods.printString("\nPlayer 1 won this battle\n\n\n\n") ; 
+players.get(1-1).trickDeck.drawfrom(players.get(1-1).warDeck, i) ; 
+players.get(1-1).trickDeck.drawfrom(players.get(2-1).warDeck, j) ; 
+checkShuffle() ; 
 endcondition.check() ; 
+}
+else
+if(players.get(1-1).warDeck.get(i-1).Value() < players.get(2-1).warDeck.get(j-1).Value())
+{
+HelpMethods.printString("Player 1 played a: ") ; 
+HelpMethods.printCard(players.get(1-1).warDeck.get(i-1)) ; 
+HelpMethods.printString("\nPlayer 2 played a: ") ; 
+HelpMethods.printCard(players.get(2-1).warDeck.get(j-1)) ; 
+HelpMethods.printString("\nPlayer 2 won this battle\n\n\n\n") ; 
+players.get(2-1).trickDeck.drawfrom(players.get(1-1).warDeck, i) ; 
+players.get(2-1).trickDeck.drawfrom(players.get(2-1).warDeck, j) ; 
+checkShuffle() ; 
+endcondition.check() ; 
+}
+else
+
+{
+HelpMethods.printString("Let the war... BEGIN!!!!!\n") ; 
+checkShuffle() ; 
+for(Player item : players)
+{
+item.takeTurn();
+}
+for(Player item : players)
+{
+item.takeTurn();
+}
+for(Player item : players)
+{
+item.takeTurn();
+}
+}
+HelpMethods.printString("\n\nPlayer 1 deck size = ") ; 
+decksize = players.get(1-1).mainDeck.size() + players.get(1-1).trickDeck.size() + players.get(1-1).warDeck.size() ; 
+HelpMethods.printNumber(decksize) ; 
+decksize = players.get(2-1).mainDeck.size() + players.get(2-1).trickDeck.size() + players.get(2-1).warDeck.size() ; 
+HelpMethods.printString("\nPlayer 2 deck size = ") ; 
+HelpMethods.printNumber(decksize) ; 
+HelpMethods.printString("\n\n") ; 
 }
 }
 public class Turn
 {
-boolean endturn = false ; 
- int cnt ; 
 public void run(Player turntaker) throws Exception
-{
-cnt = getPlayerCount() ; 
-endturn =  false  ; 
-HelpMethods.printString("Player ") ; 
-HelpMethods.printNumber(turntaker.Number) ; 
-HelpMethods.printString("\nYour hand contains: \n") ; 
-HelpMethods.printDeck(turntaker.playerHand) ; 
-HelpMethods.printString("\n Your cards add up to a total value of: ") ; 
-HelpMethods.printNumber(turntaker.playerHand.totalValue()) ; 
-HelpMethods.printString("\n") ; 
-while(turntaker.playerHand.totalValue() < 21 &&endturn ==  false )
 {
 int _ActionCnt = 1;
 ArrayList<Integer> _ActionMapping = new ArrayList<Integer>();
 if(true )
-{System.out.println(_ActionCnt + ": " + "Hit");
+{System.out.println(_ActionCnt + ": " + "Play a card");
 _ActionMapping.add(_ActionCnt);
 _ActionCnt++;
 }
 if(true )
-{System.out.println(_ActionCnt + ": " + "Stand");
-_ActionMapping.add(_ActionCnt);
-_ActionCnt++;
-}
-if(turntaker.playerHand.size() == 2 &&turntaker.playerHand.get(1-1) == turntaker.playerHand.get(2-1))
-{System.out.println(_ActionCnt + ": " + "Split");
+{System.out.println(_ActionCnt + ": " + "Surrender");
 _ActionMapping.add(_ActionCnt);
 _ActionCnt++;
 }
@@ -170,26 +189,15 @@ switch (_ActionMapping.indexOf(_ActionInput))
 {
 case 0:
 {
-turntaker.playerHand.drawfrom(gamedeck, 1) ; 
-HelpMethods.printString("you hit \n your hand now consists of: ") ; 
-HelpMethods.printDeck(turntaker.playerHand) ; 
-HelpMethods.printString("\n Your cards add up to a total value of: ") ; 
-HelpMethods.printNumber(turntaker.playerHand.totalValue()) ; 
-HelpMethods.printString("\n") ; 
+turntaker.warDeck.drawfrom(turntaker.mainDeck, 1) ; 
 }
 break;
 case 1:
 {
-endturn = true  ; 
+turntaker.warDeck.drawfrom(turntaker.mainDeck, turntaker.mainDeck.size()) ; 
 }
 break;
-case 2:
-{
-endturn = true  ; 
-HelpMethods.printString("No!") ; 
-}
-break;
-}}
+}checkShuffle() ; 
 }
 }
 public class Endcondition
@@ -200,91 +208,27 @@ boolean end = false;
 public Endcondition() throws Exception
 {
 }
- int i ; 
- int playercount ; 
 public void check() throws Exception
 {
-if(true )
-{playercount = getPlayerCount() ; 
-while(i < playercount)
+if(_playeranyfunc0())
+{HelpMethods.printString("Player 1: \n") ; 
+HelpMethods.printString("mainDeck \n") ; 
+HelpMethods.printDeck(players.get(1-1).mainDeck) ; 
+HelpMethods.printString("trickDeck \n") ; 
+HelpMethods.printDeck(players.get(1-1).trickDeck) ; 
+HelpMethods.printString("\n\nPlayer 2: \n") ; 
+HelpMethods.printString("mainDeck \n") ; 
+HelpMethods.printDeck(players.get(2-1).mainDeck) ; 
+HelpMethods.printString("trickDeck \n") ; 
+HelpMethods.printDeck(players.get(2-1).trickDeck) ; 
+if(players.get(1-1).mainDeck.size() <=  0 )
 {
- int j ; 
-j = i + 1 ; 
-if(players.get(j-1).playerHand.totalValue() > 21)
-{
-HelpMethods.printString("Player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString(" has over 21\n") ; 
-HelpMethods.printString("Dealer wins against ") ; 
-HelpMethods.printString("Player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString("\n") ; 
-}
-else
-if(table.dealerHand.totalValue() > 21)
-{
-HelpMethods.printString("Dealer has over 21\n") ; 
-HelpMethods.printString("Player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString(" wins\n") ; 
-}
-else
-if(players.get(j-1).playerHand.totalValue() == table.dealerHand.totalValue() &&table.dealerHand.totalValue() == 21)
-{
-HelpMethods.printString("Both Player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString("and the dealer has 21\nPlayer ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString(" ties with the dealer\n") ; 
-}
-else
-if(players.get(j-1).playerHand.totalValue() == table.dealerHand.totalValue())
-{
-HelpMethods.printString("The dealer and player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString("Has the same amount of points, the dealer wins by tie\n") ; 
-}
-else
-if(table.dealerHand.totalValue() == 21)
-{
-HelpMethods.printString("Dealer has 21\n") ; 
-HelpMethods.printString("Dealer wins against ") ; 
-HelpMethods.printString("Player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString("\n") ; 
-}
-else
-if(players.get(j-1).playerHand.totalValue() == 21)
-{
-HelpMethods.printString("Player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString(" has 21\n") ; 
-HelpMethods.printString("Player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString(" wins\n") ; 
-}
-else
-if(players.get(j-1).playerHand.totalValue() > table.dealerHand.totalValue())
-{
-HelpMethods.printString("Player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString(" has a higher value than dealer\n") ; 
-HelpMethods.printString("Player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString(" wins\n") ; 
+winner = players.get(2-1) ; 
 }
 else
 
 {
-HelpMethods.printString("Dealer has a higher value than player") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString("\nDealer wins against") ; 
-HelpMethods.printString("Player ") ; 
-HelpMethods.printNumber(j) ; 
-HelpMethods.printString("\n") ; 
-}
-i = i + 1 ; 
-HelpMethods.printString("\n") ; 
+winner = players.get(1-1) ; 
 }
 end = true;
 if(winner == none)
@@ -297,22 +241,24 @@ System.out.println(" The winner is player" + (players.indexOf(winner) + 1));
 }
 }
 }
- int  myFunc( int i , 
- int k )
+void  checkShuffle()
 {
- int j ; 
-j = i ; 
-if(j > k)
+if(players.get(1-1).mainDeck.size() <=  0 )
 {
-k = j ; 
+players.get(1-1).mainDeck.drawfrom(players.get(1-1).trickDeck, players.get(1-1).trickDeck.size()) ; 
+players.get(1-1).mainDeck.shuffle() ; 
 }
- return i ; 
+if(players.get(2-1).mainDeck.size() <=  0 )
+{
+players.get(2-1).mainDeck.drawfrom(players.get(2-1).trickDeck, players.get(2-1).trickDeck.size()) ; 
+players.get(2-1).mainDeck.shuffle() ; 
+}
 }
 public boolean _playeranyfunc0()
 {
 for(Player p : players)
 {
-if (p.playerHand.totalValue() < 21)
+if (p.mainDeck.size() <=  0 )
 {
 return true;
 }

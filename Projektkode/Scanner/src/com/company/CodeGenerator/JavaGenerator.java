@@ -57,9 +57,9 @@ public class JavaGenerator {
                 "import java.util.List;\n" +
                 "import java.util.Scanner;" +
                 "public class Shuffler\n{\n" +
-                "public static void main(String[] args)\n" +
+                "public static void main(String[] args) throws Exception\n" +
                 "    {\n" +
-                "        System.out.println(\"Hey\");\n" +
+                "        new Shuffler().ShufflerRun();\n" +
                 "    }" +
                 "int _playerCnt = " + ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib.rightSib.rightSib).terminal).value + ";\n" +
                 "Cards cards = new Cards();\n" +
@@ -92,6 +92,8 @@ public class JavaGenerator {
                 "{\n" +
                 "round.run();\n" +
                 "}\n" +
+                "System.out.println(\"Press any key to terminate program\");\n" +
+                "System.in.read();\n" +
                 "}\n";
     }
 
@@ -614,16 +616,17 @@ public class JavaGenerator {
         return s;
     }
 
-    public String IdGenerator(String spelling)
+    public String IdGenerator(Node node)
     {
+        String spelling = String.valueOf(((idToken) ((TerminalNode) node).terminal).spelling);
         switch (spelling)
         {
             case "size" :
                 return "size()";
             case "totalValue" :
                 return "totalValue()";
-            case "Value" :
-                return "Value()";
+            case "value" :
+                return EvaluateValue(node);
             case "printHand" :
                 spelling = "printDeck";
             case "printDeck" :
@@ -636,6 +639,33 @@ public class JavaGenerator {
                 return spelling;
         }
 
+    }
+    public String EvaluateValue(Node node)
+    {
+        if (node.parent.parent.leftMostSib instanceof TerminalNode)
+        {
+            if (((TerminalNode) node.parent.parent.leftMostSib).terminal instanceof idToken)
+            {
+                switch (((idToken) ((TerminalNode) node.parent.parent.leftMostSib).terminal).spelling)
+                {
+                    case "ace":
+                    case "two":
+                    case "three":
+                    case "four":
+                    case "five":
+                    case "six":
+                    case "seven":
+                    case "eight":
+                    case "nine":
+                    case "ten":
+                    case "jack":
+                    case "queen":
+                    case "king":
+                        return "value";
+                }
+            }
+        }
+        return "Value()";
     }
 
     public String FlagDclGenerator(Node node) throws Exception

@@ -7,62 +7,28 @@ import javax.tools.ToolProvider;
 import java.io.*;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
 public class Main
 {
 
     public static void main(String[] args) throws Exception
     {
-        //new ShufflerExecuter().Execute();
         new Compiler().Compile();
-        //Process p = Runtime.getRuntime().exec();
-        //new OutputCompiler().run();
 
-        /*JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        int result = compiler.run(null, null, null,"C:\\Users\\alexa\\Desktop\\SW4\\SW4_github\\P4-kursus\\Projektkode\\Scanner\\src\\shufflerCode\\Shuffler.java");
-        System.out.println(result);
-        File classesDir = new File("C:\\Users\\alexa\\Desktop\\SW4\\SW4_github\\P4-kursus\\Projektkode\\Scanner\\src\\shufflerCode");
-        URLClassLoader classLoader;
-        try
-        {
-            classLoader = URLClassLoader.newInstance(new URL[]{classesDir.toURI().toURL()});
-            Class<?> cls;
-            cls = Class.forName("shufflerCode.Shuffler", true, classLoader);
-            //Shuffler instance = (Shuffler)cls.newInstance();
-            //instance.ShufflerRun();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }*/
-        /*try
-        {
-            System.out.println("************");
-            runProcess("javac C:\\Users\\alexa\\Desktop\\SW4\\SW4_github\\P4-kursus\\Projektkode\\Scanner\\src\\shufflerCode\\Shuffler.java");
-            System.out.println("************");
-            runProcess("java C:\\Users\\alexa\\Desktop\\SW4\\SW4_github\\P4-kursus\\Projektkode\\Scanner\\src\\shufflerCode\\Shuffler.java");
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }*/
+        List<String> cmds = Arrays.asList("cmd.exe","/c","javac","-d","Classes", "*.java");
+        ProcessBuilder builder = new ProcessBuilder(cmds).directory(new File(Paths.get(".").toAbsolutePath().normalize().toString() + "\\shufflerCode\\src"));
+        Process p = builder.start();
+        p.waitFor();
+        TimeUnit.SECONDS.sleep(1);
+        cmds = Arrays.asList("cmd.exe","/c","start","java","shufflerCode.Shuffler");
+        builder = new ProcessBuilder(cmds).directory(new File(Paths.get(".").toAbsolutePath().normalize().toString() + "\\shufflerCode\\src\\Classes"));
+        builder.start();
     }
-
-    private static void runProcess(String command) throws Exception {
-        Process pro = Runtime.getRuntime().exec(command);
-        printLines(command + " stdout:", pro.getInputStream());
-        printLines(command + " stderr:", pro.getErrorStream());
-
-        pro.waitFor();
-        System.out.println(command + " exitValue() " + pro.exitValue());
-    }
-
-    private static void printLines(String cmd, InputStream ins) throws Exception {
-        String line = null;
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(ins));
-        while ((line = in.readLine()) != null) {
-            System.out.println(line);
-        }
-    }
-
 }
 

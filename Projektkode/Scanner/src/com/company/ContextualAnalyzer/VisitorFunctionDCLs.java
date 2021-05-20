@@ -34,7 +34,7 @@ public class VisitorFunctionDCLs extends Visitor
                 List<String> parameters = GetParameterTypes(node.leftMostChild.rightSib.rightSib.rightSib);
                 Collections.reverse(parameters);
 
-                Symbol symbol = new FunctionSymbol(id, "func", returnType, parameters);
+                Symbol symbol = new FunctionSymbol(id, returnType + " func ()", returnType, parameters);
                 EnterSymbolToCurrentScope(symbol);
 
             } catch (Exception e)

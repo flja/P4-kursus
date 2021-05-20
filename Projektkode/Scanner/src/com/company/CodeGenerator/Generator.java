@@ -242,7 +242,7 @@ public class Generator
                     javagenerator.Emit(" - ");
                     break;
                 case "id":
-                    javagenerator.Emit(javagenerator.IdGenerator(String.valueOf(((idToken) ((TerminalNode) node).terminal).spelling)));
+                    javagenerator.Emit(javagenerator.IdGenerator(node));
                     break;
                 case "if":
                     javagenerator.Emit("if ");

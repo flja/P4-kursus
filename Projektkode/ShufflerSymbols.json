@@ -75,6 +75,10 @@
                     "type" : "card"
                 },
                 {
+                    "name" : "numberValue.value",
+                    "type" : "number"
+                },
+                {
                     "name" : "shuffle",
                     "type" : "void func ()"
                 },

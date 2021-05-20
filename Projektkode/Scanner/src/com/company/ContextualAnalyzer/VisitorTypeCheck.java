@@ -179,6 +179,8 @@ public class VisitorTypeCheck{
     {
         List<String> list;
         String funcType = RetrieveSymbol(VisitObjectSpecifier(node))._type;
+        System.out.println(VisitObjectSpecifier(node));
+        System.out.println(RetrieveSymbol(VisitObjectSpecifier(node))._type);
         if (funcType.substring(funcType.indexOf("("), funcType.indexOf(")")).length() > 2)
         {
             String parameterTypes = funcType.substring(funcType.indexOf("(") + 1, funcType.indexOf(")") - 1);
@@ -403,7 +405,7 @@ public class VisitorTypeCheck{
                 return leftType;
             }
             String operator;
-            switch (Parser.GetName(((TerminalNode) node.leftMostChild.rightSib.leftMostChild).terminal))
+            switch (Parser.GetName(((TerminalNode) node.leftMostChild).terminal))
             {
                 case "plus":
                     operator = " + ";
@@ -413,7 +415,7 @@ public class VisitorTypeCheck{
                     break;
 
             }
-            throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.rightSib.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType + "\"");
+            throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType + "\"");
 
         }
     }

@@ -71,8 +71,8 @@ public class DeckClass {
         {
             if (deck.size() > 0)
             {
-                CardClass card = deck.cards.get(0);
-                deck.cards.remove(0);
+                CardClass card = deck.cards.get(deck.size() - 1);
+                deck.cards.remove(deck.size() - 1);
                 this.cards.add(card);
             }
         }

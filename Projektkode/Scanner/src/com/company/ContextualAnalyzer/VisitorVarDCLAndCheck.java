@@ -154,7 +154,23 @@ public class VisitorVarDCLAndCheck extends Visitor
                     id += ".";
                     break;
                 case "id":
-                    id += ((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling;
+                    Symbol symbol = RetrieveSymbol(((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling);
+                    if (symbol != null && !((NonTerminalNode) node).nonterminal.equals("ObjectSpecifier"))
+                    {
+                        if (symbol._type.equals("number"))
+                        {
+                            id += "numberValue";
+                            node.leftMostChild.type = "number";
+                        }
+                        else
+                        {
+                            id += ((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling;
+                        }
+                    }
+                    else
+                    {
+                        id += ((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling;
+                    }
                     node.leftMostChild.visited = true;
                     break;
             }
@@ -168,6 +184,7 @@ public class VisitorVarDCLAndCheck extends Visitor
                     break;
                 case "Number":
                         id += "numberValue";
+                        node.leftMostChild.type = "number";
                     break;
                 case "Card":
                     id += "cardValue";

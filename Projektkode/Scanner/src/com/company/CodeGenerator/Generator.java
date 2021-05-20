@@ -30,8 +30,9 @@ public class Generator
     {
 
         _ast.ResetVisit();
-        javagenerator.generateTemplate();
+        javagenerator.generateTemplate(_ast.Root.leftMostChild.rightSib.rightSib);
         RecursiveVisitor(_ast.Root);
+        javagenerator.code += javagenerator.functions;
         javagenerator.code += "\n}";
         javagenerator.WriteToFile();
     }
@@ -69,6 +70,9 @@ public class Generator
                 case "DeckDcl":
                     javagenerator.Emit(javagenerator.DeckDclGenerator(node));
                     break;
+                case "FlagDcl":
+                    javagenerator.Emit(javagenerator.FlagDclGenerator(node));
+                    break;
                 case "TableDef":
                     javagenerator.Emit(javagenerator.TableDefGenerator(node));
                     break;
@@ -102,7 +106,12 @@ public class Generator
                 case "FollowObject1":
                     javagenerator.Emit(javagenerator.FollowObject1Generator(node));
                     break;
-
+                case "FunctionCall1":
+                    javagenerator.Emit(javagenerator.FunctionCall1Generator(node));
+                    break;
+                case "LogicalTerm":
+                    javagenerator.Emit(javagenerator.LogicalTermGenerator(node));
+                    break;
             }
         }
         else if (node instanceof TerminalNode)
@@ -224,7 +233,7 @@ public class Generator
                     javagenerator.Emit(" > ");
                     break;
                 case "hand":
-                    javagenerator.Emit(" hand ");
+                    javagenerator.Emit(" DeckClass ");
                     break;
                 case "hearts":
                     //ignore
@@ -233,7 +242,7 @@ public class Generator
                     javagenerator.Emit(" - ");
                     break;
                 case "id":
-                    javagenerator.Emit(String.valueOf(((idToken) ((TerminalNode) node).terminal).spelling));
+                    javagenerator.Emit(javagenerator.IdGenerator(String.valueOf(((idToken) ((TerminalNode) node).terminal).spelling)));
                     break;
                 case "if":
                     javagenerator.Emit("if ");

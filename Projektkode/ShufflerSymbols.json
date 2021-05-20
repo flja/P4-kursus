@@ -36,14 +36,6 @@
         {
             "keywords":
             [
-                {
-                    "name" : "visible",
-                    "type" : "visibility"
-                },
-                {
-                    "name" : "hidden",
-                    "type" : "visibility"
-                }
             ]
         }
     },
@@ -56,10 +48,6 @@
             "properties":
             [
                 {
-                    "name" : "visibility",
-                    "type" : "visibility"
-                },
-                {
                     "name" : "drawfrom",
                     "type" : "deck func (deck; number;)"
                 },
@@ -69,7 +57,7 @@
                 },
                 {
                     "name" : "numberValue",
-                    "type" : "number"
+                    "type" : "card"
                 },
                 {
                     "name" : "totalValue",
@@ -91,10 +79,6 @@
                     "type" : "void func ()"
                 },
                 {
-                    "name" : "visibility",
-                    "type" : "visibility"
-                },
-                {
                     "name" : "drawfrom",
                     "type" : "deck func (deck; number;)"
                 },
@@ -114,7 +98,11 @@
             [
                 {
                     "name" : "takeTurn",
-                    "type" : "func void ()"
+                    "type" : "void func ()"
+                },
+                {
+                    "name" : "Number",
+                    "type" : "number"
                 }
             ]
         }
@@ -127,11 +115,39 @@
                 [
                     {
                         "name" : "players.takeTurn",
-                        "type" : "func void ()"
+                        "type" : "void func ()"
                     },
                     {
                         "name" : "endcondition.check",
-                        "type" : "func void ()"
+                        "type" : "void func ()"
+                    },
+                    {
+                        "name" : "printDeck",
+                        "type" : "void func (deck;)"
+                    },
+                    {
+                        "name" : "printCard",
+                        "type" : "void func (card;)"
+                    },
+                    {
+                        "name" : "printString",
+                        "type" : "void func (string;)"
+                    },
+                    {
+                        "name" : "printNumber",
+                        "type" : "void func (number;)"
+                    },
+                    {
+                        "name" : "printHand",
+                        "type" : "void func (hand;)"
+                    },
+                    {
+                        "name" : "printFlag",
+                        "type" : "void func (flag;)"
+                    },
+                    {
+                        "name" : "getPlayerCount",
+                        "type" : "number func ()"
                     }
                 ]
     },
@@ -140,10 +156,6 @@
     {
         "symbols":
         [
-            {
-                "name": "endTurn",
-                "type": "void func ()"
-            }
         ]
     },
 

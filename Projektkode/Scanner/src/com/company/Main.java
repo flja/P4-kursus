@@ -13,6 +13,7 @@ import com.company.ShufflerSymbols.LoadShufflerSymbols;
 import com.company.ShufflerSymbols.ShufflerSymbols;
 import com.company.ContextualAnalyzer.ScopeTable;
 import com.company.ContextualAnalyzer.Analyzer;
+import shufflerCode.Shuffler;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -41,7 +42,10 @@ public class Main {
         JavaGenerator javaGenerator = new JavaGenerator();
         System.out.println(javaGenerator.DeckGenerator(ast.Root.leftMostChild.leftMostChild.rightSib.rightSib));
         Generator codeGenerator = new Generator(ast);
-        codeGenerator.StartGenerator();
+        //codeGenerator.StartGenerator();
+        Shuffler shuffler = new Shuffler();
+        shuffler.ShufflerRun();
+
     }
     public static void printNode(Node node, int indents)
     {

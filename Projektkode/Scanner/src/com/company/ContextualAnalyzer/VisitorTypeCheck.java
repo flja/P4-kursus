@@ -168,7 +168,7 @@ public class VisitorTypeCheck{
         if (matchCnt == parameterTypes.size() && matchCnt == ExpectedTypes.size())
         {
             String returnType = RetrieveSymbol(VisitObjectSpecifier(node.leftMostChild)).Type();
-            returnType = returnType.substring(0, returnType.indexOf(" ") - 1);
+            returnType = returnType.substring(0, returnType.indexOf(" "));
             node.type = returnType;
             return returnType;
         }
@@ -284,7 +284,7 @@ public class VisitorTypeCheck{
                     break;
 
             }
-            throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType);
+            throw new Exception("Error at line " + ((TerminalNode) node.parent.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType);
         }
     }
     String VisitLogicalTerm1(Node node) throws Exception
@@ -502,7 +502,9 @@ public class VisitorTypeCheck{
     {
         String type;
         if(((NonTerminalNode) node.leftMostChild).nonterminal.equals("ObjectSpecifier")) {
-            type = RetrieveSymbol(VisitObjectSpecifier(node.leftMostChild))._type.toLowerCase();
+            String s = VisitObjectSpecifier(node.leftMostChild);
+            System.out.println(s);
+            type = RetrieveSymbol(s)._type.toLowerCase();
             node.leftMostChild.type = type;
             node.type = type;
         }
@@ -542,7 +544,23 @@ public class VisitorTypeCheck{
                     id += ".";
                     break;
                 case "id":
-                    id += ((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling;
+                    Symbol symbol = RetrieveSymbol(((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling);
+                    if (symbol != null && !((NonTerminalNode) node).nonterminal.equals("ObjectSpecifier"))
+                    {
+                        if (symbol._type.equals("number"))
+                        {
+                            id += "numberValue";
+                            node.leftMostChild.type = "number";
+                        }
+                        else
+                        {
+                            id += ((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling;
+                        }
+                    }
+                    else
+                    {
+                        id += ((idToken) ((TerminalNode) node.leftMostChild).terminal).spelling;
+                    }
                     node.leftMostChild.visited = true;
                     break;
             }

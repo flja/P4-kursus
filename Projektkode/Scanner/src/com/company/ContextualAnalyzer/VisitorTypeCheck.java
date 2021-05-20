@@ -113,7 +113,7 @@ public class VisitorTypeCheck{
     void VisitAssignment(Node node) throws Exception{
         node.visited = true;
         String id = VisitObjectSpecifier(node.leftMostChild.rightSib);
-        System.out.println("one");
+        //System.out.println("one");
         node.leftMostChild.rightSib.type = RetrieveSymbol(VisitObjectSpecifier(node.leftMostChild.rightSib))._type.toLowerCase();
         String leftType = node.leftMostChild.rightSib.type.toLowerCase();
         String rightType = VisitExpr(node.leftMostChild.rightSib.rightSib.rightSib).toLowerCase();
@@ -503,7 +503,7 @@ public class VisitorTypeCheck{
         String type;
         if(((NonTerminalNode) node.leftMostChild).nonterminal.equals("ObjectSpecifier")) {
             String s = VisitObjectSpecifier(node.leftMostChild);
-            System.out.println(s);
+            //System.out.println(s);
             type = RetrieveSymbol(s)._type.toLowerCase();
             node.leftMostChild.type = type;
             node.type = type;

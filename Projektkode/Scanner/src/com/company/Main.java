@@ -1,135 +1,68 @@
 package com.company;
-import com.company.AST.AST;
-import com.company.AST.Node;
-import com.company.AST.NonTerminalNode;
-import com.company.AST.TerminalNode;
-import com.company.CodeGenerator.Generator;
-import com.company.CodeGenerator.JavaGenerator;
-import com.company.CodeGenerator.TemplateCode.ActionClass;
-import com.company.CodeGenerator.TemplateCode.DeckClass;
-import com.company.CodeGenerator.TemplateCode.HelpMethods;
-import com.company.CodeGenerator.ValidationCodeGenerator;
-import com.company.ShufflerSymbols.LoadShufflerSymbols;
-import com.company.ShufflerSymbols.ShufflerSymbols;
-import com.company.ContextualAnalyzer.ScopeTable;
-import com.company.ContextualAnalyzer.Analyzer;
-import shufflerCode.Shuffler;
 
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+//import shufflerCode.Shuffler;
 
-public class Main {
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
+import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Scanner;
+public class Main
+{
 
     public static void main(String[] args) throws Exception
     {
-        System.out.println(Paths.get(".").toAbsolutePath().normalize().toString());
-        ShufflerSymbols shufflerSymbols = new LoadShufflerSymbols().Load();
-        Scanner1 scanner = new Scanner1();
-        Parser parser = new Parser();
-        AST ast = parser.LLparser(scanner.Lexer());
-        Analyzer analyzer = new Analyzer(ast);
-        ast = analyzer.RunAnalyzer();
-        ScopeTable SymbolTable = analyzer._globalScope;
-        PrintSymbolTable(SymbolTable);
-        Node node = ast.Root;
-        ast.ResetVisit();
-        prettyPrintAST(node);
-        ValidationCodeGenerator ValidationGenerator = new ValidationCodeGenerator(ast);
-        ValidationGenerator.StartGenerator(node);
-        ValidationGenerator.WriteToFile();
+        //new ShufflerExecuter().Execute();
+        //new Compiler().Compile();
+        //Process p = Runtime.getRuntime().exec();
+        //new OutputCompiler().run();
 
-        JavaGenerator javaGenerator = new JavaGenerator();
-        System.out.println(javaGenerator.DeckGenerator(ast.Root.leftMostChild.leftMostChild.rightSib.rightSib));
-        Generator codeGenerator = new Generator(ast);
-        //codeGenerator.StartGenerator();
-        Shuffler shuffler = new Shuffler();
-        shuffler.ShufflerRun();
-
-    }
-    public static void printNode(Node node, int indents)
-    {
-        String indentation = "";
-        for (int i = 0; i < indents; i++)
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        int result = compiler.run(null, null, null,"C:\\Users\\alexa\\Desktop\\SW4\\SW4_github\\P4-kursus\\Projektkode\\Scanner\\src\\shufflerCode\\Shuffler.java");
+        System.out.println(result);
+        File classesDir = new File("C:\\Users\\alexa\\Desktop\\SW4\\SW4_github\\P4-kursus\\Projektkode\\Scanner\\src\\shufflerCode");
+        URLClassLoader classLoader;
+        try
         {
-            indentation += "|   ";
-        }
-        if(node instanceof TerminalNode)
+            classLoader = URLClassLoader.newInstance(new URL[]{classesDir.toURI().toURL()});
+            Class<?> cls;
+            cls = Class.forName("shufflerCode.Shuffler", true, classLoader);
+            //Shuffler instance = (Shuffler)cls.newInstance();
+            //instance.ShufflerRun();
+        } catch (Exception e)
         {
-            System.out.println(indentation  + ((TerminalNode) node).terminal.getClass().getSimpleName() + " " + node.type + " " + ((TerminalNode) node).terminal.line);
+            e.printStackTrace();
         }
-        else
+        /*try
         {
-            System.out.println(indentation + ((NonTerminalNode) node).nonterminal + " " + node.type);
-        }
+            System.out.println("************");
+            runProcess("javac C:\\Users\\alexa\\Desktop\\SW4\\SW4_github\\P4-kursus\\Projektkode\\Scanner\\src\\shufflerCode\\Shuffler.java");
+            System.out.println("************");
+            runProcess("java C:\\Users\\alexa\\Desktop\\SW4\\SW4_github\\P4-kursus\\Projektkode\\Scanner\\src\\shufflerCode\\Shuffler.java");
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }*/
     }
 
-    public static void prettyPrintAST(Node node)
-    {
-        int indent = 0;
-        System.out.println("\n\n");
-        printNode(node, indent);
-        while (node != null)
-        {
-            if (node.leftMostChild != null && !node.leftMostChild.visited)
-            {
-                node = node.leftMostChild;
-                indent += 1;
-                printNode(node, indent);
-            }
-            else if (node.rightSib != null && !node.rightSib.visited)
-            {
-                node = node.rightSib;
-                printNode(node, indent);
-            }
-            else if (node.parent != null)
-            {
-                node = node.parent;
-                indent -= 1;
-            }
-            else
-            {
-                node = null;
-            }
-            if (node != null)
-            {
-                node.visited = true;
-            }
+    private static void runProcess(String command) throws Exception {
+        Process pro = Runtime.getRuntime().exec(command);
+        printLines(command + " stdout:", pro.getInputStream());
+        printLines(command + " stderr:", pro.getErrorStream());
+
+        pro.waitFor();
+        System.out.println(command + " exitValue() " + pro.exitValue());
+    }
+
+    private static void printLines(String cmd, InputStream ins) throws Exception {
+        String line = null;
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(ins));
+        while ((line = in.readLine()) != null) {
+            System.out.println(line);
         }
     }
 
-    public static void PrintSymbolTable(ScopeTable globalScope)
-    {
-        int indent = 1;
-        System.out.println("\n\n");
-        System.out.println("SymbolTable:");
-        printScopes(globalScope, indent);
-    }
-    static int j = 0;
-    public static void printScopes(ScopeTable scopeTable, int indent)
-    {
-        System.out.println("Scope " + j);
-        for (String item : scopeTable.table.keySet())
-        {
-            PrintSymbol(scopeTable.table.get(item).ToString(), indent);
-        }
-        j++;
-        indent++;
-        for (ScopeTable item : scopeTable.subScopes)
-        {
-            printScopes(item, indent);
-        }
-    }
-
-    public static void PrintSymbol(String symbol, int indents)
-    {
-        String indentation = "";
-        for (int i = 0; i < indents; i++)
-        {
-            indentation += "|   ";
-        }
-        System.out.println(indentation + symbol.toString());
-    }
 }
-
 

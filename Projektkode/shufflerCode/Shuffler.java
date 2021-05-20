@@ -28,7 +28,7 @@ public class Shuffler
 {
     public static void main(String[] args)
     {
-        System.out.println("Hey");
+        System.out.println("Success");
     }
 
     int _playerCnt = 2;

@@ -3,6 +3,7 @@ package com.company.ContextualAnalyzer;
 import com.company.AST.Node;
 import com.company.AST.NonTerminalNode;
 import com.company.AST.TerminalNode;
+import com.company.Compiler;
 import com.company.Main;
 import com.company.Parser;
 import com.company.ShufflerSymbols.PropertiesClass;
@@ -19,7 +20,7 @@ public class VisitorVarDCLAndCheck extends Visitor
 
     @Override
     public ScopeTable StartVisitor() throws Exception {
-        Main.PrintSymbolTable(_globalScope);
+        Compiler.PrintSymbolTable(_globalScope);
         RecursiveVisitor(_astTree);
         return _globalScope;
     }

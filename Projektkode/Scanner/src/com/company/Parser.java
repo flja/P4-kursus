@@ -57,7 +57,7 @@ public class Parser
                 System.out.println(nonTerminals.indexOf(stack.peek()) + " " + terminals.indexOf(GetName(ts.get(tsIndex))));
                 if (p == 0)
                 {
-                    throw new Exception("P = 0 " + ts.get(tsIndex).line);
+                    throw new Exception("Error at line " + ts.get(tsIndex).line + ": Unexpected token\n");
                 }
                 System.out.println("Production: " + p);
                 List<String> A = Data.getProduction(p);
@@ -65,7 +65,6 @@ public class Parser
                 stack.pop();
                 for (int i = A.size() - 1; i >= 0; i--)
                 {
-                    System.out.println(A.get(i) + " Pushed to stack");
                     stack.push(A.get(i));
                 }
                 for (int i = 0; i < A.size(); i++)
@@ -149,7 +148,7 @@ public class Parser
                 current = current.parent;
             }
         }
-        System.out.println("No more");
+        //System.out.println("No more");
         return null;
     }
 }

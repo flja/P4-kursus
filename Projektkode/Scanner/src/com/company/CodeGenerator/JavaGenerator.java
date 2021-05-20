@@ -33,30 +33,34 @@ public class JavaGenerator {
 
     public void generateTemplate(Node node) throws Exception{
         code = "package shufflerCode;\n" +
-                "import com.company.CodeGenerator.TemplateCode.HelpMethods;\n" +
-                "import com.company.CodeGenerator.TemplateCode.ActionClass;\n" +
-                "import com.company.CodeGenerator.TemplateCode.CardClass;\n" +
-                "import com.company.CodeGenerator.TemplateCode.DeckClass;\n" +
-                "import com.company.CodeGenerator.TemplateCode.two;\n" +
-                "import com.company.CodeGenerator.TemplateCode.three;\n" +
-                "import com.company.CodeGenerator.TemplateCode.four;\n" +
-                "import com.company.CodeGenerator.TemplateCode.five;\n" +
-                "import com.company.CodeGenerator.TemplateCode.six;\n" +
-                "import com.company.CodeGenerator.TemplateCode.seven;\n" +
-                "import com.company.CodeGenerator.TemplateCode.eight;\n" +
-                "import com.company.CodeGenerator.TemplateCode.nine;\n" +
-                "import com.company.CodeGenerator.TemplateCode.ten;\n" +
-                "import com.company.CodeGenerator.TemplateCode.jack;\n" +
-                "import com.company.CodeGenerator.TemplateCode.queen;\n" +
-                "import com.company.CodeGenerator.TemplateCode.king;\n" +
-                "import com.company.CodeGenerator.TemplateCode.joker;\n" +
-                "import com.company.CodeGenerator.TemplateCode.ace;\n" +
+                "import shufflerCode.TemplateCode.HelpMethods;\n" +
+                "import shufflerCode.TemplateCode.ActionClass;\n" +
+                "import shufflerCode.TemplateCode.CardClass;\n" +
+                "import shufflerCode.TemplateCode.DeckClass;\n" +
+                "import shufflerCode.TemplateCode.two;\n" +
+                "import shufflerCode.TemplateCode.three;\n" +
+                "import shufflerCode.TemplateCode.four;\n" +
+                "import shufflerCode.TemplateCode.five;\n" +
+                "import shufflerCode.TemplateCode.six;\n" +
+                "import shufflerCode.TemplateCode.seven;\n" +
+                "import shufflerCode.TemplateCode.eight;\n" +
+                "import shufflerCode.TemplateCode.nine;\n" +
+                "import shufflerCode.TemplateCode.ten;\n" +
+                "import shufflerCode.TemplateCode.jack;\n" +
+                "import shufflerCode.TemplateCode.queen;\n" +
+                "import shufflerCode.TemplateCode.king;\n" +
+                "import shufflerCode.TemplateCode.joker;\n" +
+                "import shufflerCode.TemplateCode.ace;\n" +
                 "\n" +
                 "import java.util.ArrayList;\n" +
                 "import java.util.Arrays;\n" +
                 "import java.util.List;\n" +
                 "import java.util.Scanner;" +
                 "public class Shuffler\n{\n" +
+                "public static void main(String[] args)\n" +
+                "    {\n" +
+                "        System.out.println(\"Hey\");\n" +
+                "    }" +
                 "int _playerCnt = " + ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib.rightSib.rightSib).terminal).value + ";\n" +
                 "Cards cards = new Cards();\n" +
                 "List<Player> players = GeneratePlayers(_playerCnt);\n" +

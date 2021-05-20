@@ -1,0 +1,74 @@
+deck gamedeck = standard;
+
+Define Cards
+{
+    assign jack.value = 11;
+    assign queen.value = 12;
+    assign king.value = 13;
+	assign ace.value = 14;	
+}
+
+Define Player(2)
+{
+	// Player doesnt hold cards only play them
+}
+
+Define Table
+{
+	deck player1;
+    deck player2;
+	deck player1Played;
+    deck player2Played;
+
+	assign player1.visibility = hidden;
+    assign player2.visibility = hidden;
+	assign player1Played.visibility = hidden;
+    assign player2Played.visibility = hidden;
+}
+
+Setup
+{
+	func gamedeck.shuffle();
+	func table.player1.drawfrom(gamedeck, 26);
+	func table.player2.drawfrom(gamedeck, 26);
+}
+
+Round
+{ 
+
+	func endcondition.check();
+}
+
+Turn
+{
+	player1Played.player.1.drawfrom(player1, 1);
+	player2Played.player.2.drawfrom(player2, 1);
+	if(?(player1Played==player2Played))
+	{
+		print("war");
+		player1Played.player.1.drawfrom(player1, 3);
+		player2Played.player.2.drawfrom(player2, 3);
+		actions
+		{
+			action "play1" if(?true) //spille førstekort
+			{
+				func  
+			}
+		}
+	} endif;
+	func endcondition.check();
+}
+
+Endcondition()
+{
+	if(?player1 ==0){
+		print("player 1 has lost and player 2 wins"); // Har vi print?
+	} else {
+		print("Player 2 lost and player 1 wins");
+	} endif;
+}
+
+Functions
+{
+
+}

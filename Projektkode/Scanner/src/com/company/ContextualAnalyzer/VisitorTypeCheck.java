@@ -316,7 +316,7 @@ public class VisitorTypeCheck
                     break;
 
             }
-            throw new Exception("Error at line " + ((TerminalNode) node.parent.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType);
+            throw new Exception("Error" + ": cannot resolve \"" + leftType + operator + rightType);
         }
     }
 

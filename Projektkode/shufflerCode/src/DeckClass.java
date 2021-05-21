@@ -8,7 +8,14 @@ public class DeckClass {
     List<CardClass> cards = new ArrayList<CardClass>();
 
     public DeckClass(String[] aCards) throws Exception {
-        GenerateDeck(aCards);
+        try
+        {
+            GenerateDeck(aCards);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
     public DeckClass() throws Exception {
     }

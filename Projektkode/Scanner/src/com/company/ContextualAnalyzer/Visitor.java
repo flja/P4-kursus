@@ -84,7 +84,7 @@ public abstract class Visitor {
     {
         if (DeclaredLocally(symbol.Id()))
         {
-            throw new Exception("Dublicate Definition of " + symbol.Id());
+            throw new Exception("Error at line " +   "Dublicate Definition of " + symbol.Id());
 
         } else
         {

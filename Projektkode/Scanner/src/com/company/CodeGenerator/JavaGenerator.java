@@ -57,6 +57,14 @@ public class JavaGenerator {
                 "import java.util.List;\n" +
                 "import java.util.Scanner;" +
                 "public class Shuffler\n{\n" +
+                "int _playerCnt = " + ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib.rightSib.rightSib).terminal).value + ";\n" +
+                "Cards cards;\n" +
+                "List<Player> players;\n" +
+                "Table table;\n" +
+                "Setup setup;\n" +
+                "Round round;\n" +
+                "Turn turn;\n" +
+                "Endcondition endcondition;\n" +
                 "public static void main(String[] args) throws Exception\n" +
                 "    {\n" +
                 "try\n" +
@@ -69,16 +77,15 @@ public class JavaGenerator {
                 "            System.in.read();\n" +
                 "        }" +
                 "    }" +
-                "int _playerCnt = " + ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib.rightSib.rightSib).terminal).value + ";\n" +
-                "Cards cards = new Cards();\n" +
-                "List<Player> players = GeneratePlayers(_playerCnt);\n" +
-                "Table table = new Table();\n" +
-                "Setup setup = new Setup();\n" +
-                "Round round = new Round();\n" +
-                "Turn turn = new Turn();\n" +
-                "Endcondition endcondition = new Endcondition();\n" +
                 "public Shuffler() throws Exception\n" +
                 " {\n" +
+                "cards = new Cards();" +
+            "table = new Table();" +
+                "players = GeneratePlayers(_playerCnt);" +
+                "setup = new Setup();" +
+                "round = new Round();" +
+                "turn = new Turn();" +
+                "endcondition = new Endcondition();" +
                 " }\n" +
                 "public int getPlayerCount()\n" +
                 "{\n" +
@@ -300,7 +307,7 @@ public class JavaGenerator {
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
         functions += StmtGen.javagenerator.functions;
         EndconditionBlock += StmtGen.javagenerator.code;
-        EndconditionBlock += "end = true;\n" +
+        EndconditionBlock +=
                 "if(winner == none)\n" +
                 "{\n" +
                 "}\n" +
@@ -308,6 +315,9 @@ public class JavaGenerator {
                 "{\n" +
                 "System.out.println(\" The winner is player\" + (players.indexOf(winner) + 1));\n" +
                 "}\n" +
+                        "System.out.println(\"Press any key to terminate\");\n" +
+                        "System.in.read();\n" +
+                        "System.exit(0);\n" +
                 "}\n}\n}\n";
         node.VisitSuptree();
         return EndconditionBlock;
@@ -400,7 +410,7 @@ public class JavaGenerator {
             s += "if(" + item.logicalExpr + ")" +
                     "\n{System.out.println(_ActionCnt" + " + \": \" + " + item.name + ");\n" +
                     "_ActionMapping.add(_ActionCnt);\n" +
-                    "_ActionCnt++;\n}\n";
+                    "_ActionCnt++;\n}else{_ActionMapping.add(-100);}\n";
         }
        s += "System.out.println(\"Choose an action to perform: \");" +
         "Scanner _ActionScanner = new Scanner(System.in);\n" +

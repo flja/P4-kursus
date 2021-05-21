@@ -21,14 +21,39 @@ public class Main
     {
         new Compiler().Compile();
 
+
         List<String> cmds = Arrays.asList("cmd.exe","/c","javac","-d","Classes", "*.java");
         ProcessBuilder builder = new ProcessBuilder(cmds).directory(new File(Paths.get(".").toAbsolutePath().normalize().toString() + "\\shufflerCode\\src"));
+        builder.redirectErrorStream(true);
         Process p = builder.start();
+        printLines(p.getInputStream());
+        //printLines(p.getErrorStream());
         p.waitFor();
         TimeUnit.SECONDS.sleep(1);
-        cmds = Arrays.asList("cmd.exe","/c","start","java","shufflerCode.Shuffler");
-        builder = new ProcessBuilder(cmds).directory(new File(Paths.get(".").toAbsolutePath().normalize().toString() + "\\shufflerCode\\src\\Classes"));
-        builder.start();
+        System.out.println(p.exitValue());
+        if (p.exitValue() == 0)
+        {
+            cmds = Arrays.asList("cmd.exe","/c","start","java","shufflerCode.Shuffler");
+            builder = new ProcessBuilder(cmds).directory(new File(Paths.get(".").toAbsolutePath().normalize().toString() + "\\shufflerCode\\src\\Classes"));
+            builder.redirectErrorStream(true);
+            p = builder.start();
+            printLines(p.getInputStream());
+            printLines(p.getErrorStream());
+        }
+        else
+        {
+            throw new Exception("Error in java compiler");
+        }
+
+    }
+
+    private static void printLines(InputStream ins) throws Exception {
+        String line = null;
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(ins));
+        while ((line = in.readLine()) != null) {
+            System.out.println(line);
+        }
     }
 }
 

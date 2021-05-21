@@ -14,25 +14,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class VisitorTypeCheck{
+public class VisitorTypeCheck
+{
     ScopeTable _currentScope;
     Node _astTree;
     ShufflerSymbols _shufflerSymbols;
 
-    public VisitorTypeCheck(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols) {
+    public VisitorTypeCheck(ScopeTable aTable, Node aAstTree, ShufflerSymbols aShufflerSymbols)
+    {
         _currentScope = aTable;
         _astTree = aAstTree;
         _shufflerSymbols = aShufflerSymbols;
     }
 
-    void Visit(Node node) throws Exception {
+    void Visit(Node node) throws Exception
+    {
         if (node instanceof TerminalNode)
         {
             switch (Parser.GetName(((TerminalNode) node).terminal).toLowerCase())
             {
                 case "lbrace":
                 {
-                    for (ScopeTable s: _currentScope.subScopes)
+                    for (ScopeTable s : _currentScope.subScopes)
                     {
                         if (!s.Visited)
                         {
@@ -44,13 +47,14 @@ public class VisitorTypeCheck{
                 break;
                 case "rbrace":
                 {
-                  _currentScope.Visited = true;
-                  _currentScope = _currentScope.previous;
+                    _currentScope.Visited = true;
+                    _currentScope = _currentScope.previous;
                 }
             }
         }
 
-        if (node instanceof NonTerminalNode) {
+        if (node instanceof NonTerminalNode)
+        {
             switch (((NonTerminalNode) node).nonterminal)
             {
                 case "Assignment":
@@ -74,15 +78,18 @@ public class VisitorTypeCheck{
             }
         }
     }
+
     AST StartVisitor() throws Exception
     {
         RecursiveVisitor(_astTree);
         return new AST(_astTree);
     }
 
-    void RecursiveVisitor(Node node) throws Exception {
+    void RecursiveVisitor(Node node) throws Exception
+    {
         Visit(node);
-        for (Node child : node.GetChildren()) {
+        for (Node child : node.GetChildren())
+        {
             if (!node.visited)
             {
                 RecursiveVisitor(child);
@@ -90,18 +97,24 @@ public class VisitorTypeCheck{
         }
     }
 
-    public Symbol RetrieveSymbol(String name) {
+    public Symbol RetrieveSymbol(String name)
+    {
         ScopeTable current = _currentScope;
-        while (current != null) {
-            if (current.table.get(name) != null) {
+        while (current != null)
+        {
+            if (current.table.get(name) != null)
+            {
                 Symbol s = current.table.get(name);
                 return current.table.get(name);
-            } else {
+            }
+            else
+            {
                 current = current.previous;
             }
         }
         return null;
     }
+
     void VisitDcl(Node node)
     {
         String type = Parser.GetName(((TerminalNode) node.leftMostChild.leftMostChild).terminal);
@@ -110,7 +123,8 @@ public class VisitorTypeCheck{
         node.leftMostChild.type = type;
     }
 
-    void VisitAssignment(Node node) throws Exception{
+    void VisitAssignment(Node node) throws Exception
+    {
         node.visited = true;
         String id = VisitObjectSpecifier(node.leftMostChild.rightSib);
         //System.out.println("one");
@@ -131,13 +145,13 @@ public class VisitorTypeCheck{
         String Switch = ((NonTerminalNode) node.leftMostChild).nonterminal;
         switch (Switch)
         {
-            case "AddExpr" :
+            case "AddExpr":
                 type = VisitAddExpr(node.leftMostChild);
                 break;
-            case "LogicalExpr" :
+            case "LogicalExpr":
                 type = VisitLogicalExpr(node.leftMostChild);
                 break;
-            case "FunctionCall" :
+            case "FunctionCall":
                 type = VisitFunctionCall(node.leftMostChild);
                 break;
         }
@@ -151,6 +165,7 @@ public class VisitorTypeCheck{
         node.type = type;
         return type;
     }
+
     String VisitFunctionCall1(Node node) throws Exception
     {
         List<String> parameterTypes = new ArrayList<String>();
@@ -163,7 +178,10 @@ public class VisitorTypeCheck{
             {
                 matchCnt++;
             }
-            else throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.rightSib).terminal.line + ": Parameter types does not match function parameter types");
+            else
+                throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.rightSib).terminal.line + ": Parameter types does not match function parameter " +
+                        "Expected parameters: " + ExpectedTypes +
+                        "\nActual parameters: " + parameterTypes);
         }
         if (matchCnt == parameterTypes.size() && matchCnt == ExpectedTypes.size())
         {
@@ -172,7 +190,10 @@ public class VisitorTypeCheck{
             node.type = returnType;
             return returnType;
         }
-        else throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.rightSib).terminal.line + ": Number of parameters does not match function definition");
+        else
+            throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.rightSib).terminal.line + ": Number of parameters does not match function definition, " +
+                    "Expected parameters: " + ExpectedTypes +
+                    "\nActual parameters: " + parameterTypes);
     }
 
     List<String> FindExpectedParameterTypes(Node node)
@@ -196,11 +217,13 @@ public class VisitorTypeCheck{
 
     List<String> VisitParameters(Node node, List<String> parameterTypes)
     {
-        if (node.leftMostChild != null) {
+        if (node.leftMostChild != null)
+        {
             parameterTypes = VisitParameters1(node.leftMostChild, parameterTypes);
         }
         return parameterTypes;
     }
+
     List<String> VisitParameters1(Node node, List<String> parameterTypes)
     {
 
@@ -208,6 +231,7 @@ public class VisitorTypeCheck{
         parameterTypes = VisitParameters2(node.leftMostChild.rightSib, parameterTypes);
         return parameterTypes;
     }
+
     List<String> VisitParameters2(Node node, List<String> parameterTypes)
     {
         if (node.leftMostChild != null)
@@ -216,18 +240,22 @@ public class VisitorTypeCheck{
         }
         return parameterTypes;
     }
+
     String VisitLogicalExpr(Node node) throws Exception
     {
         String leftType = VisitLogicalTerm(node.leftMostChild.rightSib);
         String rightType = VisitLogicalExpr1(node.leftMostChild.rightSib.rightSib);
-        if (leftType.equals("flag")) {
-            if (rightType.equals("") || rightType.equals(leftType) ) {
+        if (leftType.equals("flag"))
+        {
+            if (rightType.equals("") || rightType.equals(leftType))
+            {
                 node.type = leftType;
                 return leftType;
             }
         }
         throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild).terminal.line + ": Illegal logical expression");
     }
+
     String VisitLogicalExpr1(Node node) throws Exception
     {
         if (node.leftMostChild == null)
@@ -237,7 +265,8 @@ public class VisitorTypeCheck{
         }
         String leftType = VisitLogicalTerm(node.leftMostChild.rightSib);
         String rightType = VisitLogicalExpr1(node.leftMostChild.rightSib.rightSib);
-        if (leftType.equals("flag")) {
+        if (leftType.equals("flag"))
+        {
             if (leftType.equals(rightType) || rightType.equals(""))
             {
                 node.type = leftType;
@@ -265,7 +294,8 @@ public class VisitorTypeCheck{
         else
         {
             String operator = "";
-            switch (Parser.GetName(((TerminalNode) node.leftMostChild.rightSib.leftMostChild.leftMostChild).terminal)) {
+            switch (Parser.GetName(((TerminalNode) node.leftMostChild.rightSib.leftMostChild.leftMostChild).terminal))
+            {
                 case "lessthan":
                     operator = " < ";
                     break;
@@ -289,6 +319,7 @@ public class VisitorTypeCheck{
             throw new Exception("Error at line " + ((TerminalNode) node.parent.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType);
         }
     }
+
     String VisitLogicalTerm1(Node node) throws Exception
     {
         String type;
@@ -312,7 +343,8 @@ public class VisitorTypeCheck{
                 }
                 else
                 {
-                    switch (operator) {
+                    switch (operator)
+                    {
                         case "lessthan":
                             operator = " < ";
                             break;
@@ -342,8 +374,6 @@ public class VisitorTypeCheck{
     }
 
 
-
-
     String VisitAddExpr(Node node) throws Exception
     {
         String leftType = VisitTerm(node.leftMostChild);
@@ -353,9 +383,11 @@ public class VisitorTypeCheck{
             node.type = leftType;
             return leftType;
         }
-        else {
+        else
+        {
             String operator;
-            switch (Parser.GetName(((TerminalNode) node.leftMostChild.rightSib.rightSib.leftMostChild).terminal)) {
+            switch (Parser.GetName(((TerminalNode) node.leftMostChild.rightSib.rightSib.leftMostChild).terminal))
+            {
                 case "star":
                     operator = " * ";
                     break;
@@ -370,6 +402,7 @@ public class VisitorTypeCheck{
             throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType);
         }
     }
+
     String VisitAddExpr1(Node node) throws Exception
     {
         if (node.leftMostChild == null)
@@ -419,6 +452,7 @@ public class VisitorTypeCheck{
 
         }
     }
+
     String VisitTerm(Node node) throws Exception
     {
         String leftType = VisitFactor(node.leftMostChild).toLowerCase();
@@ -443,7 +477,7 @@ public class VisitorTypeCheck{
                     operator = " mod ";
                     break;
             }
-            throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.rightSib.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator +rightType + "\"");
+            throw new Exception("Error at line " + ((TerminalNode) node.leftMostChild.rightSib.leftMostChild).terminal.line + ": cannot resolve \"" + leftType + operator + rightType + "\"");
         }
     }
 
@@ -500,10 +534,12 @@ public class VisitorTypeCheck{
         node.type = type;
         return type;
     }
+
     String VisitVal(Node node)
     {
         String type;
-        if(((NonTerminalNode) node.leftMostChild).nonterminal.equals("ObjectSpecifier")) {
+        if (((NonTerminalNode) node.leftMostChild).nonterminal.equals("ObjectSpecifier"))
+        {
             String s = VisitObjectSpecifier(node.leftMostChild);
             //System.out.println(s);
             type = RetrieveSymbol(s)._type.toLowerCase();
@@ -567,7 +603,7 @@ public class VisitorTypeCheck{
                     break;
             }
         }
-        else  if (node.leftMostChild instanceof NonTerminalNode)
+        else if (node.leftMostChild instanceof NonTerminalNode)
         {
             switch (((NonTerminalNode) node.leftMostChild).nonterminal)
             {

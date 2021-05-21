@@ -105,7 +105,7 @@ public class Scanner1
                     }
                     else
                     {
-                        throw new Exception("no end");
+                        throw new Exception("no end at line:" + lineNum);
                     }
 
                 }

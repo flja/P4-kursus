@@ -64,6 +64,7 @@ Val⟶Number
 Val⟶Flag
 Val⟶Card
 Val⟶ObjectSpecifier
+Val⟶FunctionCall
 Stmts⟶Stmt Stmts
 Stmts⟶
 Stmt⟶Assignment

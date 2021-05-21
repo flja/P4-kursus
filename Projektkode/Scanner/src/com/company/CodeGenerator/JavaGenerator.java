@@ -59,7 +59,15 @@ public class JavaGenerator {
                 "public class Shuffler\n{\n" +
                 "public static void main(String[] args) throws Exception\n" +
                 "    {\n" +
-                "        new Shuffler().ShufflerRun();\n" +
+                "try\n" +
+                "        {\n" +
+                "            new Shuffler().ShufflerRun();\n" +
+                "        } catch (Exception e)\n" +
+                "        {\n" +
+                "            System.out.println(e.getMessage());\n" +
+                "            System.out.println(\"Press any key to terminate\");\n" +
+                "            System.in.read();\n" +
+                "        }" +
                 "    }" +
                 "int _playerCnt = " + ((nonZeroNumToken) ((TerminalNode) node.leftMostChild.rightSib.rightSib.rightSib).terminal).value + ";\n" +
                 "Cards cards = new Cards();\n" +
@@ -331,7 +339,7 @@ public class JavaGenerator {
             temp = temp.substring(0, temp.lastIndexOf(","));
         }
         s += temp;
-        s += ")";
+        s += ") throws Exception";
         Generator StmtGen = new Generator(new AST(node.leftMostChild.rightSib.rightSib.rightSib.rightSib.rightSib));
         StmtGen.RecursiveVisitor(StmtGen._ast.Root);
         functions += StmtGen.javagenerator.functions;
@@ -385,7 +393,7 @@ public class JavaGenerator {
     {
         List<ActionClass> actions = new ArrayList<ActionClass>();
         actions = FindActions(node.leftMostChild.rightSib, actions);
-        String s = "int _ActionCnt = 1;\n";
+        String s = "{\nint _ActionCnt = 1;\n";
         s += "ArrayList<Integer> _ActionMapping = new ArrayList<Integer>();\n";
 
         for (ActionClass item: actions) {
@@ -404,7 +412,7 @@ public class JavaGenerator {
                     item.body +
                     "break;\n";
         }
-        s += "}";
+        s += "}\n}\n";
         node.VisitSuptree();
         return s;
 

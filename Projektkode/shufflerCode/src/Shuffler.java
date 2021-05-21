@@ -1,4 +1,5 @@
 package shufflerCode;
+
 import shufflerCode.HelpMethods;
 import shufflerCode.ActionClass;
 import shufflerCode.CardClass;
@@ -21,249 +22,446 @@ import shufflerCode.ace;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;public class Shuffler
+import java.util.Scanner;
+
+public class Shuffler
 {
-public static void main(String[] args) throws Exception
+    public static void main(String[] args) throws Exception
     {
-        new Shuffler().ShufflerRun();
-    }int _playerCnt = 2;
-Cards cards = new Cards();
-List<Player> players = GeneratePlayers(_playerCnt);
-Table table = new Table();
-Setup setup = new Setup();
-Round round = new Round();
-Turn turn = new Turn();
-Endcondition endcondition = new Endcondition();
-public Shuffler() throws Exception
- {
- }
-public int getPlayerCount()
-{
-return _playerCnt;}
-public List<Player> GeneratePlayers(int cnt) throws Exception
-{
-List<Player> list = new ArrayList<Player>();
-for(int i = 0; i < cnt; i++)
-{
-list.add(new Player());
-list.get(i).Number = i+1;
-}
-return list;
-}
-public void ShufflerRun() throws Exception
-{
-setup.run();
-while (!endcondition.end) 
-{
-round.run();
-}
-System.out.println("Press any key to terminate program");
-System.in.read();
-}
-DeckClass gamedeck = new DeckClass(new String[]{"standard"}) ; 
-public class Cards
-{
-public Cards() throws Exception
-{
-ace.value = 14 ; 
-}
-}
-public class Player
-{
-public int Number;public void takeTurn() throws Exception
-{
-turn.run(this);
-}
-DeckClass mainDeck = new DeckClass() ; 
-DeckClass trickDeck = new DeckClass() ; 
-DeckClass warDeck = new DeckClass() ; 
-public Player() throws Exception
-{
-}
-}
-public class Table
-{
-public Table() throws Exception
-{
-}
-}
-public class Setup
-{
- int i ; 
- int j ; 
-public void run() throws Exception
-{
-i = gamedeck.size() / 2 ; 
-gamedeck.shuffle() ; 
-for(Player item : players)
-{
-item.mainDeck.drawfrom(gamedeck, i);
-}
-}
-}
-public class Round
-{
- int decksize ; 
- int i ; 
- int j ; 
-public void run() throws Exception
-{
-for(Player item : players)
-{
-item.takeTurn();
-}
-i = players.get(1-1).warDeck.size() ; 
-j = players.get(2-1).warDeck.size() ; 
-checkShuffle() ; 
-if(players.get(1-1).warDeck.get(i-1).Value() > players.get(2-1).warDeck.get(j-1).Value())
-{
-HelpMethods.printString("Player 1 played a: ") ; 
-HelpMethods.printCard(players.get(1-1).warDeck.get(i-1)) ; 
-HelpMethods.printString("\nPlayer 2 played a: ") ; 
-HelpMethods.printCard(players.get(2-1).warDeck.get(j-1)) ; 
-HelpMethods.printString("\nPlayer 1 won this battle\n\n\n\n") ; 
-players.get(1-1).trickDeck.drawfrom(players.get(1-1).warDeck, i) ; 
-players.get(1-1).trickDeck.drawfrom(players.get(2-1).warDeck, j) ; 
-checkShuffle() ; 
-endcondition.check() ; 
-}
-else
-if(players.get(1-1).warDeck.get(i-1).Value() < players.get(2-1).warDeck.get(j-1).Value())
-{
-HelpMethods.printString("Player 1 played a: ") ; 
-HelpMethods.printCard(players.get(1-1).warDeck.get(i-1)) ; 
-HelpMethods.printString("\nPlayer 2 played a: ") ; 
-HelpMethods.printCard(players.get(2-1).warDeck.get(j-1)) ; 
-HelpMethods.printString("\nPlayer 2 won this battle\n\n\n\n") ; 
-players.get(2-1).trickDeck.drawfrom(players.get(1-1).warDeck, i) ; 
-players.get(2-1).trickDeck.drawfrom(players.get(2-1).warDeck, j) ; 
-checkShuffle() ; 
-endcondition.check() ; 
-}
-else
+        try
+        {
+            new Shuffler().ShufflerRun();
+        } catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Press any key to terminate");
+            System.in.read();
+        }
+    }
 
-{
-HelpMethods.printString("Let the war... BEGIN!!!!!\n") ; 
-checkShuffle() ; 
-for(Player item : players)
-{
-item.takeTurn();
-}
-for(Player item : players)
-{
-item.takeTurn();
-}
-for(Player item : players)
-{
-item.takeTurn();
-}
-}
-HelpMethods.printString("\n\nPlayer 1 deck size = ") ; 
-decksize = players.get(1-1).mainDeck.size() + players.get(1-1).trickDeck.size() + players.get(1-1).warDeck.size() ; 
-HelpMethods.printNumber(decksize) ; 
-decksize = players.get(2-1).mainDeck.size() + players.get(2-1).trickDeck.size() + players.get(2-1).warDeck.size() ; 
-HelpMethods.printString("\nPlayer 2 deck size = ") ; 
-HelpMethods.printNumber(decksize) ; 
-HelpMethods.printString("\n\n") ; 
-}
-}
-public class Turn
-{
-public void run(Player turntaker) throws Exception
-{
-int _ActionCnt = 1;
-ArrayList<Integer> _ActionMapping = new ArrayList<Integer>();
-if(true )
-{System.out.println(_ActionCnt + ": " + "Play a card");
-_ActionMapping.add(_ActionCnt);
-_ActionCnt++;
-}
-if(true )
-{System.out.println(_ActionCnt + ": " + "Surrender");
-_ActionMapping.add(_ActionCnt);
-_ActionCnt++;
-}
-System.out.println("Choose an action to perform: ");Scanner _ActionScanner = new Scanner(System.in);
-Integer _ActionInput = _ActionScanner.nextInt();
-switch (_ActionMapping.indexOf(_ActionInput))
-{
-case 0:
-{
-turntaker.warDeck.drawfrom(turntaker.mainDeck, 1) ; 
-}
-break;
-case 1:
-{
-turntaker.warDeck.drawfrom(turntaker.mainDeck, turntaker.mainDeck.size()) ; 
-}
-break;
-}checkShuffle() ; 
-}
-}
-public class Endcondition
-{
-Player none = new Player();
-Player winner = none;
-boolean end = false;
-public Endcondition() throws Exception
-{
-}
-public void check() throws Exception
-{
-if(_playeranyfunc0())
-{HelpMethods.printString("Player 1: \n") ; 
-HelpMethods.printString("mainDeck \n") ; 
-HelpMethods.printDeck(players.get(1-1).mainDeck) ; 
-HelpMethods.printString("trickDeck \n") ; 
-HelpMethods.printDeck(players.get(1-1).trickDeck) ; 
-HelpMethods.printString("\n\nPlayer 2: \n") ; 
-HelpMethods.printString("mainDeck \n") ; 
-HelpMethods.printDeck(players.get(2-1).mainDeck) ; 
-HelpMethods.printString("trickDeck \n") ; 
-HelpMethods.printDeck(players.get(2-1).trickDeck) ; 
-if(players.get(1-1).mainDeck.size() <=  0 )
-{
-winner = players.get(2-1) ; 
-}
-else
+    int _playerCnt = 3;
+    Cards cards = new Cards();
+    List<Player> players = GeneratePlayers(_playerCnt);
+    Table table = new Table();
+    Setup setup = new Setup();
+    Round round = new Round();
+    Turn turn = new Turn();
+    Endcondition endcondition = new Endcondition();
 
-{
-winner = players.get(1-1) ; 
-}
-end = true;
-if(winner == none)
-{
-}
-else
-{
-System.out.println(" The winner is player" + (players.indexOf(winner) + 1));
-}
-}
-}
-}
-void  checkShuffle()
-{
-if(players.get(1-1).mainDeck.size() <=  0 )
-{
-players.get(1-1).mainDeck.drawfrom(players.get(1-1).trickDeck, players.get(1-1).trickDeck.size()) ; 
-players.get(1-1).mainDeck.shuffle() ; 
-}
-if(players.get(2-1).mainDeck.size() <=  0 )
-{
-players.get(2-1).mainDeck.drawfrom(players.get(2-1).trickDeck, players.get(2-1).trickDeck.size()) ; 
-players.get(2-1).mainDeck.shuffle() ; 
-}
-}
-public boolean _playeranyfunc0()
-{
-for(Player p : players)
-{
-if (p.mainDeck.size() <=  0 )
-{
-return true;
-}
-}
-return false;
-}
+    public Shuffler() throws Exception
+    {
+    }
+
+    public int getPlayerCount()
+    {
+        return _playerCnt;
+    }
+
+    public List<Player> GeneratePlayers(int cnt) throws Exception
+    {
+        List<Player> list = new ArrayList<Player>();
+        for (int i = 0; i < cnt; i++)
+        {
+            list.add(new Player());
+            list.get(i).Number = i + 1;
+        }
+        return list;
+    }
+
+    public void ShufflerRun() throws Exception
+    {
+        setup.run();
+        while (!endcondition.end)
+        {
+            round.run();
+        }
+        System.out.println("Press any key to terminate program");
+        System.in.read();
+    }
+
+    DeckClass gamedeck = new DeckClass(new String[]{"standard"});
+
+    public class Cards
+    {
+        public Cards() throws Exception
+        {
+        }
+    }
+
+    public class Player
+    {
+        public int Number;
+
+        public void takeTurn() throws Exception
+        {
+            turn.run(this);
+        }
+
+        boolean out = false;
+        DeckClass playerHand = new DeckClass();
+        DeckClass trickDeck = new DeckClass();
+
+        public Player() throws Exception
+        {
+            out = false;
+        }
+    }
+
+    public class Table
+    {
+        public Table() throws Exception
+        {
+        }
+    }
+
+    public class Setup
+    {
+        public void run() throws Exception
+        {
+            gamedeck.shuffle();
+            for (Player item : players)
+            {
+                item.playerHand.drawfrom(gamedeck, 7);
+            }
+        }
+    }
+
+    public class Round
+    {
+        public void run() throws Exception
+        {
+            for (Player item : players)
+            {
+                item.takeTurn();
+            }
+        }
+    }
+
+    public class Turn
+    {
+        int playernumber;
+        int i;
+        boolean hasAce = false;
+        boolean hasTwo = false;
+        boolean hasThree = false;
+        boolean hasFour = false;
+        boolean hasFive = false;
+        boolean hasSix = false;
+        boolean hasSeven = false;
+        boolean hasEight = false;
+        boolean hasNine = false;
+        boolean hasTen = false;
+        boolean hasJack = false;
+        boolean hasQueen = false;
+        boolean hasKing = false;
+
+        public void run(Player turntaker) throws Exception
+        {
+            hasAce = hasCard(ace.value, turntaker.Number);
+            hasTwo = hasCard(two.value, turntaker.Number);
+            hasThree = hasCard(three.value, turntaker.Number);
+            hasFour = hasCard(four.value, turntaker.Number);
+            hasFive = hasCard(five.value, turntaker.Number);
+            hasSix = hasCard(six.value, turntaker.Number);
+            hasSeven = hasCard(seven.value, turntaker.Number);
+            hasEight = hasCard(eight.value, turntaker.Number);
+            hasNine = hasCard(nine.value, turntaker.Number);
+            hasTen = hasCard(ten.value, turntaker.Number);
+            hasJack = hasCard(jack.value, turntaker.Number);
+            hasQueen = hasCard(queen.value, turntaker.Number);
+            hasKing = hasCard(king.value, turntaker.Number);
+            HelpMethods.printString("Player ");
+            HelpMethods.printNumber(turntaker.Number);
+            HelpMethods.printString(" your hand consists of: ");
+            HelpMethods.printDeck(turntaker.playerHand);
+            HelpMethods.printString("\nChoose a player to ask\n");
+            {
+                int _ActionCnt = 1;
+                ArrayList<Integer> _ActionMapping = new ArrayList<Integer>();
+                if (turntaker.Number != 1)
+                {
+                    System.out.println(_ActionCnt + ": " + "Player 1");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (turntaker.Number != 2)
+                {
+                    System.out.println(_ActionCnt + ": " + "Player 2");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (turntaker.Number != 3)
+                {
+                    System.out.println(_ActionCnt + ": " + "Player 3");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                System.out.println("Choose an action to perform: ");
+                Scanner _ActionScanner = new Scanner(System.in);
+                Integer _ActionInput = _ActionScanner.nextInt();
+                switch (_ActionMapping.indexOf(_ActionInput))
+                {
+                    case 0:
+                    {
+                        playernumber = 1;
+                    }
+                    break;
+                    case 1:
+                    {
+                        playernumber = 2;
+                    }
+                    break;
+                    case 2:
+                    {
+                        playernumber = 3;
+                    }
+                    break;
+                }
+            }
+            HelpMethods.printString("Choose a card to ask for\n");
+            {
+                int _ActionCnt = 1;
+                ArrayList<Integer> _ActionMapping = new ArrayList<Integer>();
+                if (hasAce)
+                {
+                    System.out.println(_ActionCnt + ": " + "aces");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasTwo)
+                {
+                    System.out.println(_ActionCnt + ": " + "twos");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasThree)
+                {
+                    System.out.println(_ActionCnt + ": " + "threes");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasFour)
+                {
+                    System.out.println(_ActionCnt + ": " + "fours");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasFive)
+                {
+                    System.out.println(_ActionCnt + ": " + "fives");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasSix)
+                {
+                    System.out.println(_ActionCnt + ": " + "six'");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasSeven)
+                {
+                    System.out.println(_ActionCnt + ": " + "sevens");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasEight)
+                {
+                    System.out.println(_ActionCnt + ": " + "eights");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasNine)
+                {
+                    System.out.println(_ActionCnt + ": " + "nines");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasTen)
+                {
+                    System.out.println(_ActionCnt + ": " + "tens");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasJack)
+                {
+                    System.out.println(_ActionCnt + ": " + "jacks");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasQueen)
+                {
+                    System.out.println(_ActionCnt + ": " + "queens");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                if (hasKing)
+                {
+                    System.out.println(_ActionCnt + ": " + "kings");
+                    _ActionMapping.add(_ActionCnt);
+                    _ActionCnt++;
+                }
+                System.out.println("Choose an action to perform: ");
+                Scanner _ActionScanner = new Scanner(System.in);
+                Integer _ActionInput = _ActionScanner.nextInt();
+                System.out.println("\n\n\n" + _ActionInput + " " + _ActionMapping.indexOf(_ActionInput)+ "\n\n\n");
+                switch (_ActionMapping.indexOf(_ActionInput))
+                {
+                    case 0:
+                    {
+                        i = ace.value;
+                        askForCards(turntaker.Number, playernumber, i);
+                    }
+                    break;
+                    case 1:
+                    {
+                        askForCards(turntaker.Number, playernumber, two.value);
+                    }
+                    break;
+                    case 2:
+                    {
+                        i = three.value;
+                        HelpMethods.printNumber(i);
+                        HelpMethods.printNumber(three.value);
+                        askForCards(turntaker.Number, playernumber, i);
+                    }
+                    break;
+                    case 3:
+                    {
+                        askForCards(turntaker.Number, playernumber, four.value);
+                    }
+                    break;
+                    case 4:
+                    {
+                        askForCards(turntaker.Number, playernumber, five.value);
+                    }
+                    break;
+                    case 5:
+                    {
+                        askForCards(turntaker.Number, playernumber, six.value);
+                    }
+                    break;
+                    case 6:
+                    {
+                        askForCards(turntaker.Number, playernumber, seven.value);
+                    }
+                    break;
+                    case 7:
+                    {
+                        askForCards(turntaker.Number, playernumber, eight.value);
+                    }
+                    break;
+                    case 8:
+                    {
+                        askForCards(turntaker.Number, playernumber, nine.value);
+                    }
+                    break;
+                    case 9:
+                    {
+                        askForCards(turntaker.Number, playernumber, ten.value);
+                    }
+                    break;
+                    case 10:
+                    {
+                        askForCards(turntaker.Number, playernumber, jack.value);
+                    }
+                    break;
+                    case 11:
+                    {
+                        askForCards(turntaker.Number, playernumber, queen.value);
+                    }
+                    break;
+                    case 12:
+                    {
+                        askForCards(turntaker.Number, playernumber, king.value);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    public class Endcondition
+    {
+        Player none = new Player();
+        Player winner = none;
+        boolean end = false;
+
+        public Endcondition() throws Exception
+        {
+        }
+
+        public void check() throws Exception
+        {
+            if (true)
+            {
+                end = true;
+                if (winner == none)
+                {
+                }
+                else
+                {
+                    System.out.println(" The winner is player" + (players.indexOf(winner) + 1));
+                }
+            }
+        }
+    }
+
+    void askForCards(int to,
+                     int from,
+                     int askValue) throws Exception
+    {
+        DeckClass temp = new DeckClass();
+        int CardsRecieved = 0;
+        int handsize;
+        handsize = players.get(from - 1).playerHand.size();
+        while (handsize != 0)
+        {
+            HelpMethods.printString("\nTwos value: ");
+            HelpMethods.printNumber(two.value);
+            HelpMethods.printString("\nhandsize: ");
+            HelpMethods.printNumber(handsize);
+            HelpMethods.printString("\nCardValue: ");
+            HelpMethods.printNumber(players.get(from - 1).playerHand.get(handsize - 1).Value());
+            HelpMethods.printString("\nAskValue: ");
+            HelpMethods.printNumber(askValue);
+            HelpMethods.printString("\n");
+            HelpMethods.printDeck(players.get(from - 1).playerHand);
+            if (players.get(from - 1).playerHand.get(handsize - 1).Value() == askValue)
+            {
+                players.get(to - 1).playerHand.drawfrom(players.get(from - 1).playerHand, 1);
+                CardsRecieved = CardsRecieved + 1;
+            }
+            else
+
+            {
+                temp.drawfrom(players.get(from - 1).playerHand, 1);
+            }
+            handsize = players.get(from - 1).playerHand.size();
+        }
+        HelpMethods.printString("\nPlayer ");
+        HelpMethods.printNumber(to);
+        HelpMethods.printString(" recieved ");
+        HelpMethods.printNumber(CardsRecieved);
+        HelpMethods.printString(" Cards ");
+        HelpMethods.printString("from player ");
+        HelpMethods.printNumber(from);
+        HelpMethods.printString("\n");
+        players.get(from - 1).playerHand.drawfrom(temp, temp.size());
+    }
+
+    boolean hasCard(int cardValue,
+                    int playerNumber) throws Exception
+    {
+        int i = 1;
+        while (i < players.get(playerNumber - 1).playerHand.size())
+        {
+            if (players.get(playerNumber - 1).playerHand.get(i - 1).Value() == cardValue)
+            {
+                return true;
+            }
+            i = i + 1;
+        }
+        return false;
+    }
 
 }

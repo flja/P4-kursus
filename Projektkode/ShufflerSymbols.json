@@ -29,6 +29,10 @@
                 {
                     "name" : "suit",
                     "type" : "string"
+                },
+                {
+                    "name" : "facevalue",
+                    "type" : "string"
                 }
             ]
         },
@@ -61,6 +65,10 @@
                 },
                 {
                     "name" : "totalValue",
+                    "type" : "number"
+                },
+                {
+                    "name" : "numberValue.value",
                     "type" : "number"
                 }
             ]
